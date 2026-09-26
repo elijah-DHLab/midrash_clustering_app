@@ -44,21 +44,26 @@ CORPUS_HE = {
 }
 
 
-def collect(node, out, he_cat=None):
-    """Every titled entry in the tree, with the Hebrew category it sits under."""
+def collect(node, out, trail=()):
+    """Every titled entry in the tree, with the Hebrew categories above it.
+
+    The trail is what lets the app show a work the way a catalogue does —
+    מדרש אגדה / מדרש רבה / שיר השירים רבה — rather than the bare title.
+    """
     if isinstance(node, list):
         for item in node:
-            collect(item, out, he_cat)
+            collect(item, out, trail)
         return
     if not isinstance(node, dict):
         return
-    cat = node.get("heCategory") or he_cat
+    he_cat = (node.get("heCategory") or "").strip()
+    here = trail + (he_cat,) if he_cat and he_cat not in trail else trail
     title, he = node.get("title"), node.get("heTitle")
     if title and he:
-        out.setdefault(title.strip(), (he.strip(), cat))
+        out.setdefault(title.strip(), (he.strip(), here))
     for key in ("contents", "nodes"):
         if key in node:
-            collect(node[key], out, cat)
+            collect(node[key], out, here)
 
 
 def normalise(s):
@@ -102,8 +107,11 @@ def main():
             he = hit[0] if hit else MANUAL.get(book, "")
             if not he:
                 missing.append(book)
+            # The trail minus the top-level corpus, which the rubric already names.
+            trail = [c for c in (hit[1] if hit else ()) if c and c != CORPUS_HE.get(corpus)]
             mapping[filename] = {"he": he, "en": book,
-                                 "he_category": (hit[1] if hit else "") or "",
+                                 "he_path": " / ".join(list(trail) + ([he] if he else [])),
+                                 "he_trail": trail,
                                  "corpus_en": corpus,
                                  "corpus_he": CORPUS_HE.get(corpus, corpus)}
         (model_dir / "titles.json").write_text(

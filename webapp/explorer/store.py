@@ -108,7 +108,11 @@ def catalogue(model: str, chunk_size: int) -> pd.DataFrame:
             "filename": filename,
             "corpus": parts[0] if parts else "",
             "corpus_he": name.get("corpus_he") or (parts[0] if parts else ""),
-            "book": name.get("he") or (" / ".join(parts[1:]) if len(parts) > 1 else filename),
+            # The catalogue path — אגדה / מדרש רבה / שיר השירים רבה — with the work
+            # itself last, so the eye finds the title at the end of the line.
+            "book": name.get("he_path") or name.get("he")
+                    or (" / ".join(parts[1:]) if len(parts) > 1 else filename),
+            "book_he": name.get("he", ""),
             "book_en": name.get("en") or (parts[-1] if parts else filename),
             "hierarchy": meta.get("hierarchy", ""),
             "n_chunks": meta.get("n_chunks", 0),

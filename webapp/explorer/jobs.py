@@ -27,13 +27,14 @@ STAGE_COST = {
     "ציור":                  0.00030,
 }
 STAGES = list(STAGE_COST)
+CPD_STAGE = "נקודות שינוי"     # the one stage that is skipped when it is not asked for
 
 
 def estimate(chunks, k, with_cpd=True):
     """Seconds the whole run should take, and the cumulative fraction of each stage."""
     costs = [STAGE_COST[s] * chunks * max(k, 1) / 8 for s in STAGES]
     if not with_cpd:
-        costs[STAGES.index("change points")] = 0.0
+        costs[STAGES.index(CPD_STAGE)] = 0.0
     total = sum(costs) + 0.5
     cum, acc = [], 0.0
     for c in costs:
