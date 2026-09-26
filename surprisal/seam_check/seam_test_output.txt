@@ -1,0 +1,28 @@
+
+=== shemot_rabbah: 486 blocks of 200 words; seam (ch 15 starts) at block 133 = 27% of the work
+  layer                             R2@seam seam pctile  best cut  cut in ch  part1-part2
+  LM  surprisal (median)              0.048       82.9%       208         20     +0.52 sd
+  LM  entropy at word start           0.080       98.4%       163         15     +0.67 sd
+  LM  top-1 prob                      0.058       99.1%       163         15     -0.58 sd
+  LM  first token = argmax            0.042       94.3%       163         15     -0.48 sd
+  base tokens per word                0.046       80.6%        42          2     +0.48 sd
+  base word length                    0.019       46.5%       257         24     +0.32 sd
+  base 100 function words             0.013       99.8%       133         15             
+  base 300 char trigrams              0.009       89.1%       258         25             
+  ctrl shared with Tanchuma           0.076       99.5%       132         14     +0.55 sd
+  LM  surprisal | Tanchuma share      0.066       87.7%       208         20     +0.61 sd
+  Tanchuma share -> surprisal slope: -0.90 bits per 100% shared
+
+=== bamidbar_rabbah: 735 blocks of 200 words; seam (ch 15 starts) at block 534 = 73% of the work
+  layer                             R2@seam seam pctile  best cut  cut in ch  part1-part2
+  LM  surprisal (median)              0.088       92.3%       568         16     -0.72 sd
+  LM  entropy at word start           0.105       92.3%       567         16     -0.79 sd
+  LM  top-1 prob                      0.079       96.7%       553         15     +0.72 sd
+  LM  first token = argmax            0.087       95.6%       543         15     +0.71 sd
+  base tokens per word                0.003       31.8%       188          8     +0.12 sd
+  base word length                    0.009       80.6%       485         14     +0.22 sd
+  base 100 function words             0.013       99.7%       533         14             
+  base 300 char trigrams              0.009       99.5%       535         15             
+  ctrl shared with Tanchuma           0.683       99.8%       534         15     -3.10 sd
+  LM  surprisal | Tanchuma share      0.026       84.9%       568         16     -0.38 sd
+  Tanchuma share -> surprisal slope: +0.79 bits per 100% shared

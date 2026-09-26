@@ -1,0 +1,38 @@
+# Secrets — ClearML API keys live here, never commit
+.env
+
+# Virtualenvs
+venv/
+.venv/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Embedding cache (~150MB of .pkl, regenerable from the pipeline)
+cache/
+
+# Generated visualizations and outputs. These run to hundreds of MB and
+# several individual files exceed GitHub's 100MB per-file hard limit, so
+# they cannot be pushed. All are reproducible by re-running the pipeline.
+# To track one specific small result anyway: git add -f Results/<file>
+Results/
+*.html
+
+# Streamlit runtime log
+streamlit_log.txt
+
+# Claude Code local state
+.claude/scheduled_tasks.lock
+
+# Embedding stores: 438MB of .npz per model, regenerable with webapp/build_store.py
+# and shared through Drive (MIDRASH/embedding_store/). Too large for git.
+embedding_store/
+embedding_store_zohar_cache/
+
+# Cached run outputs of the web app — figures and CSVs, hundreds of MB
+webapp/_runs/
+
+# Corpus subsets copied for a run
+surprisal/corpus/
+surprisal/measurements/
