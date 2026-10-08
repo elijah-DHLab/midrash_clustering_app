@@ -1,0 +1,27 @@
+# The midrash explorer, beside HAMATATE on the same small server.
+# Everything below the [Service] line that is not ExecStart is there so that
+# this app can never take memory or CPU from HAMATATE: it is capped, it is the
+# first thing the kernel kills if memory runs out anyway, and it yields the CPU.
+[Unit]
+Description=Midrash cluster explorer (gunicorn)
+After=network.target
+
+[Service]
+User=adi
+Group=www-data
+WorkingDirectory=/home/adi/midrash/webapp
+EnvironmentFile=/home/adi/midrash/service.env
+# One worker: the job table lives in the process, and one at a time is the point.
+ExecStart=/home/adi/midrash/venv/bin/gunicorn --workers 1 --threads 4 --timeout 300 \
+          --umask 007 --bind unix:/home/adi/midrash/gunicorn.sock midrash_web.wsgi:application
+Restart=always
+RestartSec=5
+
+MemoryMax=750M
+MemorySwapMax=0
+OOMScoreAdjust=1000
+Nice=10
+CPUWeight=50
+
+[Install]
+WantedBy=multi-user.target
