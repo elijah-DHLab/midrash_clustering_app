@@ -18,6 +18,8 @@ cache/
 # To track one specific small result anyway: git add -f Results/<file>
 Results/
 *.html
+# ...but the web app's page templates are source, not output.
+!webapp/explorer/templates/**/*.html
 
 # Streamlit runtime log
 streamlit_log.txt

@@ -306,29 +306,32 @@ def add_cluster_ctfidf_ngrams(df, ngram_n=3, top_k=20):
         df["cluster_top_ngrams"] = "No n-grams available"
         return df
 
-    counts_dense = (
-        counts.toarray().astype(float)
-        if hasattr(counts, "toarray")
-        else np.asarray(counts, dtype=float)
-    )
-    row_sums = counts_dense.sum(axis=1, keepdims=True)
+    # Kept sparse throughout. The dense version held clusters x every distinct
+    # n-gram in the selection, four times over (counts, tf, the >0 mask, ctfidf):
+    # on two million words that is over a million columns and more than a
+    # gigabyte, for a table that is almost all zeros. The arithmetic is the
+    # same, in the same order, so the scores and the ranking are identical.
+    counts = counts.tocsr().astype(float)
+    counts.sort_indices()
+    row_sums = np.asarray(counts.sum(axis=1)).ravel()
     row_sums[row_sums == 0] = 1.0
-    tf = counts_dense / row_sums
 
-    doc_freq = (counts_dense > 0).sum(axis=0)
-    n_classes = counts_dense.shape[0]
+    doc_freq = counts.getnnz(axis=0)
+    n_classes = counts.shape[0]
     idf = np.log((1 + n_classes) / (1 + doc_freq)) + 1.0
-    ctfidf = tf * idf
 
     feature_names = vectorizer.get_feature_names_out()
     top_ngrams_by_cluster = {}
     for row_idx, cluster_id in enumerate(cluster_docs.index):
-        scores = ctfidf[row_idx]
-        nonzero = np.flatnonzero(scores > 0)
-        if len(nonzero) == 0:
+        lo, hi = counts.indptr[row_idx], counts.indptr[row_idx + 1]
+        cols = counts.indices[lo:hi]
+        scores = (counts.data[lo:hi] / row_sums[row_idx]) * idf[cols]
+        keep = scores > 0
+        cols, scores = cols[keep], scores[keep]
+        if len(cols) == 0:
             top_ngrams_by_cluster[int(cluster_id)] = "No n-grams available"
             continue
-        top_indices = nonzero[np.argsort(scores[nonzero])[::-1][:top_k]]
+        top_indices = cols[np.argsort(scores)[::-1][:top_k]]
         top_terms = [str(feature_names[i]) for i in top_indices]
         top_ngrams_by_cluster[int(cluster_id)] = "<br>".join(top_terms)
 

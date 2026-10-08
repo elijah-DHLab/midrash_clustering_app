@@ -27,12 +27,49 @@ DEFAULT_K = 10
 GROUPING_LEVELS = [(1, "קורפוס"), (2, "תת-קורפוס"), (3, "חיבור")]
 
 # The sweep fits KMeans once per k, so it runs on a sample of the selection rather
-# than all of it; silhouette is quadratic in the sample and takes a smaller one.
+# than all of it.
 SWEEP_MAX_POINTS = 20000
-SILHOUETTE_SAMPLE = 2000
 WEBGL_ABOVE = 20000
 HOVER_CHARS_LARGE = 60
 DEFAULT_PENALTY = 1.0
+
+# On the shared server only one computation runs at a time: two at once would
+# double the memory the cap below is sized for. A run holds this from the request
+# until its thread finishes; a sweep for as long as it computes.
+_BUSY = threading.Lock()
+BUSY_MESSAGE = "חישוב אחר רץ כרגע על השרת. נסי שוב בעוד דקה."
+
+
+def _selection_size(filenames, chunk_size, model):
+    """(chunks, words) of a selection, read from the store's index - nothing loaded."""
+    index = store.index_for(model, chunk_size)
+    rows = [index[f] for f in filenames if f in index]
+    return (sum(int(r.get("n_chunks", 0)) for r in rows),
+            sum(int(r.get("words", 0)) for r in rows))
+
+
+def _estimate_mb(chunks, words):
+    """Peak memory of a run, in MB. Measured 8.10.2026 on runs of 6k-50k chunks at
+    every chunk size and k up to 30 (the process itself is ~200 MB of libraries):
+    the plot and the clustering grow with the number of chunks, the n-gram
+    vocabulary with the number of words. Rounded up; it over-estimates slightly."""
+    return 200 + 7.6 * chunks / 1000 + 248 * words / 1e6
+
+
+def _too_large(filenames, chunk_size, model):
+    """The refusal to show, or None when the selection fits the server."""
+    limit = getattr(settings, "MAX_RUN_MB", None)
+    if not limit:
+        return None
+    chunks, words = _selection_size(filenames, chunk_size, model)
+    if _estimate_mb(chunks, words) <= limit:
+        return None
+    # How much of this selection would fit, at this chunk size.
+    share = (limit - 200) / max(_estimate_mb(chunks, words) - 200, 1)
+    return ("הבחירה גדולה מדי לשרת: %s צ'אנקים, %s מילים. "
+            "השרת מחזיק בערך %d%% ממנה. אפשר לבחור פחות טקסטים, "
+            "או צ'אנקים גדולים יותר (פחות צ'אנקים לאותו טקסט)."
+            % (format(chunks, ","), format(words, ","), int(share * 100)))
 
 
 def _cache_key(filenames, chunk_size, k, smoothing, grouping_level, want_cpd,
@@ -154,21 +191,28 @@ def run(request):
         return render(request, "explorer/index.html",
                       _context(chunk_size, model=model, error="יש לבחור טקסט אחד לפחות."))
 
-    df = store.load_selection(filenames, chunk_size, model)
+    form_back = dict(selected=set(filenames), k=k, grouping_level=grouping_level,
+                     smoothing=smoothing, want_cpd=want_cpd,
+                     block_size=block_size, penalty=penalty)
+    too_large = _too_large(filenames, chunk_size, model)
+    if too_large:
+        return render(request, "explorer/index.html",
+                      _context(chunk_size, model=model, error=too_large, **form_back))
 
     if request.POST.get("action") == "sweep":
-        sweep_html, sweep = _sweep(df, k)
+        if not _BUSY.acquire(blocking=False):
+            return render(request, "explorer/index.html",
+                          _context(chunk_size, model=model, error=BUSY_MESSAGE, **form_back))
+        try:
+            df = store.load_selection(filenames, chunk_size, model)
+            sweep_html, sweep = _sweep(df, k)
+        finally:
+            _BUSY.release()
         return render(request, "explorer/index.html",
                       _context(chunk_size, model=model, figure_html=sweep_html, sweep=sweep,
                                selected=set(filenames), k=k, grouping_level=grouping_level,
                                smoothing=smoothing, want_cpd=want_cpd,
                                block_size=block_size, penalty=penalty))
-
-    if len(df) < k:
-        return render(request, "explorer/index.html",
-                      _context(chunk_size, model=model,
-                               error="בבחירה הזו יש %d צ'אנקים בלבד. "
-                                     "בחרי יותר טקסט או k קטן יותר." % len(df)))
 
     # Hand the work to a thread and give the page a job to watch. Anything large
     # takes minutes, and a request that returns only at the end cannot say so.
@@ -178,12 +222,29 @@ def run(request):
         "want_cpd": want_cpd, "block_size": block_size, "penalty": penalty,
     }
     # The model belongs in the key: the same selection read in the two spaces is two
-    # different runs, and serving one for the other would be silently wrong.
+    # different runs, and serving one for the other would be silently wrong. Whether
+    # the change points are *shown* does not: they are always computed, and the page
+    # toggles them, so a run differing only in that is the same run.
     key = _cache_key(filenames, chunk_size, k, smoothing, grouping_level,
-                     want_cpd, block_size, penalty, model)
+                     True, block_size, penalty, model)
     cached = _cached_token(key)
     if cached:
         return _render_result(request, cached, from_cache=True)
+
+    if not _BUSY.acquire(blocking=False):
+        return render(request, "explorer/index.html",
+                      _context(chunk_size, model=model, error=BUSY_MESSAGE, **form_back))
+    try:
+        df = store.load_selection(filenames, chunk_size, model)
+    except Exception:
+        _BUSY.release()
+        raise
+    if len(df) < k:
+        _BUSY.release()
+        return render(request, "explorer/index.html",
+                      _context(chunk_size, model=model,
+                               error="בבחירה הזו יש %d צ'אנקים בלבד. "
+                                     "בחרי יותר טקסט או k קטן יותר." % len(df), **form_back))
 
     job_id = jobs.create(len(df), k, want_cpd)
     jobs.JOBS[job_id]["form"] = form
@@ -213,10 +274,15 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
         jobs.set_stage(job_id, "צירופי מילים אופייניים")
         df = cvr.add_cluster_ctfidf_ngrams(df, ngram_n=3, top_k=20)
 
-        change_points = None
-        if want_cpd:
-            jobs.set_stage(job_id, "נקודות שינוי")
-            df, change_points = cvr.compute_change_points(df, block_size=block_size, penalty=penalty)
+        # Always computed, never conditional: PELT over the block composition costs a
+        # few seconds against minutes for the rest of the run, and computing it here
+        # is what lets the checkbox show and hide the result without running again.
+        jobs.set_stage(job_id, "נקודות שינוי")
+        try:
+            df, change_points = cvr.compute_change_points(df, block_size=block_size,
+                                                          penalty=penalty)
+        except Exception:
+            change_points = None
 
         jobs.set_stage(job_id, "ציור")
         # Past this many points the SVG layer makes hovering and panning unusable.
@@ -229,6 +295,20 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
         # Wheel zoom, and a figure that keeps its view when the page re-renders.
         fig.update_layout(hovermode="closest", hoverdistance=12,
                           uirevision="explorer")
+
+        # build_figure draws a change point as a red dashed line with a red score
+        # beside it. Collecting those indices lets the page hide and show them with
+        # one relayout, instead of asking for the whole run again.
+        cp_shapes = [i for i, s in enumerate(fig.layout.shapes or ())
+                     if str(getattr(s.line, "color", "")) == "red"]
+        cp_notes = [i for i, a in enumerate(fig.layout.annotations or ())
+                    if str(getattr(a, "arrowcolor", "")) == "red"]
+        if not want_cpd:
+            fig.update_layout(
+                shapes=[s.update(visible=False) if i in cp_shapes else s
+                        for i, s in enumerate(fig.layout.shapes or ())],
+                annotations=[a.update(visible=False) if i in cp_notes else a
+                             for i, a in enumerate(fig.layout.annotations or ())])
 
         token = uuid.uuid4().hex[:12]
         out_dir = pathlib.Path(settings.RUNS_DIR) / token
@@ -261,6 +341,9 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
             "webgl": render_mode == "webgl",
             "cpd_requested": want_cpd,
             "penalty": penalty,
+            "block_size": block_size,
+            "cp_shapes": cp_shapes,
+            "cp_notes": cp_notes,
         }
         # Written beside the outputs so a result can be re-served without the job,
         # which is what makes the cache survive a restart.
@@ -271,6 +354,8 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
         jobs.finish(job_id, token, summary)
     except Exception as exc:                                  # surfaced on the page
         jobs.fail(job_id, "%s: %s" % (type(exc).__name__, exc))
+    finally:
+        _BUSY.release()
 
 
 def progress(request, job_id):
@@ -310,15 +395,21 @@ def _render_result(request, token, from_cache=False):
 
 
 def _sweep(df, current_k, k_min=2, k_max=20):
-    """Inertia and silhouette across k, the two readings the choice of k rests on.
+    """Inertia across k, read twice: where the fall flattens, and what each k still buys.
 
-    Inertia always falls as k rises, so what it shows is where the fall stops paying
-    — the elbow. Silhouette has a maximum, and it is the one that says which k the
-    data actually support. They are plotted separately: the two have no common
-    scale, and drawing them on one pair of axes would invent a comparison.
+    Silhouette used to be shown beside this and has been dropped. On embeddings of this
+    kind it almost always peaks at k = 2, because it rewards splitting the cloud into two
+    well-separated lobes — a fact about the geometry of the vector space, not about the
+    number of registers in the material. At the resolution this tool is used at it pointed
+    at an answer nobody would act on, so it was reading as noise in the interface.
+
+    Both panels here come from the same inertia curve. The first shows the curve with the
+    chord between its ends, because the elbow is defined against that chord. The second
+    shows what the curve implies but does not display: the share of the remaining spread
+    that each additional cluster removes. That is what "the fall stops paying" means, and
+    it is a number a reader can act on.
     """
     from sklearn.cluster import KMeans
-    from sklearn.metrics import silhouette_score
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
 
@@ -327,48 +418,62 @@ def _sweep(df, current_k, k_min=2, k_max=20):
     if len(X) > SWEEP_MAX_POINTS:
         X = X[rng.choice(len(X), SWEEP_MAX_POINTS, replace=False)]
 
-    ks, inertia, silhouette = [], [], []
+    ks, inertia = [], []
     t0 = time.time()
     for k in range(k_min, k_max + 1):
-        km = KMeans(n_clusters=k, random_state=42, n_init="auto").fit(X)
         ks.append(k)
-        inertia.append(float(km.inertia_))
-        sample = min(SILHOUETTE_SAMPLE, len(X))
-        silhouette.append(float(silhouette_score(X, km.labels_, sample_size=sample, random_state=42)))
+        inertia.append(float(KMeans(n_clusters=k, random_state=42, n_init="auto")
+                             .fit(X).inertia_))
 
-    best = ks[int(np.argmax(silhouette))]
     # The elbow, stated rather than eyeballed: the k whose point lies furthest from the
     # straight line joining the ends of the inertia curve.
     x = np.array(ks, dtype=float)
     y = np.array(inertia, dtype=float)
     xn = (x - x[0]) / (x[-1] - x[0])
     yn = (y - y[-1]) / (y[0] - y[-1])
-    elbow = ks[int(np.argmax(np.abs(yn - (1 - xn)) / np.sqrt(2)))]
-    # A range worth trying, rather than one number: everything within 5% of the best
-    # silhouette is, on this evidence, as defensible as the maximum.
-    good = [k for k, s in zip(ks, silhouette) if s >= max(silhouette) * 0.95]
+    bend = np.abs(yn - (1 - xn)) / np.sqrt(2)
+    elbow = ks[int(np.argmax(bend))]
+    # A range rather than one number: every k that bends the curve nearly as hard as the
+    # elbow does is as defensible a choice on this evidence.
+    good = [k for k, b in zip(ks, bend) if b >= bend.max() * 0.85]
     band = (min(good), max(good))
-    fig = make_subplots(rows=1, cols=2, subplot_titles=(
-        "Inertia — where the fall flattens", "Silhouette — higher is better separated"))
-    fig.add_trace(go.Scatter(x=ks, y=inertia, mode="lines+markers", name="inertia",
-                             line=dict(color="#2a78d6", width=2)), row=1, col=1)
-    fig.add_trace(go.Scatter(x=ks, y=silhouette, mode="lines+markers", name="silhouette",
-                             line=dict(color="#eb6834", width=2)), row=1, col=2)
-    for col in (1, 2):
-        fig.add_vline(x=current_k, line=dict(color="#767f79", width=1, dash="dot"), row=1, col=col)
-        fig.update_xaxes(title_text="k", row=1, col=col)
-    fig.add_vline(x=best, line=dict(color="#1d6360", width=2), row=1, col=2)
-    fig.update_layout(height=340, showlegend=False, margin=dict(t=50, b=40, l=50, r=20))
+    # What each extra cluster buys, as a percentage of the spread still unexplained.
+    gain = [0.0] + [100 * (inertia[i - 1] - inertia[i]) / inertia[i - 1]
+                    for i in range(1, len(inertia))]
 
-    fig.add_vline(x=elbow, line=dict(color="#1d6360", width=2), row=1, col=1)
-    sweep = {"points": len(X), "k_min": k_min, "k_max": k_max, "best": best,
-             "best_score": round(max(silhouette), 3), "at_current": round(
-                 silhouette[ks.index(current_k)], 3) if current_k in ks else None,
+    fig = make_subplots(rows=1, cols=2, subplot_titles=(
+        "המרפק — היכן הירידה מתיישרת", "מה כל קלאסטר נוסף עוד מסביר"))
+    fig.add_trace(go.Scatter(x=[ks[0], ks[-1]], y=[inertia[0], inertia[-1]], mode="lines",
+                             line=dict(color="#c9c2b6", width=1, dash="dash"),
+                             hoverinfo="skip"), row=1, col=1)
+    fig.add_trace(go.Scatter(x=ks, y=inertia, mode="lines+markers",
+                             line=dict(color="#2d5a6b", width=2),
+                             hovertemplate="k = %{x}<br>אינרציה %{y:.0f}<extra></extra>"),
+                  row=1, col=1)
+    fig.add_trace(go.Bar(x=ks[1:], y=gain[1:], marker_color="#9c6b1f", opacity=.8,
+                         hovertemplate="k = %{x}<br>%{y:.1f}%% מהפיזור שנותר<extra></extra>"),
+                  row=1, col=2)
+    for col in (1, 2):
+        fig.add_vline(x=current_k, line=dict(color="#8a8378", width=1, dash="dot"),
+                      row=1, col=col)
+        fig.add_vline(x=elbow, line=dict(color="#8c2f28", width=2), row=1, col=col)
+        fig.update_xaxes(title_text="k", row=1, col=col)
+    fig.update_yaxes(title_text="אינרציה", row=1, col=1)
+    fig.update_yaxes(title_text="% מהפיזור שנותר", row=1, col=2)
+    fig.update_layout(height=340, showlegend=False, margin=dict(t=50, b=40, l=60, r=20),
+                      paper_bgcolor="#f7f4ee", plot_bgcolor="#f7f4ee",
+                      font=dict(family="Heebo, Segoe UI, sans-serif", size=12))
+
+    at = ks.index(current_k) if current_k in ks else None
+    sweep = {"points": len(X), "k_min": k_min, "k_max": k_max,
              "current_k": current_k, "seconds": round(time.time() - t0, 1),
              "sampled": len(df) > SWEEP_MAX_POINTS, "elbow": elbow,
              "band_low": band[0], "band_high": band[1],
-             "agree": abs(elbow - best) <= 2,
-             "weak": max(silhouette) < 0.15}
+             "gain_at_elbow": round(gain[ks.index(elbow)], 1),
+             "gain_at_current": round(gain[at], 1) if at else None,
+             "gain_last": round(gain[-1], 1),
+             # A curve with no real bend: the elbow is then a formality, not a finding.
+             "flat": float(bend.max()) < 0.08}
     return fig.to_html(full_html=False, include_plotlyjs="cdn",
                        config={"displaylogo": False, "responsive": True}), sweep
 

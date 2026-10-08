@@ -1,0 +1,562 @@
+{% load static %}<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>סייר הקלאסטרים המדרשי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Heebo:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* A printed page, not an application: paper, ink, hairlines, and one rubric red —
+     the colour early Hebrew printing kept for headings. Hebrew reads right to left,
+     so the controls sit on the right and the plate opens to their left. */
+  :root {
+    --paper:   #f5f3ee;
+    --plate:   #fffefb;
+    --ink:     #1a1815;
+    --ink-2:   #4b4640;
+    --muted:   #8a8378;
+    --rule:    #ddd7cc;
+    --rule-2:  #ebe6dc;
+    --rubric:  #8c2f28;
+    --rubric-soft: #f0e2df;
+    --field:   #fffefb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper:   #14130f;
+      --plate:   #1b1915;
+      --ink:     #ece7dc;
+      --ink-2:   #b3ab9d;
+      --muted:   #8a8378;
+      --rule:    #302c25;
+      --rule-2:  #262219;
+      --rubric:  #cd6a5c;
+      --rubric-soft: #2e211e;
+      --field:   #211e19;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--paper); }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 15px/1.65 "Heebo", "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Digits and file names stay left to right inside the Hebrew page. */
+  .ltr { direction: ltr; unicode-bidi: isolate; }
+  .num { font: 500 15px "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums;
+         direction: ltr; unicode-bidi: isolate; }
+
+  header.masthead {
+    border-bottom: 1px solid var(--rule);
+    padding: 20px 28px 15px;
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 20px; flex-wrap: wrap;
+  }
+  .masthead h1 {
+    margin: 0; font: 500 26px/1.2 "Frank Ruhl Libre", "David", serif; letter-spacing: 0;
+  }
+  .masthead h1 em { font-style: normal; color: var(--rubric); }
+  .masthead p { margin: 5px 0 0; color: var(--muted); font-size: 13px; max-width: 62ch; }
+  .masthead .imprint {
+    font: 400 12px/1.6 "IBM Plex Mono", monospace; color: var(--muted); text-align: left;
+    direction: ltr;
+  }
+
+  .wrap { display: grid; grid-template-columns: 410px minmax(0, 1fr); align-items: start; }
+  @media (max-width: 1040px) { .wrap { grid-template-columns: 1fr; } }
+
+  form.controls {
+    border-left: 1px solid var(--rule);
+    padding: 2px 24px 0;
+    position: sticky; top: 0; height: 100vh;
+    display: flex; flex-direction: column; min-height: 0;
+  }
+  .controls-body { flex: 1 1 auto; overflow-y: auto; min-height: 0; scrollbar-width: thin; }
+  @media (max-width: 1040px) {
+    form.controls { position: static; height: auto; border-left: 0; border-bottom: 1px solid var(--rule); }
+    .controls-body { overflow: visible; }
+  }
+  fieldset { border: 0; margin: 0; padding: 18px 0; border-bottom: 1px solid var(--rule-2); }
+  legend {
+    padding: 0; font: 500 12px/1 "Heebo", sans-serif; letter-spacing: .06em; color: var(--muted);
+  }
+  .field { display: grid; gap: 5px; margin-top: 12px; }
+  .field > span { font-size: 13px; color: var(--ink-2); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  select, input[type=number] {
+    width: 100%; font: 400 14px "Heebo", sans-serif; color: var(--ink);
+    background: var(--field); border: 1px solid var(--rule); border-radius: 2px;
+    padding: 7px 9px; appearance: none;
+  }
+  select { background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+                              linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+           background-position: 15px 52%, 20px 52%;
+           background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-left: 26px; }
+  input[type=number] { font-family: "IBM Plex Mono", monospace; direction: ltr; text-align: right; }
+  select:focus-visible, input:focus-visible, button:focus-visible, a:focus-visible {
+    outline: 2px solid var(--rubric); outline-offset: 1px;
+  }
+  label.check { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+  input[type=checkbox] { accent-color: var(--rubric); width: 14px; height: 14px; flex: none; }
+  .note { margin: 8px 0 0; font-size: 12.5px; line-height: 1.6; color: var(--muted); }
+
+  .picker-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin: 12px 0 8px; font-size: 13px; color: var(--muted);
+  }
+  .picker-head a { color: var(--rubric); text-decoration: none; border-bottom: 1px solid transparent; }
+  .picker-head a:hover { border-bottom-color: var(--rubric); }
+  details.corpus { border-top: 1px solid var(--rule-2); }
+  details.corpus:last-of-type { border-bottom: 1px solid var(--rule-2); }
+  details.corpus > summary {
+    cursor: pointer; list-style: none; padding: 9px 2px;
+    display: flex; align-items: center; gap: 9px;
+  }
+  details.corpus > summary::-webkit-details-marker { display: none; }
+  details.corpus > summary:hover .he { color: var(--rubric); }
+  details.corpus[open] > summary .he { color: var(--rubric); }
+  /* The row opens the list and the checkbox selects the whole rubric. Without a visible
+     triangle nothing says the row opens at all, and the corpus name sat inside the
+     checkbox's label, so clicking it selected everything instead. */
+  .twisty {
+    width: 0; height: 0; flex: none; transition: transform .14s ease;
+    border-block: 4px solid transparent; border-right: 6px solid var(--muted);
+  }
+  details.corpus[open] > summary .twisty {
+    transform: rotate(-90deg); border-right-color: var(--rubric);
+  }
+  .grow { flex: 1 1 auto; }
+  details.corpus > summary:hover { background: var(--hover, rgba(140,47,40,.045)); }
+  .open-hint, .shut-hint {
+    flex: none; font-size: 12px; color: var(--rubric); opacity: 0;
+    transition: opacity .14s ease; white-space: nowrap;
+  }
+  details.corpus > summary:hover .open-hint,
+  details.corpus > summary:hover .shut-hint { opacity: .9; }
+  details.corpus[open] .open-hint, details.corpus:not([open]) .shut-hint { display: none; }
+  .count { font: 400 12px "IBM Plex Mono", monospace; color: var(--muted); direction: ltr; }
+  .files { max-height: 280px; overflow: auto; padding: 2px 22px 10px 2px;
+           scrollbar-width: thin; overscroll-behavior: contain; }
+  .files label {
+    display: flex; gap: 8px; align-items: baseline; white-space: nowrap;
+    line-height: 1.8; padding: 1px 0; color: var(--ink-2); cursor: pointer;
+    /* A block-level row is capped at the container's width, so a long catalogue path
+       spills out of its own box and the row never asks the list to scroll sideways.
+       Sizing the row to its content, with the container width as the floor, gives the
+       horizontal scrollbar something to measure and keeps the hover band full-width. */
+    width: max-content; min-width: 100%;
+  }
+  .files label:hover { color: var(--ink); }
+  .files .n { padding-right: 10px; font: 400 11.5px "IBM Plex Mono", monospace;
+              color: var(--muted); direction: ltr; }
+  .files::-webkit-scrollbar { height: 7px; width: 7px; }
+  .files::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 4px; }
+  .he { font: 400 16px/1.5 "Frank Ruhl Libre", "David", serif; }
+
+  button {
+    width: 100%; cursor: pointer; border-radius: 2px;
+    font: 500 15px "Heebo", sans-serif; padding: 10px 14px;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  button.primary { background: var(--rubric); color: #fffefb; border: 1px solid var(--rubric); }
+  button.primary:hover:not(:disabled) { background: #74251f; border-color: #74251f; }
+  button.primary:disabled { opacity: .55; cursor: default; }
+  button.quiet { background: var(--plate); color: var(--ink); border: 1px solid var(--rule); margin-top: 8px; }
+  button.quiet:hover { border-color: var(--ink-2); }
+  .actions {
+    flex: none; z-index: 2; margin: 0 -24px;
+    padding: 14px 24px 16px; background: var(--paper); border-top: 1px solid var(--rule);
+  }
+
+  main { padding: 22px 28px 40px; }
+  .plate { background: var(--plate); border: 1px solid var(--rule); padding: 8px 8px 2px; }
+  .plate-caption {
+    padding: 10px 6px 12px; font: 400 13px/1.7 "Frank Ruhl Libre", serif;
+    color: var(--muted); border-top: 1px solid var(--rule-2); margin-top: 6px;
+  }
+  .runline {
+    display: flex; flex-wrap: wrap; gap: 6px 26px; align-items: baseline;
+    margin: 0 0 16px; padding-bottom: 14px; border-bottom: 1px solid var(--rule);
+  }
+  .runline .item { font-size: 13px; color: var(--muted); }
+  .runline .item b { color: var(--ink); margin-left: 6px; }
+  .runline .tag {
+    font-size: 12px; color: var(--rubric); border: 1px solid var(--rubric-soft);
+    background: var(--rubric-soft); padding: 2px 9px; border-radius: 2px;
+  }
+  .downloads { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+  .downloads a {
+    font-size: 13px; color: var(--ink); text-decoration: none;
+    border: 1px solid var(--rule); border-radius: 2px; padding: 6px 11px; background: var(--plate);
+  }
+  .downloads a:hover { border-color: var(--ink-2); }
+  .downloads a span { color: var(--muted); font: 400 11.5px "IBM Plex Mono", monospace; direction: ltr; }
+  .error { border-right: 3px solid var(--rubric); background: var(--rubric-soft);
+           padding: 12px 14px; margin-bottom: 18px; font-size: 14px; }
+  .notice { border-right: 3px solid var(--muted); background: var(--plate);
+            border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+            padding: 12px 14px; margin: 0 0 16px; font-size: 14px; color: var(--ink-2);
+            max-width: 78ch; }
+  .notice b { color: var(--ink); }
+  /* A figure on screen is a record of the run that made it, not of the form as it
+     now stands; when the two part company the page has to say so. */
+  .stale {
+    border-right: 3px solid var(--rubric); background: var(--rubric-soft);
+    padding: 11px 14px; margin: 0 0 14px; font-size: 14px; color: var(--ink);
+  }
+  .plate.stale-figure { opacity: .45; filter: saturate(.6); transition: opacity .2s; }
+  .empty { color: var(--muted); font: 400 17px/1.8 "Frank Ruhl Libre", serif;
+           text-align: center; padding: 70px 20px; border: 1px dashed var(--rule); }
+
+  .progress { border: 1px solid var(--rule); background: var(--plate); padding: 18px 20px; }
+  .progress h2 { margin: 0 0 12px; font: 500 18px "Frank Ruhl Libre", serif; }
+  .bar { height: 3px; background: var(--rule-2); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--rubric); transition: width .6s linear; }
+  .bar-text { margin: 10px 0 0; font-size: 14px; }
+  .bar-text span { color: var(--muted); font-size: 13px; }
+  ol.stages { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap;
+              gap: 4px 18px; font-size: 12.5px; color: var(--muted); }
+  ol.stages li.done { color: var(--ink-2); }
+  ol.stages li.now { color: var(--rubric); font-weight: 500; }
+
+  .reading { max-width: 70ch; margin: 0 0 18px; font: 400 15px/1.85 "Frank Ruhl Libre", serif; color: var(--ink-2); }
+  .reading p { margin: 0 0 10px; }
+  .reading b { color: var(--ink); font-weight: 700; }
+  .reading .fine { font: 400 13px/1.7 "Heebo", sans-serif; color: var(--muted); }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div>
+    <h1>סייר הקלאסטרים <em>המדרשי</em></h1>
+    <p>הצ'אנקים מקודדים פעם אחת ונשמרים; כל הרצה היא קלאסטרינג חדש של הפלח שבוחרים.</p>
+  </div>
+  <div class="imprint">
+    {{ model_label }}<br>
+    {% if chunk_size %}{{ chunk_size }}-word chunks{% endif %}
+  </div>
+</header>
+
+<div class="wrap">
+
+  <form class="controls" method="post" action="{% url 'run' %}">
+    <div class="controls-body">
+
+    <fieldset>
+      <legend>מרחב האמבדינג</legend>
+      <div class="field">
+        <select name="model" onchange="this.form.action='{% url 'index' %}'; this.form.submit();">
+          {% for m in models %}
+            <option value="{{ m.name }}" {% if m.name == model %}selected{% endif %}>{{ m.label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      {% for m in models %}{% if m.name == model and m.note %}<p class="note ltr" style="text-align:left">{{ m.note }}</p>{% endif %}{% endfor %}
+    </fieldset>
+
+    <fieldset>
+      <legend>רזולוציה</legend>
+      <div class="grid2" style="margin-top:12px">
+        <label class="field"><span>גודל צ'אנק</span>
+          <select name="chunk_size" onchange="this.form.action='{% url 'index' %}'; this.form.submit();">
+            {% for s in sizes %}<option value="{{ s }}" {% if s == chunk_size %}selected{% endif %}>{{ s }} מילים</option>{% endfor %}
+          </select>
+        </label>
+        <label class="field"><span>מספר קלאסטרים (k)</span>
+          <select name="k">
+            {% for v in k_range %}<option value="{{ v }}" {% if v == k %}selected{% endif %}>{{ v }}</option>{% endfor %}
+          </select>
+        </label>
+      </div>
+      <div class="field"><span>תוויות הטקסטים לפי</span>
+        <select name="grouping_level">
+          {% for lv, name in grouping_levels %}<option value="{{ lv }}" {% if lv == grouping_level %}selected{% endif %}>{{ name }}</option>{% endfor %}
+        </select>
+      </div>
+      <label class="check" style="margin-top:12px">
+        <input type="checkbox" name="smoothing" {% if smoothing %}checked{% endif %}> החלקה מול הצ'אנקים השכנים
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>נקודות שינוי</legend>
+      <label class="check" style="margin-top:12px">
+        <input type="checkbox" name="change_points" {% if want_cpd %}checked{% endif %}> הצגת נקודות שינוי
+      </label>
+      <div class="grid2" style="margin-top:12px">
+        <label class="field"><span>גודל בלוק</span>
+          <input type="number" name="block_size" min="5" max="500" value="{{ block_size }}"></label>
+        <label class="field"><span>פנלטי <span style="color:var(--muted)">(0.5–2)</span></span>
+          <input type="number" name="penalty" min="0.1" max="50" step="0.1" value="{{ penalty }}"></label>
+      </div>
+      <p class="note" id="cp-hint" style="color:var(--rubric)"></p>
+      </fieldset>
+
+    <fieldset>
+      <legend>טקסטים</legend>
+      <div class="picker-head">
+        <span><a href="#" class="pick" data-all="1">בחירת הכל</a> · <a href="#" class="pick" data-all="0">ניקוי</a></span>
+        <span><b id="count" class="num">0</b> נבחרו</span>
+      </div>
+      {% for g in groups %}
+        {% comment %}
+          A rubric that already has texts chosen opens itself, and so does the first one:
+          a column of closed rows gives the reader nothing to recognise, and the chooser
+          reads as all-or-nothing even though every title is one click away.
+
+          {# #} is single-line only in Django — spanning it over several lines does not
+          comment anything out, it prints.
+        {% endcomment %}
+        <details class="corpus" {% if g.picked or forloop.first %}open{% endif %}>
+          <summary>
+            <span class="twisty" aria-hidden="true"></span>
+            <input type="checkbox" class="group-all" data-group="{{ forloop.counter }}"
+                   title="בחירת כל הטקסטים ברובריקה">
+            <span class="he grow">{{ g.corpus_he }}</span>
+            <span class="count">{% if g.picked %}{{ g.picked }}/{% endif %}{{ g.files|length }}</span>
+            <span class="open-hint">הצגת הטקסטים</span>
+            <span class="shut-hint">סגירה</span>
+          </summary>
+          <div class="files" data-group="{{ forloop.counter }}">
+            {% for f in g.files %}
+              <label title="{{ f.book_en }}"><input type="checkbox" name="files" value="{{ f.filename }}"
+                {% if f.filename in selected %}checked{% endif %}>
+                <span class="he">{{ f.book }}</span><span class="n">{{ f.n_chunks }}</span></label>
+            {% endfor %}
+          </div>
+        </details>
+      {% empty %}
+        <p class="note">אין מחסן אמבדינגים תחת <span class="ltr">{{ store_dir }}</span>.</p>
+      {% endfor %}
+    </fieldset>
+
+    </div><!-- /controls-body -->
+    <div class="actions">
+      <button type="submit" class="primary" id="go" name="action" value="cluster">הרצת קלאסטרינג</button>
+      <button type="submit" class="quiet" id="sweep" name="action" value="sweep">איזה k? בדיקת המרפק</button>
+    </div>
+  </form>
+
+  <main>
+    {% if error %}<div class="error">{{ error }}</div>{% endif %}
+
+    {% if job_id %}
+      <div class="progress" id="job" data-job="{{ job_id }}">
+        <h2>מחשב</h2>
+        <div class="bar"><i id="bar-fill"></i></div>
+        <p class="bar-text"><b id="bar-stage">מתחיל…</b> <span id="bar-time"></span></p>
+        <ol class="stages" id="stage-list"></ol>
+      </div>
+    {% endif %}
+
+    {% if sweep %}
+      <div class="runline">
+        <span class="item"><b class="num">{{ sweep.band_low }}–{{ sweep.band_high }}</b>הטווח שכדאי לשחק בו</span>
+        <span class="item"><b class="num">{{ sweep.elbow }}</b>המרפק</span>
+        {% if sweep.gain_at_current %}<span class="item"><b class="num">{{ sweep.gain_at_current }}%</b>מה שהוסיף k = {{ sweep.current_k }}</span>{% endif %}
+        <span class="item"><span class="num">{{ sweep.points }}</span> צ'אנקים{% if sweep.sampled %}, בדגימה{% endif %} · נסרק k מ־{{ sweep.k_min }} עד {{ sweep.k_max }} · {{ sweep.seconds }} שניות</span>
+      </div>
+      <div class="reading">
+        <p><b>הטווח, לא המספר.</b> נסי כל ערך בין <b>k = {{ sweep.band_low }}</b>
+        ל־<b>k = {{ sweep.band_high }}</b>. כולם מוצדקים באותה מידה על סמך החומר, וההבדל
+        ביניהם הוא כמה דק הפירוט שאת רוצה — לא מי מהם "נכון". קצת לפני המרפק נותן חלוקה
+        גסה וקריאה, קצת אחריו מפצל קבוצות גדולות לגוונים. שווה להריץ שניים־שלושה ולהשוות.</p>
+        <p><b>מאיפה הטווח.</b> כל קלאסטר שמוסיפים מסביר עוד קצת מהפיזור, ולכן העקומה
+        השמאלית יכולה רק לרדת. מה שמעניין הוא איפה היא מתיישרת — <b>המרפק, k =
+        {{ sweep.elbow }}</b>. העמודות מימין מראות את אותו דבר בצורה ישירה: כמה אחוזים
+        מהפיזור שנותר כל קלאסטר נוסף עוד מסביר. אצל המרפק זה
+        {{ sweep.gain_at_elbow }}%, ומשם זה דועך — בקצה הסריקה כבר רק
+        {{ sweep.gain_last }}%.
+        {% if sweep.flat %}
+          כאן העקומה כמעט ישרה, כלומר לחומר הזה אין מספר קבוצות טבעי. הטווח שלמעלה הוא
+          הצעה סבירה, אבל בחרי לפי מה שקריא בתרשים ודווחי מה בחרת.
+        {% endif %}
+        </p>
+        <p class="fine">הקו האדום הוא המרפק, הקו המקווקו הוא ה־k שמוגדר כרגע בטופס.</p>
+      </div>
+    {% endif %}
+
+    {% if summary %}
+      <div class="runline">
+        <span class="item"><b class="num">{{ summary.chunks }}</b>צ'אנקים</span>
+        <span class="item"><b class="num">{{ summary.files }}</b>טקסטים</span>
+        <span class="item"><b class="num">{{ summary.words }}</b>מילים</span>
+        <span class="item"><b class="num">{{ summary.clusters }}</b>קלאסטרים</span>
+        {% if summary.cpd_requested and summary.change_points %}
+          <span class="item"><b class="num">{{ summary.change_points }}</b>נקודות שינוי</span>
+        {% endif %}
+        <span class="item"><span class="num">{{ summary.seconds }}</span> שניות</span>
+        {% if summary.webgl %}<span class="tag">מצויר ב־GPU</span>{% endif %}
+        {% if from_cache %}<span class="tag">מהמטמון</span>{% endif %}
+      </div>
+      {% if summary.cpd_requested and not summary.change_points %}
+        <div class="notice">
+          <b>לא נמצאה אף נקודת שינוי.</b> PELT רץ על הרכב הקלאסטרים בבלוקים של
+          {{ summary.block_size }} צ'אנקים, ובפנלטי {{ summary.penalty }} שום גבול לא הצדיק
+          את עלותו. כדאי להנמיך את הפנלטי — 0.5 ואף 0.2 — או להקטין את הבלוק, כדי שהאות
+          יהיה עדין יותר.
+        </div>
+      {% endif %}
+      <div class="downloads">
+        {% for name, size in downloads %}
+          <a href="{% url 'download' token name %}" download><span class="ltr">{{ name }}</span>
+            <span>{{ size|filesizeformat }}</span></a>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    {% if figure_html %}
+      <div class="stale" id="stale" hidden>
+        הפרמטרים שונו מאז הריצה הזו. התרשים שלמטה עדיין מציג את הריצה הקודמת —
+        יש ללחוץ על <b>הרצת קלאסטרינג</b> כדי לראות את השינוי.
+      </div>
+      {% if summary %}
+        <script id="cp-index" type="application/json">{"shapes": {{ summary.cp_shapes|default:"[]" }}, "notes": {{ summary.cp_notes|default:"[]" }}}</script>
+      {% endif %}
+      <div class="plate" id="plate">
+        {{ figure_html|safe }}
+        <p class="plate-caption">
+          {{ model_label }} · צ'אנקים של {{ chunk_size }} מילים{% if summary %} · k = {{ k }}{% if smoothing %} · בהחלקה{% endif %}.
+          גלילה לזום, גרירה להזזה, לחיצה כפולה לאיפוס.{% endif %}
+        </p>
+      </div>
+    {% elif not job_id and not error %}
+      <p class="empty">בוחרים טקסטים ופרמטרים, ומריצים.</p>
+    {% endif %}
+  </main>
+</div>
+
+<script>
+(function () {
+  var form = document.querySelector("form.controls");
+  var boxes = function () { return document.querySelectorAll("input[name=files]"); };
+  var counter = document.getElementById("count");
+
+  function refresh() {
+    var checked = document.querySelectorAll("input[name=files]:checked").length;
+    if (counter) counter.textContent = checked;
+    document.querySelectorAll(".group-all").forEach(function (g) {
+      var inGroup = document.querySelectorAll('.files[data-group="' + g.dataset.group + '"] input[name=files]');
+      var on = Array.prototype.filter.call(inGroup, function (b) { return b.checked; }).length;
+      g.checked = on === inGroup.length && inGroup.length > 0;
+      g.indeterminate = on > 0 && on < inGroup.length;
+    });
+  }
+
+  // A checkbox inside <summary> would otherwise open and close the section.
+  document.querySelectorAll(".group-all").forEach(function (g) {
+    g.addEventListener("click", function (e) { e.stopPropagation(); });
+    g.addEventListener("change", function () {
+      document.querySelectorAll('.files[data-group="' + g.dataset.group + '"] input[name=files]')
+        .forEach(function (b) { b.checked = g.checked; });
+      refresh();
+    });
+  });
+
+  document.querySelectorAll("a.pick").forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      e.preventDefault();
+      var on = a.dataset.all === "1";
+      boxes().forEach(function (b) { b.checked = on; });
+      refresh();
+    });
+  });
+
+  document.addEventListener("change", function (e) {
+    if (e.target.name === "files") refresh();
+  });
+
+  form.addEventListener("submit", function () {
+    var go = document.getElementById("go");
+    go.disabled = true;
+    go.textContent = "מחשב…";
+  });
+
+  // A figure on screen is a record of the run that made it. When a parameter that
+  // feeds the computation changes, say so rather than leave the old figure looking
+  // like an answer to the new question.
+  var stale = document.getElementById("stale");
+  var plate = document.getElementById("plate");
+  if (stale) {
+    form.addEventListener("change", function (e) {
+      // The model and the chunk size reload the page of their own accord, and the
+      // change-point checkbox only toggles a layer that is already drawn.
+      if (["model", "chunk_size", "change_points"].indexOf(e.target.name) >= 0) return;
+      stale.hidden = false;
+      if (plate) plate.classList.add("stale-figure");
+      var go = document.getElementById("go");
+      if (go) go.textContent = "הרצת קלאסטרינג ↻";
+    });
+  }
+
+  // The change points are computed on every run and drawn into the figure, so the
+  // checkbox only shows and hides them — no second run, no waiting.
+  var cpIndex = document.getElementById("cp-index");
+  var cpBox = document.querySelector('input[name="change_points"]');
+  if (cpIndex && cpBox) {
+    var idx = JSON.parse(cpIndex.textContent);
+    var gd = document.querySelector("#plate .plotly-graph-div");
+    var found = (idx.shapes || []).length;
+    cpBox.addEventListener("change", function () {
+      if (!gd || !window.Plotly) return;
+      var update = {};
+      (idx.shapes || []).forEach(function (i) { update["shapes[" + i + "].visible"] = cpBox.checked; });
+      (idx.notes || []).forEach(function (i) { update["annotations[" + i + "].visible"] = cpBox.checked; });
+      if (Object.keys(update).length) Plotly.relayout(gd, update);
+      var hint = document.getElementById("cp-hint");
+      if (hint) hint.textContent = cpBox.checked
+        ? (found ? found + " נקודות שינוי מוצגות" : "לא נמצאו נקודות שינוי בפרמטרים האלה")
+        : "";
+    });
+  }
+
+  function humanTime(s) {
+    if (s < 60) return s + " שניות";
+    return Math.floor(s / 60) + " דקות ו־" + (s % 60) + " שניות";
+  }
+
+  var jobBox = document.getElementById("job");
+  if (jobBox) {
+    var jobId = jobBox.dataset.job;
+    var fill = document.getElementById("bar-fill");
+    var stageEl = document.getElementById("bar-stage");
+    var timeEl = document.getElementById("bar-time");
+    var list = document.getElementById("stage-list");
+
+    (function poll() {
+      fetch("{% url 'index' %}progress/" + jobId).then(function (r) { return r.json(); }).then(function (s) {
+        if (s.error) { jobBox.innerHTML = '<div class="error">' + s.error + "</div>"; return; }
+        if (s.done) { window.location = "{% url 'index' %}result/" + jobId; return; }
+        fill.style.width = Math.round(s.fraction * 100) + "%";
+        stageEl.textContent = s.stage + " · " + s.chunks.toLocaleString("he-IL") + " צ'אנקים";
+        timeEl.textContent = s.overrun
+          ? "עברו " + humanTime(Math.round(s.elapsed)) + ", יותר מההערכה של "
+            + humanTime(Math.round(s.estimate))
+          : "עברו " + humanTime(Math.round(s.elapsed)) + ", נותרו בערך "
+            + humanTime(s.remaining) + " מתוך " + humanTime(Math.round(s.estimate));
+        if (!list.children.length) {
+          s.stages.forEach(function (name) {
+            var li = document.createElement("li");
+            li.textContent = name;
+            list.appendChild(li);
+          });
+        }
+        Array.prototype.forEach.call(list.children, function (li, i) {
+          li.className = i < s.stage_index ? "done" : (i === s.stage_index ? "now" : "");
+        });
+        setTimeout(poll, 1000);
+      }).catch(function () { setTimeout(poll, 2000); });
+    })();
+  }
+
+  refresh();
+})();
+</script>
+</body>
+</html>
