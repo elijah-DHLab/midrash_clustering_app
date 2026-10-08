@@ -262,7 +262,9 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
         t0 = time.time()
         jobs.set_stage(job_id, "קלאסטרינג")
         df = pipeline_core.cluster_chunks(df, k=k, apply_smoothing=smoothing)
-        df = pipeline_core.stringify_vectors(df)
+        # Vectors stay numpy arrays: the one reader of `vec` downstream
+        # (compute_chunk_cluster_affinities) takes them as they are, and
+        # stringify_vectors exists for CSV round trips this app never makes.
         df = cvr.prepare_dataframe(df, grouping_level=grouping_level)
         df = cvr.merge_small_groups(df)
         df = cvr.compute_density_original(df)
@@ -283,6 +285,21 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
                                                           penalty=penalty)
         except Exception:
             change_points = None
+
+        # The table goes out before the figure is drawn, so that the columns only
+        # it needs - the full text and the vectors - can be let go first: plotly
+        # takes a copy of the frame it is given, and on all of Midrash those two
+        # columns are a few hundred MB the figure never reads.
+        token = uuid.uuid4().hex[:12]
+        out_dir = pathlib.Path(settings.RUNS_DIR) / token
+        out_dir.mkdir(parents=True, exist_ok=True)
+        columns = [c for c in ("filename", "hierarchy", "chunk_number", "chronological_index",
+                               "scluster", "segment", "group_label", "chunk") if c in df.columns]
+        df[columns].to_csv(out_dir / "chunks.csv", index=False, encoding="utf-8-sig")
+        # One chunk at a time: .str.split() on the whole column held every word of
+        # the selection as a string at once. Same count, NaN skipped as before.
+        n_words = sum(len(c.split()) for c in df["chunk"] if isinstance(c, str))
+        df = df.drop(columns=[c for c in ("vec", "chunk", "hierarchy_list") if c in df.columns])
 
         jobs.set_stage(job_id, "ציור")
         # Past this many points the SVG layer makes hovering and panning unusable.
@@ -310,12 +327,6 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
                 annotations=[a.update(visible=False) if i in cp_notes else a
                              for i, a in enumerate(fig.layout.annotations or ())])
 
-        token = uuid.uuid4().hex[:12]
-        out_dir = pathlib.Path(settings.RUNS_DIR) / token
-        out_dir.mkdir(parents=True, exist_ok=True)
-        columns = [c for c in ("filename", "hierarchy", "chunk_number", "chronological_index",
-                               "scluster", "segment", "group_label", "chunk") if c in df.columns]
-        df[columns].to_csv(out_dir / "chunks.csv", index=False, encoding="utf-8-sig")
         plot_config = {"displaylogo": False, "responsive": True, "scrollZoom": True,
                        "doubleClick": "reset", "modeBarButtonsToAdd": ["drawopenpath", "eraseshape"]}
         fig.write_html(out_dir / "figure.html", include_plotlyjs="cdn", config=plot_config)
@@ -334,7 +345,7 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
         summary = {
             "chunks": len(df),
             "files": df["filename"].nunique(),
-            "words": int(df["chunk"].str.split().str.len().sum()),
+            "words": n_words,
             "clusters": int(df["scluster"].nunique()),
             "change_points": len(change_points) if change_points else 0,
             "seconds": round(time.time() - t0, 1),

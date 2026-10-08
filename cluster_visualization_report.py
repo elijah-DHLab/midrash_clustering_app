@@ -10,6 +10,8 @@ Combines:
 import argparse
 import ast
 import os
+import re
+from array import array
 
 from dotenv import load_dotenv
 
@@ -214,7 +216,15 @@ def compute_density_original(df):
 
 
 def _parse_vec_fast(vec_str):
-    """Parse a '[0.1, 0.2, ...]' string to a float array without ast.literal_eval."""
+    """Parse a '[0.1, 0.2, ...]' string to a float array without ast.literal_eval.
+
+    A live numpy vector is taken as it is. The string is only ever the repr of
+    that vector's values, and it parses back to exactly them as float64, so
+    converting here gives the same numbers without the round trip through text
+    - which on all of Midrash was some 400 MB of strings.
+    """
+    if isinstance(vec_str, np.ndarray):
+        return vec_str.astype(np.float64) if vec_str.size else None
     cleaned = str(vec_str).strip().strip("[]")
     if not cleaned:
         return None
@@ -229,8 +239,14 @@ def compute_chunk_cluster_affinities(df):
         print("WARNING: 'vec' column not found — skipping chunk affinities.")
         return df
 
-    vecs = df["vec"].apply(_parse_vec_fast)
-    valid = vecs.apply(lambda v: v is not None and v.size > 0)
+    if df["vec"].map(lambda v: isinstance(v, np.ndarray)).all():
+        # Live vectors (the web app): stacked as float32 and widened once,
+        # which gives the float64 values _parse_vec_fast would, row by row.
+        valid = df["vec"].map(lambda v: v.size > 0)
+        vecs = None
+    else:
+        vecs = df["vec"].apply(_parse_vec_fast)
+        valid = vecs.apply(lambda v: v is not None and v.size > 0)
     if not valid.all():
         print(
             f"WARNING: {(~valid).sum()} chunks have unparsable vectors — "
@@ -239,15 +255,20 @@ def compute_chunk_cluster_affinities(df):
 
     df = df.copy()
     cluster_ids = sorted(df["scluster"].unique())
-    centroids = []
-    for cid in cluster_ids:
-        mask = valid & (df["scluster"] == cid)
-        cluster_vecs = np.stack(vecs[mask].values)
-        centroids.append(cluster_vecs.mean(axis=0))
-    centroid_matrix = np.stack(centroids)
-
-    chunk_matrix = np.stack(vecs[valid].values)
+    # One matrix of the valid vectors, built once; each centroid is the mean of
+    # its rows in it. The same rows in the same order as stacking per cluster,
+    # so the same numbers - without a float64 copy of every vector held in a
+    # Series beside the matrix (about 500 MB on 160k chunks).
+    if vecs is None:
+        chunk_matrix = np.stack(df["vec"][valid].values).astype(np.float64)
+    else:
+        chunk_matrix = np.stack(vecs[valid].values)
+    del vecs
+    labels = df.loc[valid, "scluster"].to_numpy()
+    centroid_matrix = np.stack([chunk_matrix[labels == cid].mean(axis=0)
+                                for cid in cluster_ids])
     sim_matrix = cosine_similarity(chunk_matrix, centroid_matrix)
+    del chunk_matrix
 
     cluster_id_to_col = {cid: i for i, cid in enumerate(cluster_ids)}
     own_col = df.loc[valid, "scluster"].map(cluster_id_to_col).to_numpy()
@@ -277,7 +298,118 @@ def compute_chunk_cluster_affinities(df):
 # ---------------------------------------------------------------------------
 
 
+_TOKEN = re.compile(r"(?u)\b\w+\b")      # CountVectorizer's default token_pattern
+
+
 def add_cluster_ctfidf_ngrams(df, ngram_n=3, top_k=20):
+    """The top_k most characteristic n-grams of each cluster, by c-TF-IDF.
+
+    Gives exactly what _ctfidf_ngrams_sklearn gives - same scores, same order,
+    ties included - at a small fraction of the memory. CountVectorizer keeps
+    every distinct n-gram of the selection as a string in a dict: on all of
+    Midrash that is millions of strings and about a gigabyte. Here each word
+    becomes an integer and each n-gram one 64-bit number, so the counting is
+    done on flat arrays and strings are built only for the winners.
+
+    The words are numbered in alphabetical order. Since the space that joins
+    an n-gram sorts below every word character, the numeric order of the
+    packed n-grams is the alphabetical order of their strings - the order
+    CountVectorizer gives its columns - so each cluster's scores reach argsort
+    in the same arrangement, and equal scores come out in the same order.
+    """
+    if "chunk" not in df.columns or df["chunk"].fillna("").eq("").all():
+        df = df.copy()
+        df["cluster_top_ngrams"] = "No n-grams available"
+        return df
+
+    # 1. Tokens, as provisional word ids, cluster by cluster. Chunks are joined
+    #    with a space in the reference, so tokenizing them one by one and
+    #    concatenating gives the same token stream.
+    word_id, words, streams, clusters = {}, [], [], []
+    for cluster_id, chunks in df.groupby("scluster")["chunk"]:
+        ids = array("q")        # 8 bytes a token; a list of ints costs ~36
+        for c in chunks:
+            s = str(c)
+            if not s.strip():
+                continue
+            for tok in _TOKEN.findall(s):
+                i = word_id.get(tok)
+                if i is None:
+                    i = word_id[tok] = len(words)
+                    words.append(tok)
+                ids.append(i)
+        clusters.append(cluster_id)
+        streams.append(np.frombuffer(ids, dtype=np.int64).copy())
+        del ids
+
+    V = max(len(words), 1)
+    if V ** ngram_n >= 2 ** 63:
+        return _ctfidf_ngrams_sklearn(df, ngram_n=ngram_n, top_k=top_k)
+
+    # 2. Renumber the words alphabetically.
+    order = sorted(range(len(words)), key=words.__getitem__)
+    rank = np.empty(len(words), dtype=np.int64)
+    rank[np.asarray(order, dtype=np.int64)] = np.arange(len(words), dtype=np.int64)
+    sorted_words = [words[i] for i in order]
+    del word_id, words, order
+
+    # 3. Each cluster's distinct n-grams (sorted, so alphabetical) and counts.
+    per_cluster = []
+    for ids in streams:
+        if len(ids) < ngram_n:
+            per_cluster.append((np.empty(0, np.int64), np.empty(0, np.int64)))
+            continue
+        r = rank[ids]
+        key = np.zeros(len(r) - ngram_n + 1, dtype=np.int64)
+        for j in range(ngram_n):
+            key = key * V + r[j:len(r) - ngram_n + 1 + j]
+        per_cluster.append(np.unique(key, return_counts=True))
+    del streams
+
+    if not any(len(k) for k, _c in per_cluster):
+        df = df.copy()
+        df["cluster_top_ngrams"] = "No n-grams available"
+        return df
+
+    # 4. Document frequency: in how many clusters each n-gram occurs.
+    all_keys, doc_freq = np.unique(np.concatenate([k for k, _c in per_cluster]),
+                                   return_counts=True)
+    n_classes = len(per_cluster)
+
+    def decode(key):
+        parts = []
+        for _ in range(ngram_n):
+            key, w = divmod(int(key), V)
+            parts.append(sorted_words[w])
+        return " ".join(reversed(parts))
+
+    # 5. Score and rank, with the reference's arithmetic in the reference's order.
+    top_ngrams_by_cluster = {}
+    for cluster_id, (keys, counts) in zip(clusters, per_cluster):
+        if len(keys) == 0:
+            top_ngrams_by_cluster[int(cluster_id)] = "No n-grams available"
+            continue
+        counts = counts.astype(float)
+        row_sum = counts.sum()
+        df_c = doc_freq[np.searchsorted(all_keys, keys)]
+        idf = np.log((1 + n_classes) / (1 + df_c)) + 1.0
+        scores = (counts / row_sum) * idf
+        keep = scores > 0
+        keys, scores = keys[keep], scores[keep]
+        if len(keys) == 0:
+            top_ngrams_by_cluster[int(cluster_id)] = "No n-grams available"
+            continue
+        top = keys[np.argsort(scores)[::-1][:top_k]]
+        top_ngrams_by_cluster[int(cluster_id)] = "<br>".join(decode(k) for k in top)
+
+    df = df.copy()
+    df["cluster_top_ngrams"] = df["scluster"].map(top_ngrams_by_cluster)
+    return df
+
+
+def _ctfidf_ngrams_sklearn(df, ngram_n=3, top_k=20):
+    """The CountVectorizer version - the reference the fast path is checked
+    against, and its fallback for a vocabulary too large to pack."""
     if "chunk" not in df.columns or df["chunk"].fillna("").eq("").all():
         df = df.copy()
         df["cluster_top_ngrams"] = "No n-grams available"
