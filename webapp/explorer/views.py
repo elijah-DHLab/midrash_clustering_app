@@ -80,6 +80,9 @@ def _cache_key(filenames, chunk_size, k, smoothing, grouping_level, want_cpd,
                block_size, penalty, model):
     """Identical parameters produce an identical run, so they need computing once."""
     payload = json.dumps({
+        # Bumped when a run starts producing something an older one lacks (2: the
+        # cluster table), so a cached run is never served without it.
+        "outputs": 2,
         "files": sorted(filenames), "chunk_size": chunk_size, "k": k, "model": model,
         "smoothing": smoothing, "grouping_level": grouping_level,
         "cpd": [want_cpd, block_size, penalty],
