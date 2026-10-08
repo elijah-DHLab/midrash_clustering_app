@@ -261,6 +261,75 @@ def run(request):
                            want_cpd=want_cpd, block_size=block_size, penalty=penalty))
 
 
+def _cluster_table(df, model):
+    """One row per cluster: what it is made of, where it sits, how tight it is.
+
+    Read off the frame the run already has - sizes, the texts its chunks come
+    from, where they fall on the chronological axis, the affinities and the
+    n-grams computed for the hover - so it costs nothing to compute. The colour
+    is the one build_figure gives the cluster, so a row can be found in the plot.
+    """
+    import plotly.express as px
+
+    names = store.titles_for(model)
+    def title(filename):
+        n = names.get(filename, {})
+        parts = [x for x in filename.replace(".json", "").split("-") if x]
+        return n.get("he") or n.get("en") or (parts[-1] if parts else filename)
+
+    ids = sorted(int(c) for c in df["scluster"].unique())
+    top = max(ids) if ids else 0
+    positions = [0.5] if len(ids) == 1 else [c / top for c in ids]
+    colours = dict(zip(ids, px.colors.sample_colorscale(px.colors.sequential.Plasma, positions)))
+
+    pos = df["chronological_index"].rank(pct=True).to_numpy() * 100
+    file_share = df["filename"].value_counts(normalize=True)
+    total = len(df)
+    rows = []
+    for cid in ids:
+        mask = (df["scluster"] == cid).to_numpy()
+        part = df.loc[mask]
+        n = int(mask.sum())
+        texts = part["filename"].value_counts()
+        p10, p50, p90 = np.percentile(pos[mask], [10, 50, 90])
+        nearest = part["nearest_other_cluster"].dropna()
+        ngrams = str(part["cluster_top_ngrams"].iloc[0]) if "cluster_top_ngrams" in part else ""
+        ngrams = [] if ngrams.startswith("No n-grams") else ngrams.split("<br>")
+        rows.append({
+            "cluster": cid,
+            "colour": colours[cid],
+            "chunks": n,
+            "share": round(100 * n / total, 1),
+            # Share of the cluster, and how many times the text's share of the whole
+            # selection that is: a large text tops every cluster by size alone, and
+            # the ratio is what says a cluster is drawn from it in particular.
+            "texts": [{"name": title(f), "share": round(100 * c / n),
+                       "lift": round((c / n) / (file_share[f]), 1)}
+                      for f, c in texts.head(3).items()],
+            "n_texts": int(len(texts)),
+            "p10": round(float(p10), 1), "p50": round(float(p50), 1), "p90": round(float(p90), 1),
+            "cohesion": round(float(part["own_cluster_sim"].mean()), 3)
+                        if "own_cluster_sim" in part else None,
+            "nearest": int(nearest.mode().iloc[0]) if len(nearest) else None,
+            "ngrams": ngrams,
+        })
+    return rows
+
+
+def _write_cluster_csv(rows, path):
+    pd.DataFrame([{
+        "cluster": r["cluster"],
+        "chunks": r["chunks"],
+        "share_of_selection_pct": r["share"],
+        "texts_in_cluster": r["n_texts"],
+        "top_texts": "; ".join("%s %d%% (x%.1f)" % (t["name"], t["share"], t["lift"]) for t in r["texts"]),
+        "position_p10_pct": r["p10"], "position_median_pct": r["p50"], "position_p90_pct": r["p90"],
+        "cohesion_mean_sim": r["cohesion"],
+        "nearest_cluster": r["nearest"],
+        "top_ngrams": "; ".join(r["ngrams"]),
+    } for r in rows]).to_csv(path, index=False, encoding="utf-8-sig")
+
+
 def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, penalty):
     try:
         t0 = time.time()
@@ -304,6 +373,9 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
         # the selection as a string at once. Same count, NaN skipped as before.
         n_words = sum(len(c.split()) for c in df["chunk"] if isinstance(c, str))
         df = df.drop(columns=[c for c in ("vec", "chunk", "hierarchy_list") if c in df.columns])
+        clusters = _cluster_table(df, jobs.JOBS[job_id].get("form", {}).get("model")
+                                  or store.default_model())
+        _write_cluster_csv(clusters, out_dir / "clusters.csv")
 
         jobs.set_stage(job_id, "ציור")
         # Past this many points the SVG layer makes hovering and panning unusable.
@@ -347,6 +419,7 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
                                       encoding="utf-8-sig")
 
         summary = {
+            "clusters_table": clusters,
             "chunks": len(df),
             "files": df["filename"].nunique(),
             "words": n_words,
@@ -495,6 +568,6 @@ def _sweep(df, current_k, k_min=2, k_max=20):
 
 def download(request, token, name):
     path = pathlib.Path(settings.RUNS_DIR) / token / name
-    if name not in {"chunks.csv", "figure.html", "change_points.csv"} or not path.exists():
+    if name not in {"chunks.csv", "clusters.csv", "figure.html", "change_points.csv"} or not path.exists():
         raise Http404
     return FileResponse(open(path, "rb"), as_attachment=True, filename=name)

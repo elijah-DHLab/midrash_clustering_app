@@ -189,6 +189,32 @@
     font-size: 12px; color: var(--rubric); border: 1px solid var(--rubric-soft);
     background: var(--rubric-soft); padding: 2px 9px; border-radius: 2px;
   }
+  /* The cluster table: one row per cluster, read alongside the plot. */
+  .clusters-wrap { overflow-x: auto; margin: 22px 0 8px; }
+  .clusters-head { font: 500 18px "Frank Ruhl Libre", serif; margin: 0 0 4px; }
+  .clusters-note { color: var(--muted); font-size: 13px; margin: 0 0 10px; max-width: 78ch; }
+  table.clusters { border-collapse: collapse; width: 100%; font-size: 13.5px; background: var(--plate); }
+  table.clusters th { font: 500 12px "Heebo", sans-serif; color: var(--muted); text-align: right;
+                      border-bottom: 1px solid var(--rule); padding: 7px 10px; white-space: nowrap;
+                      cursor: pointer; user-select: none; }
+  table.clusters th[aria-sort]::after { content: " ▾"; }
+  table.clusters th[aria-sort=ascending]::after { content: " ▴"; }
+  table.clusters td { border-bottom: 1px solid var(--rule-2); padding: 7px 10px; vertical-align: top; }
+  table.clusters tr:hover td { background: var(--rule-2); }
+  .swatch { display: inline-block; width: 11px; height: 11px; border-radius: 50%;
+            vertical-align: -1px; margin-left: 6px; }
+  .texts > span { display: block; white-space: nowrap; }
+  .texts .pct { color: var(--muted); font: 400 11.5px "IBM Plex Mono", monospace; margin-right: 6px; }
+  .texts .lift { color: var(--rubric); font: 500 11.5px "IBM Plex Mono", monospace; margin-right: 4px;
+                 direction: ltr; unicode-bidi: isolate; }
+  .texts .more { color: var(--muted); font-size: 12px; }
+  .span-track { position: relative; width: 120px; height: 10px; background: var(--rule-2);
+                border-radius: 2px; margin-top: 4px; direction: ltr; }
+  .span-band { position: absolute; top: 0; bottom: 0; background: var(--muted); opacity: .45; border-radius: 2px; }
+  .span-mid { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--rubric); }
+  .ngrams { color: var(--ink-2); font-family: "Frank Ruhl Libre", serif; font-size: 14px; line-height: 1.55; }
+  .ngrams span { display: block; white-space: nowrap; }
+
   .downloads { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
   .downloads a {
     font-size: 13px; color: var(--ink); text-decoration: none;
@@ -426,6 +452,51 @@
           גלילה לזום, גרירה להזזה, לחיצה כפולה לאיפוס.{% endif %}
         </p>
       </div>
+      {% if summary.clusters_table %}
+        <div class="clusters-wrap">
+          <h2 class="clusters-head">הקלאסטרים</h2>
+          <p class="clusters-note">שורה לכל קלאסטר, בצבע שלו בתרשים. <b>מיקום</b> הוא היכן
+          הקלאסטר יושב לאורך הציר הכרונולוגי של הבחירה: הפס מכסה את 80% האמצעיים של
+          הצ'אנקים שלו, והקו האדום הוא החציון. ליד טקסט שמיוצג בקלאסטר הרבה יותר מבבחירה כולה מופיע <span style="color:var(--rubric)">×</span> ופי כמה. <b>לכידות</b> היא הדמיון הממוצע של הצ'אנקים
+          למרכז הקלאסטר. לחיצה על כותרת ממיינת.</p>
+          <table class="clusters" id="clusters">
+            <thead><tr>
+              <th data-key="cluster" aria-sort="ascending">קלאסטר</th>
+              <th data-key="chunks">צ'אנקים</th>
+              <th>טקסטים עיקריים</th>
+              <th data-key="p50">מיקום</th>
+              <th data-key="cohesion">לכידות</th>
+              <th data-key="nearest">הקרוב ביותר</th>
+              <th>צירופים אופייניים</th>
+            </tr></thead>
+            <tbody>
+            {% for c in summary.clusters_table %}
+              <tr data-cluster="{{ c.cluster }}" data-chunks="{{ c.chunks }}" data-p50="{{ c.p50 }}"
+                  data-cohesion="{{ c.cohesion|default_if_none:0 }}" data-nearest="{{ c.nearest|default_if_none:-1 }}">
+                <td class="num"><span class="swatch" style="background: {{ c.colour }}"></span>{{ c.cluster }}</td>
+                <td><span class="num">{{ c.chunks }}</span>
+                    <div class="texts"><span class="pct">{{ c.share }}%</span></div></td>
+                <td class="texts">
+                  {% for x in c.texts %}<span>{{ x.name }}<span class="pct">{{ x.share }}%</span>{% if x.lift >= 1.5 %}<span class="lift" title="פי {{ x.lift }} משיעורו בכלל הבחירה">×{{ x.lift }}</span>{% endif %}</span>{% endfor %}
+                  {% if c.n_texts > 3 %}<span class="more">ועוד {{ c.n_texts|add:"-3" }}</span>{% endif %}
+                </td>
+                <td title="10%: {{ c.p10 }} · חציון: {{ c.p50 }} · 90%: {{ c.p90 }}">
+                  <div class="span-track">
+                    <div class="span-band" style="left: {{ c.p10 }}%; right: calc(100% - {{ c.p90 }}%)"></div>
+                    <div class="span-mid" style="left: {{ c.p50 }}%"></div>
+                  </div>
+                </td>
+                <td class="num">{{ c.cohesion|default_if_none:"–" }}</td>
+                <td class="num">{{ c.nearest|default_if_none:"–" }}</td>
+                <td class="ngrams" title="{{ c.ngrams|join:' · ' }}">
+                  {% for g in c.ngrams|slice:":5" %}<span>{{ g }}</span>{% endfor %}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
     {% elif not job_id and not error %}
       <p class="empty">בוחרים טקסטים ופרמטרים, ומריצים.</p>
     {% endif %}
@@ -556,6 +627,27 @@
   }
 
   refresh();
+})();
+</script>
+<script>
+(function () {
+  var table = document.getElementById("clusters");
+  if (!table) return;
+  table.querySelectorAll("th[data-key]").forEach(function (th) {
+    th.addEventListener("click", function () {
+      var key = th.dataset.key;
+      var asc = th.getAttribute("aria-sort") !== "ascending";
+      table.querySelectorAll("th").forEach(function (h) { h.removeAttribute("aria-sort"); });
+      th.setAttribute("aria-sort", asc ? "ascending" : "descending");
+      var body = table.tBodies[0];
+      Array.prototype.slice.call(body.rows)
+        .sort(function (a, b) {
+          var d = parseFloat(a.dataset[key]) - parseFloat(b.dataset[key]);
+          return asc ? d : -d;
+        })
+        .forEach(function (r) { body.appendChild(r); });
+    });
+  });
 })();
 </script>
 </body>
