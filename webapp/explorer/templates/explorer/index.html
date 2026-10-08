@@ -199,7 +199,8 @@
                       cursor: pointer; user-select: none; }
   table.clusters th[aria-sort]::after { content: " ▾"; }
   table.clusters th[aria-sort=ascending]::after { content: " ▴"; }
-  table.clusters td { border-bottom: 1px solid var(--rule-2); padding: 7px 10px; vertical-align: top; }
+  table.clusters td { border-bottom: 1px solid var(--rule-2); padding: 7px 10px; vertical-align: top;
+                      text-align: right; }
   table.clusters tr:hover td { background: var(--rule-2); }
   .swatch { display: inline-block; width: 11px; height: 11px; border-radius: 50%;
             vertical-align: -1px; margin-left: 6px; }
@@ -208,7 +209,7 @@
   .texts .lift { color: var(--rubric); font: 500 11.5px "IBM Plex Mono", monospace; margin-right: 4px;
                  direction: ltr; unicode-bidi: isolate; }
   .texts .more { color: var(--muted); font-size: 12px; }
-  .span-track { position: relative; width: 120px; height: 10px; background: var(--rule-2);
+  .span-track { position: relative; width: 120px; height: 10px; background: var(--rule-2); margin-left: auto;
                 border-radius: 2px; margin-top: 4px; direction: ltr; }
   .span-band { position: absolute; top: 0; bottom: 0; background: var(--muted); opacity: .45; border-radius: 2px; }
   .span-mid { position: absolute; top: -2px; bottom: -2px; width: 2px; background: var(--rubric); }
@@ -455,7 +456,7 @@
       {% if summary.clusters_table %}
         <div class="clusters-wrap">
           <h2 class="clusters-head">הקלאסטרים</h2>
-          <p class="clusters-note">שורה לכל קלאסטר, בצבע שלו בתרשים. <b>מיקום</b> הוא היכן
+          <p class="clusters-note">שורה לכל קלאסטר, בצבע שלו בתרשים. <b>מיקום כרונולוגי</b> הוא היכן
           הקלאסטר יושב לאורך הציר הכרונולוגי של הבחירה: הפס מכסה את 80% האמצעיים של
           הצ'אנקים שלו, והקו האדום הוא החציון. ליד טקסט שמיוצג בקלאסטר הרבה יותר מבבחירה כולה מופיע <span style="color:var(--rubric)">×</span> ופי כמה. <b>לכידות</b> היא הדמיון הממוצע של הצ'אנקים
           למרכז הקלאסטר. לחיצה על כותרת ממיינת.</p>
@@ -464,7 +465,7 @@
               <th data-key="cluster" aria-sort="ascending">קלאסטר</th>
               <th data-key="chunks">צ'אנקים</th>
               <th>טקסטים עיקריים</th>
-              <th data-key="p50">מיקום</th>
+              <th data-key="p50">מיקום כרונולוגי</th>
               <th data-key="cohesion">לכידות</th>
               <th data-key="nearest">הקרוב ביותר</th>
               <th>צירופים אופייניים</th>
