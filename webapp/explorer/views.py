@@ -49,11 +49,15 @@ def _selection_size(filenames, chunk_size, model):
 
 
 def _estimate_mb(chunks, words):
-    """Peak memory of a run, in MB. Measured 8.10.2026 on runs of 6k-50k chunks at
-    every chunk size and k up to 30 (the process itself is ~200 MB of libraries):
-    the plot and the clustering grow with the number of chunks, the n-gram
-    vocabulary with the number of words. Rounded up; it over-estimates slightly."""
-    return 200 + 7.6 * chunks / 1000 + 248 * words / 1e6
+    """Peak memory of a run, in MB, on the server. Calibrated there on 8.10.2026
+    with the memory-lean pipeline, on runs from 10k to 80k chunks (all of Midrash
+    at 50, 75 and 100 words among them): the clustering and the figure grow with
+    the number of chunks, the n-gram counting with the words. The constant is
+    the least-squares fit plus its largest miss plus 25 MB, so it errs high."""
+    return BASE_MB + 3.08 * chunks / 1000 + 20.3 * words / 1e6
+
+
+BASE_MB = 315
 
 
 def _too_large(filenames, chunk_size, model):
@@ -65,7 +69,7 @@ def _too_large(filenames, chunk_size, model):
     if _estimate_mb(chunks, words) <= limit:
         return None
     # How much of this selection would fit, at this chunk size.
-    share = (limit - 200) / max(_estimate_mb(chunks, words) - 200, 1)
+    share = (limit - BASE_MB) / max(_estimate_mb(chunks, words) - BASE_MB, 1)
     return ("הבחירה גדולה מדי לשרת: %s צ'אנקים, %s מילים. "
             "השרת מחזיק בערך %d%% ממנה. אפשר לבחור פחות טקסטים, "
             "או צ'אנקים גדולים יותר (פחות צ'אנקים לאותו טקסט)."
