@@ -81,7 +81,9 @@
     form.controls { position: static; height: auto; border-left: 0; border-bottom: 1px solid var(--rule); }
     .controls-body { overflow: visible; }
   }
-  fieldset { border: 0; margin: 0; padding: 18px 0; border-bottom: 1px solid var(--rule-2); }
+  /* min-width: 0 - a fieldset otherwise grows to its widest catalogue path, and the panel
+     scrolled sideways with "נבחרו" cut off at its edge. */
+  fieldset { border: 0; margin: 0; padding: 18px 0; border-bottom: 1px solid var(--rule-2); min-width: 0; }
   legend {
     padding: 0; font: 500 12px/1 "Heebo", sans-serif; letter-spacing: .06em; color: var(--muted);
   }
@@ -518,6 +520,19 @@
 <script>
 (function () {
   var form = document.querySelector("form.controls");
+
+  // The panel is sticky at the top of the window, but until the page scrolls it starts
+  // below the masthead, so a full-window height pushed the run buttons at its foot out
+  // of view. It is sized to the part of the window it actually occupies; the list above
+  // the buttons scrolls only when it does not fit.
+  function fitControls() {
+    if (getComputedStyle(form).position !== "sticky") { form.style.height = ""; return; }
+    form.style.height = (window.innerHeight - Math.max(0, form.getBoundingClientRect().top)) + "px";
+  }
+  window.addEventListener("scroll", fitControls, { passive: true });
+  window.addEventListener("resize", fitControls);
+  fitControls();
+
   var boxes = function () { return document.querySelectorAll("input[name=files]"); };
   var counter = document.getElementById("count");
 
