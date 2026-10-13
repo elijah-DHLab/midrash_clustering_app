@@ -13,7 +13,8 @@ lets the same selection be read in either space and the readings compared.
 
 Layout, under STORE_DIR:
 
-    <model>/<chunk_size>/<safe filename>.npz   vec (float32 n x dim), chunk, chunk_number
+    <model>/<chunk_size>/<safe filename>.npz   vec (float32 n x dim), chunk, chunk_number,
+                                               and from v7 on start_ref, end_ref, ref_spans, start_segment
     <model>/<chunk_size>/index.json            per file: n_chunks, words, hierarchy
     <model>/model.json                         label and provenance, shown in the app
 
@@ -62,9 +63,15 @@ def models() -> list:
     return out
 
 
+# The store the page opens on: v7 since October 2026; the others stay for comparison.
+DEFAULT_MODEL = os.environ.get("MIDRASH_DEFAULT_MODEL", "v7")
+
+
 def default_model() -> str:
-    found = models()
-    return found[0]["name"] if found else None
+    found = [m["name"] for m in models()]
+    if DEFAULT_MODEL in found:
+        return DEFAULT_MODEL
+    return found[0] if found else None
 
 
 def available_chunk_sizes(model: str) -> list:
@@ -148,13 +155,18 @@ def load_selection(filenames, chunk_size: int, model: str) -> pd.DataFrame:
     for filename in ordered:
         with np.load(STORE_DIR / model / str(chunk_size) / (safe_name(filename) + ".npz"),
                      allow_pickle=True) as z:
-            frames.append(pd.DataFrame({
+            frame = pd.DataFrame({
                 "filename": filename,
                 "hierarchy": index[filename].get("hierarchy", ""),
                 "chunk": z["chunk"],
                 "chunk_number": z["chunk_number"],
                 "vec": list(z["vec"]),
-            }))
+            })
+            # Where each chunk sits in its book - only in stores built from act_jsonl_v7.
+            for key in ("start_ref", "end_ref", "ref_spans", "start_segment"):
+                if key in z.files:
+                    frame[key] = z[key]
+            frames.append(frame)
     df = pd.concat(frames, ignore_index=True)
     df["hierarchy_list"] = df["hierarchy"].apply(_hierarchy_tuple)
     df["chronological_index"] = np.arange(len(df))

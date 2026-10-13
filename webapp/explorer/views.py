@@ -81,8 +81,9 @@ def _cache_key(filenames, chunk_size, k, smoothing, grouping_level, want_cpd,
     """Identical parameters produce an identical run, so they need computing once."""
     payload = json.dumps({
         # Bumped when a run starts producing something an older one lacks (2: the
-        # cluster table), so a cached run is never served without it.
-        "outputs": 2,
+        # cluster table; 3: the full chunks.csv and segments.csv), so a cached run is never
+        # served without it.
+        "outputs": 3,
         "files": sorted(filenames), "chunk_size": chunk_size, "k": k, "model": model,
         "smoothing": smoothing, "grouping_level": grouping_level,
         "cpd": [want_cpd, block_size, penalty],
@@ -139,7 +140,7 @@ def _catalogue(model, chunk_size, selected=()):
 
 def _context(chunk_size=None, model=None, **extra):
     all_models = store.models()
-    model = model or (all_models[0]["name"] if all_models else None)
+    model = model or store.default_model()
     sizes = store.available_chunk_sizes(model) if model else []
     chunk_size = chunk_size if chunk_size in sizes else (sizes[0] if sizes else None)
     selected = extra.get("selected") or set()
@@ -319,6 +320,81 @@ def _cluster_table(df, model):
     return rows
 
 
+# chunks.csv, in this order: the book, our chronology, where in the book, what the
+# clustering made of the chunk, its text. A column the store lacks is left out - the
+# places in the book (start_ref ...) exist only in stores built from act_jsonl_v7.
+CHUNK_COLUMNS = [
+    "chronological_index", "filename", "he_title",
+    "cat1", "cat2", "cat3", "scholarly_category", "composition_id", "edition",
+    "hierarchy", "grouping_label", "chunk_number",
+    "start_ref", "end_ref", "ref_spans", "start_segment",
+    "scluster", "own_cluster_sim", "nearest_other_cluster", "cluster_margin", "density",
+    "segment", "chunk",
+]
+BOOK_FIELDS = ("cat1", "cat2", "cat3", "scholarly_category", "composition_id", "edition")
+
+
+def _write_chunks_csv(df, model, path):
+    """Every chunk, with everything known about it - the book's catalog entry from the
+    store's titles.json, its place in the book, and its cluster, affinity and density."""
+    names = store.titles_for(model)
+    out = pd.DataFrame(index=df.index)
+    for col in CHUNK_COLUMNS:
+        if col in df.columns:
+            out[col] = df[col]
+        elif col == "he_title":
+            out[col] = df["filename"].map(lambda f: names.get(f, {}).get("he", ""))
+        elif col in BOOK_FIELDS and names:
+            out[col] = df["filename"].map(lambda f, c=col: names.get(f, {}).get(c, ""))
+        elif col == "density" and "density_normalized" in df.columns:
+            out[col] = df["density_normalized"].round(4)
+    for col in ("own_cluster_sim", "cluster_margin"):
+        if col in out.columns:
+            out[col] = out[col].round(4)
+    out.to_csv(path, index=False, encoding="utf-8-sig")
+
+
+def _place(df, names, position, end=False):
+    """'בראשית רבה 52_10': the book and the place of the chunk at a chronological index."""
+    row = df.iloc[int(min(max(position, 0), len(df) - 1))]
+    title = names.get(row["filename"], {}).get("he") or row["filename"]
+    ref = row.get("end_ref" if end else "start_ref", "")
+    return ("%s %s" % (title, ref)).strip() if isinstance(ref, str) else title
+
+
+def _write_segments_csv(df, change_points, model, path):
+    """One row per stretch between change points: where it starts and ends in the text,
+    which books it is made of, and its dominant clusters."""
+    names = store.titles_for(model)
+    ordered = df.sort_values("chronological_index").reset_index(drop=True)
+    edges = [0] + sorted(cp[0] for cp in change_points) + [len(ordered)]
+    pushed = {cp[0]: cp[2] for cp in change_points}
+    per_file = ordered["filename"].value_counts()
+    rows = []
+    for i in range(len(edges) - 1):
+        lo, hi = edges[i], edges[i + 1]
+        part = ordered.iloc[lo:hi]
+        if part.empty:
+            continue
+        books = part["filename"].value_counts()
+        clusters = part["scluster"].value_counts(normalize=True)
+        rows.append({
+            "segment": i + 1,
+            "from": _place(ordered, names, lo),
+            "to": _place(ordered, names, hi - 1, end=True),
+            "start_chunk": lo, "end_chunk": hi - 1, "chunks": len(part),
+            # Share of the segment, and how much of the book falls inside it.
+            "books": " + ".join("%s %.0f%% (%.0f%% מהספר)" % (
+                names.get(f, {}).get("he") or f, 100 * c / len(part), 100 * c / per_file[f])
+                for f, c in books.items()),
+            "top_clusters": "; ".join("%d: %.0f%%" % (c, 100 * s) for c, s in clusters.head(5).items()),
+            # The change point that opens this segment, and which clusters moved there.
+            "opened_by": "" if lo == 0 else "; ".join(
+                "%s %+.3f" % (c, d) for c, d in pushed.get(lo, [])[:5]),
+        })
+    pd.DataFrame(rows).to_csv(path, index=False, encoding="utf-8-sig")
+
+
 def _write_cluster_csv(rows, path):
     pd.DataFrame([{
         "cluster": r["cluster"],
@@ -369,15 +445,16 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
         token = uuid.uuid4().hex[:12]
         out_dir = pathlib.Path(settings.RUNS_DIR) / token
         out_dir.mkdir(parents=True, exist_ok=True)
-        columns = [c for c in ("filename", "hierarchy", "chunk_number", "chronological_index",
-                               "scluster", "segment", "group_label", "chunk") if c in df.columns]
-        df[columns].to_csv(out_dir / "chunks.csv", index=False, encoding="utf-8-sig")
+        model = jobs.JOBS[job_id].get("form", {}).get("model") or store.default_model()
+        _write_chunks_csv(df, model, out_dir / "chunks.csv")
+        if change_points:
+            _write_segments_csv(df, change_points, model, out_dir / "segments.csv")
         # One chunk at a time: .str.split() on the whole column held every word of
         # the selection as a string at once. Same count, NaN skipped as before.
         n_words = sum(len(c.split()) for c in df["chunk"] if isinstance(c, str))
-        df = df.drop(columns=[c for c in ("vec", "chunk", "hierarchy_list") if c in df.columns])
-        clusters = _cluster_table(df, jobs.JOBS[job_id].get("form", {}).get("model")
-                                  or store.default_model())
+        df = df.drop(columns=[c for c in ("vec", "chunk", "hierarchy_list", "ref_spans")
+                              if c in df.columns])
+        clusters = _cluster_table(df, model)
         _write_cluster_csv(clusters, out_dir / "clusters.csv")
 
         jobs.set_stage(job_id, "ציור")
@@ -415,7 +492,13 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
             fig.to_html(full_html=False, include_plotlyjs="cdn", config=plot_config),
             encoding="utf-8")
         if change_points:
-            rows = [{"chronological_index": ci, "score": round(float(score), 4),
+            names = store.titles_for(model)
+            ordered = df.sort_values("chronological_index").reset_index(drop=True)
+            rows = [{"chronological_index": ci,
+                     # The last chunk before the boundary and the first after it.
+                     "before": _place(ordered, names, ci - 1, end=True),
+                     "after": _place(ordered, names, ci),
+                     "score": round(float(score), 4),
                      "top_clusters": "; ".join("%s %+.3f" % (c, d) for c, d in contrib[:5])}
                     for ci, score, contrib in change_points]
             pd.DataFrame(rows).to_csv(out_dir / "change_points.csv", index=False,
@@ -571,6 +654,6 @@ def _sweep(df, current_k, k_min=2, k_max=20):
 
 def download(request, token, name):
     path = pathlib.Path(settings.RUNS_DIR) / token / name
-    if name not in {"chunks.csv", "clusters.csv", "figure.html", "change_points.csv"} or not path.exists():
+    if name not in {"chunks.csv", "clusters.csv", "segments.csv", "figure.html", "change_points.csv"} or not path.exists():
         raise Http404
     return FileResponse(open(path, "rb"), as_attachment=True, filename=name)

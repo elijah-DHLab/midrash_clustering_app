@@ -38,3 +38,6 @@ webapp/_runs/
 # Corpus subsets copied for a run
 surprisal/corpus/
 surprisal/measurements/
+
+# Sefaria act_jsonl_v7 corpus, downloaded from s3://elasticsearch-back-c/jsons/sefaria-jsons/act_jsonl_v7/
+corpus_v7/

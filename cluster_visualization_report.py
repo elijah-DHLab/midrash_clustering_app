@@ -75,6 +75,12 @@ def _grouping_label(filename, level):
     Level 3 -> Corpus-Sub-Book          e.g. 'Talmud-Bavli-Seder Moed'
     """
     base = str(filename)
+    if base.endswith(".jsonl"):
+        # act_jsonl_v7: Midrash-Aggadic_Midrash-...-Bereishit_Rabbah-[EDITION_]Sefaria.jsonl
+        parts = base[: -len(".jsonl")].replace("_", " ").split("-")
+        if parts and parts[-1].endswith("Sefaria"):
+            parts = parts[:-1]
+        return "-".join(parts[:level])
     if base.endswith("-.json"):
         base = base[: -len("-.json")]
     elif base.endswith(".json"):

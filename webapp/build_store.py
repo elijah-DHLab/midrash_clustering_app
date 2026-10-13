@@ -30,6 +30,9 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 
+CATALOG_FIELDS = ("cat1", "cat2", "cat3", "scholarly_category", "composition_id", "edition", "type")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sizes", type=int, nargs="+", required=True)
@@ -93,7 +96,11 @@ def main():
             np.savez_compressed(target,
                                 vec=vecs,
                                 chunk=chunks["chunk"].to_numpy(dtype=object),
-                                chunk_number=chunks["chunk_number"].to_numpy())
+                                chunk_number=chunks["chunk_number"].to_numpy(),
+                                start_ref=chunks["start_ref"].astype(str).to_numpy(dtype=object),
+                                end_ref=chunks["end_ref"].astype(str).to_numpy(dtype=object),
+                                ref_spans=chunks["ref_spans"].astype(str).to_numpy(dtype=object),
+                                start_segment=chunks["start_segment"].astype(str).to_numpy(dtype=object))
             index[filename] = {
                 "n_chunks": int(len(chunks)),
                 "words": int(sum(len(c.split()) for c in chunks["chunk"])),
@@ -110,6 +117,40 @@ def main():
         size_mb = sum(p.stat().st_size for p in out_dir.glob("*.npz")) / 1e6
         print("size %d: %d files in the store, %.0f MB, %.0fs"
               % (size, len(index), size_mb, time.time() - t0), flush=True)
+
+    write_titles(metadata, model_dir)
+
+
+def write_titles(metadata, model_dir):
+    """titles.json from the catalog's own columns, when the input table is corpus_catalog.xlsx.
+
+    The old dump had no Hebrew titles, so build_hebrew_titles.py fetched them from Sefaria's
+    API; v7 carries he_title and the scholarly category in every file, and the catalog has them.
+    """
+    if "he_title" not in metadata.columns:
+        return
+    from build_hebrew_titles import CORPUS_HE
+    def value(row, col):
+        v = row.get(col)
+        return "" if v is None or (isinstance(v, float) and v != v) or str(v) == "nan" else str(v)
+
+    titles = {}
+    for _, row in metadata.iterrows():
+        filename = str(row["filename"])
+        corpus = filename.split("-")[0]
+        he = value(row, "he_title")
+        scholarly = value(row, "scholarly_category")
+        titles[filename] = {
+            "he": he,
+            "en": value(row, "title"),
+            "he_path": " / ".join(x for x in (scholarly, he) if x),
+            "corpus_he": CORPUS_HE.get(corpus, corpus),
+            # Carried into every chunk of the app's chunks.csv, so the server needs no catalog.
+            **{col: value(row, col) for col in CATALOG_FIELDS},
+        }
+    (model_dir / "titles.json").write_text(json.dumps(titles, ensure_ascii=False, indent=1),
+                                           encoding="utf-8")
+    print("titles.json: %d files" % len(titles), flush=True)
 
 
 if __name__ == "__main__":

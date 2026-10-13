@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>אינדקס ספריא ב־ACT — תיעוד הקורפוס</title>
+<style>
+  :root{
+    --bg:#fbfaf7; --card:#fff; --ink:#1c1a17; --muted:#6b6560;
+    --line:#e3ded6; --accent:#8a5a2b; --accent-soft:#f4ece1;
+    --code-bg:#f4f2ee;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:0; background:var(--bg); color:var(--ink);
+    font-family:"Segoe UI","Assistant","Heebo",system-ui,-apple-system,"Arial Hebrew",sans-serif;
+    line-height:1.75; font-size:16.5px;
+  }
+  .wrap{max-width:1000px; margin:0 auto; padding:48px 24px 96px}
+  header.hero{
+    background:linear-gradient(180deg,var(--accent-soft),transparent);
+    border-bottom:1px solid var(--line); margin-bottom:40px;
+    padding:56px 24px 40px;
+  }
+  header.hero .inner{max-width:1000px;margin:0 auto}
+  h1{font-size:2.1rem; margin:0 0 10px; letter-spacing:-.01em; font-weight:700}
+  .sub{color:var(--muted); font-size:1.05rem; margin:0}
+  .meta{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .chip{
+    background:var(--card); border:1px solid var(--line); border-radius:999px;
+    padding:5px 14px; font-size:.85rem; color:var(--muted);
+  }
+  .chip b{color:var(--ink); font-weight:600}
+  h2{
+    font-size:1.4rem; margin:52px 0 16px; padding-bottom:10px;
+    border-bottom:2px solid var(--accent-soft); font-weight:700;
+  }
+  h3{font-size:1.12rem; margin:32px 0 12px; color:var(--accent); font-weight:600}
+  h4{font-size:1rem; margin:24px 0 8px; font-weight:600}
+  p{margin:0 0 14px}
+  ul,ol{margin:0 0 16px; padding-inline-start:26px}
+  li{margin-bottom:7px}
+  code,.mono{
+    font-family:"SF Mono",Menlo,Consolas,monospace; font-size:.88em;
+    background:var(--code-bg); padding:2px 6px; border-radius:4px;
+    direction:ltr; unicode-bidi:embed; display:inline-block;
+  }
+  pre{
+    background:var(--code-bg); border:1px solid var(--line); border-radius:8px;
+    padding:14px 16px; overflow-x:auto; direction:ltr; text-align:left;
+    font-family:"SF Mono",Menlo,Consolas,monospace; font-size:.85rem;
+    line-height:1.6; margin:0 0 18px;
+  }
+  blockquote{
+    margin:0 0 18px; padding:14px 18px; background:var(--card);
+    border-inline-start:3px solid var(--accent); border-radius:0 8px 8px 0;
+    color:var(--muted); font-size:.94rem;
+  }
+  blockquote.en{direction:ltr; text-align:left; border-inline-start:none; border-left:3px solid var(--accent); border-radius:8px 0 0 8px}
+  table{
+    width:100%; border-collapse:collapse; margin:0 0 22px;
+    background:var(--card); border:1px solid var(--line); border-radius:8px;
+    overflow:hidden; font-size:.93rem;
+  }
+  th,td{padding:11px 14px; text-align:right; border-bottom:1px solid var(--line); vertical-align:top}
+  th{background:var(--accent-soft); font-weight:600; font-size:.88rem}
+  tr:last-child td{border-bottom:none}
+  td.num,th.num{width:52px; text-align:center; color:var(--muted); font-variant-numeric:tabular-nums}
+  .note{
+    background:var(--card); border:1px solid var(--line); border-inline-start:3px solid var(--accent);
+    border-radius:0 8px 8px 0; padding:14px 18px; margin:0 0 20px;
+  }
+  .note strong{color:var(--accent)}
+  .toc{
+    background:var(--card); border:1px solid var(--line); border-radius:10px;
+    padding:20px 24px; margin:0 0 44px;
+  }
+  .toc h2{margin:0 0 12px; font-size:1rem; border:none; padding:0}
+  .toc ol{margin:0; padding-inline-start:22px; columns:2; column-gap:32px}
+  .toc a{color:var(--ink); text-decoration:none; border-bottom:1px solid transparent}
+  .toc a:hover{border-bottom-color:var(--accent); color:var(--accent)}
+  a{color:var(--accent)}
+  footer{
+    margin-top:64px; padding-top:24px; border-top:1px solid var(--line);
+    color:var(--muted); font-size:.87rem;
+  }
+  @media (max-width:640px){
+    .toc ol{columns:1}
+    h1{font-size:1.6rem}
+    body{font-size:16px}
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="inner">
+    <h1>אינדקס ספריא ב־ACT</h1>
+    <p class="sub">תיעוד מלא של הקורפוס: ניקוי, סגמנטציה, מבנה השדות ובדיקות האימות</p>
+    <div class="meta">
+      <span class="chip"><b>1,416</b> קבצים</span>
+      <span class="chip"><b>329,493</b> סגמנטים</span>
+      <span class="chip">מקור: <b>ספריא (Sefaria)</b></span>
+      <span class="chip">גרסה: <b>act_jsonl_v6</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <h2>תוכן העניינים</h2>
+  <ol>
+    <li><a href="#overview">מקור הנתונים ותכולת האינדקס</a></li>
+    <li><a href="#cleaning">ניקוי הטקסטים</a></li>
+    <li><a href="#decisions">נקודות החלטה בניקוי</a></li>
+    <li><a href="#segmentation">חלוקה למקטעי טקסט</a></li>
+    <li><a href="#structure">מבנה קבצי ה־JSON</a></li>
+    <li><a href="#categories">שדה הקטגוריות</a></li>
+    <li><a href="#sources">שדות מקור ומטא־דאטה</a></li>
+    <li><a href="#validation">בדיקות אימות</a></li>
+  </ol>
+</nav>
+
+<section id="overview">
+<h2>מקור הנתונים ותכולת האינדקס</h2>
+
+<p><strong>מקור הנתונים:</strong> ספריא (Sefaria) — קורפוס ספרות חז״ל ומדרשים.</p>
+
+<p>הכנת הדאטה לאינדקס כללה את השלבים הבאים:</p>
+<ol>
+  <li>ניקוי הטקסט</li>
+  <li>פיצול חיבורים לסגמנטים של 150–200 מילים</li>
+  <li>הוספת מטא־דאטה — קטגוריות, מקורות</li>
+  <li>נתינת שם משמעותי לכל מקטע</li>
+  <li>אימות</li>
+</ol>
+
+<h3>תכולת האינדקס</h3>
+<p>האינדקס כולל את כל החיבורים הנמצאים בקטגוריה 4 ו־5 ברשימה
+<a href="https://docs.google.com/spreadsheets/d/1bcT4E-hMM075ZIsZfwwkzmJF4Q7q8-muCUtlsEAwyVI/edit?gid=972639602#gid=972639602" target="_blank" rel="noopener">sefaria_books</a>.</p>
+</section>
+
+<section id="cleaning">
+<h2>ניקוי הטקסטים</h2>
+
+<p>לצורך הגדרת כללי הניקוי, נבחרה קבוצה מצומצמת של חיבורים עליהם נעשה מעבר ידני. מתוך הנתונים שנאספו החיבורים חולקו לשתי רמות ניקוי: מצב <code>standard</code> עבור רוב החיבורים, וקבוצה קטנה שמטופלת ב<strong>מצב תוספתא קדשים/טהרות</strong> (<code>tosefta_kodashim</code>). ההבדל היחיד בין שני המצבים הוא בכללי הסוגריים (ראו טבלה להלן).</p>
+
+<div class="note">
+  <strong>הקבצים שמשתמשים במצב <code>tosefta_kodashim</code>:</strong>
+  כל הקבצים ששמם מתחיל ב־<code>Tanaitic-Tosefta-Seder Kodashim-</code> או <code>Tanaitic-Tosefta-Seder Tahorot-</code>.
+</div>
+
+<h3>כללי הניקוי — 14 שלבים, בסדר ביצועם</h3>
+
+<table>
+<thead>
+<tr>
+  <th class="num">שלב</th>
+  <th>מה קורה</th>
+  <th>מצב <span class="mono">standard</span></th>
+  <th>מצב <span class="mono">tosefta_kodashim</span></th>
+</tr>
+</thead>
+<tbody>
+<tr><td class="num">1</td><td><strong>תווי אפס־רוחב ובקרת כיוון</strong></td><td>מוסרים לחלוטין (<code>U+200B–U+200F</code> ועוד)</td><td>זהה</td></tr>
+<tr><td class="num">2</td><td><strong>נורמליזציה של צורות הצגה עבריות (FB block)</strong></td><td>כל צורות ה־FB (shin עם dagesh, alef עם vowels וכו׳) ממופות לאות הבסיס</td><td>זהה</td></tr>
+<tr><td class="num">3</td><td><strong>תגי HTML</strong></td><td><code>&lt;b&gt;, &lt;i&gt;, &lt;small&gt;, &lt;br/&gt;</code> וכיו״ב — מוסרים עם התגים, התוכן נשמר</td><td>זהה</td></tr>
+<tr><td class="num">4</td><td><strong>סוגריים זוויתיים <code>&lt;...&gt;</code></strong></td><td>מוסרים יחד עם תוכנם</td><td><strong>נשמר התוכן, מוסרים הסימנים בלבד</strong></td></tr>
+<tr><td class="num">5</td><td><strong>סוגריים עגולים <code>(...)</code></strong></td><td>מוסרים יחד עם תוכנם</td><td>זהה</td></tr>
+<tr><td class="num">6</td><td><strong>סוגריים מרובעים <code>[...]</code></strong></td><td><strong>נשמר התוכן, מוסרות הסוגריים בלבד</strong></td><td><strong>מוסרים יחד עם תוכנם</strong></td></tr>
+<tr><td class="num">7</td><td><strong>ניקוד (nikud)</strong></td><td>מוסרים: ניקוד, טעמי מקרא, נקודות שין/שׂ, סימני פיסוק עבריים (<code>U+0591–U+05BD, U+05BF–U+05C2, U+05C4–U+05C7</code>).<br><strong>נשמר: ײ (Double Yod <code>U+05F2</code>) — אות עברית, לא ניקוד!</strong></td><td>זהה</td></tr>
+<tr><td class="num">8</td><td><strong>גרש ׳ וגרשיים ״</strong></td><td>מוסרים (<code>U+05F3, U+05F4</code>)</td><td>זהה</td></tr>
+<tr><td class="num">9</td><td><strong>גרשיים טיפוגרפיים</strong></td><td>כל צורות המרכאות (״ ״ ׳ ׳ « » ועוד) מוסרות</td><td>זהה</td></tr>
+<tr><td class="num">10</td><td><strong>פיסוק סטנדרטי</strong></td><td><code>. , : ; ? ! " '</code> — מוסרים</td><td>זהה</td></tr>
+<tr><td class="num">11</td><td><strong>מקפים</strong></td><td>en-dash, em-dash → רווח. מקף כפול → רווח. <strong>מקף בין שתי אותיות עבריות → רווח</strong> (למשל: מלכי-ארץ → מלכי ארץ). שאר המקפים — מוסרים</td><td>זהה</td></tr>
+<tr><td class="num">12</td><td><strong>סימנים מיוחדים</strong></td><td><code>* + / @ ~ • …</code> ועוד — מוסרים</td><td>זהה</td></tr>
+<tr><td class="num">13</td><td><strong>אותיות לטיניות</strong></td><td>מוסרות ומוחלפות ברווח (הערות מלומדים, שמות, ראשי תיבות לטיניים)</td><td>זהה</td></tr>
+<tr><td class="num">14</td><td><strong>נורמליזציית רווחים</strong></td><td>ריבוי רווחים → רווח יחיד, <code>trim</code></td><td>זהה</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="decisions">
+<h2>נקודות החלטה מרכזיות בניקוי</h2>
+
+<h4>למה לשמור תוכן סוגריים מרובעות בסטנדרט?</h4>
+<p>ספרות חז״ל משתמשת ב־<code>[...]</code> בדרך כלל לתוספות מקובלות של עורכים מודרניים שמשלימות נוסח חסר — תוכן שצריך להישמר בטקסט. לעומת זאת, בתוספתא קדשים/טהרות הסוגריים המרובעות מציינות שינויי נוסח ואלטרנטיבות, שאין רצון לכלול.</p>
+
+<h4>למה לשמור ײ (Double Yod)?</h4>
+<p>הוא אות עברית מלאה (<code>U+05F2</code>), לא ניקוד. הוא מופיע בכמה טקסטים כתחליף לשם ה׳ ומשמעותו תלויה הקשר. הסרתו כניקוד תהיה שגיאה.</p>
+
+<h4>למה להסיר אותיות לטיניות?</h4>
+<p>הן מופיעות בעיקר כהערות ביבליוגרפיות של מעתיקים ועורכים מודרניים (ראשי תיבות, שמות מחברים, מספרי עמודים), לא כחלק מהטקסט הרבני עצמו.</p>
+</section>
+
+<section id="segmentation">
+<h2>חלוקה למקטעי טקסט באורך אחיד</h2>
+
+<p>כלל החיבורים פוצלו ליחידות טקסט (סגמנטים) באורך של <strong>175 מילים</strong>. הוגדר גבול קשיח של <strong>200 מילים</strong> שאותו אין לעבור.</p>
+
+<p>פיצול ומיזוג טקסטים נעשה במספר שלבים כמפורט להלן.</p>
+
+<h3>פיצול טקסטים ארוכים לפי סימני פיסוק</h3>
+
+<h4>מעבר 1 — פיצול יחידות טקסט גדולות</h4>
+<p>כל ״עלה״ (leaf) בעץ ספריא שגדול מ־200 מילה:</p>
+<ul>
+  <li><strong>יש בו נקודות בטקסט המקורי</strong> → מפוצל על פי הנקודות. מילות הטקסט המנוקה (שאין בו נקודות, כי הוסרו בניקוי) מחולקות <strong>פרופורציונלית</strong> לפי אורך כל חלק בטקסט המקורי. החלקים עוברים לאחר מכן מיזוג חמדן (greedy combine).</li>
+  <li><strong>אין בו נקודות בטקסט המקורי</strong> → מסומן כ״עצמאי״ (standalone). <strong>לא ממוזג עם שכניו</strong> — נשמר כיחידה נפרדת, גם אם ישנו קצר. זה יטופל בשלב 3.</li>
+</ul>
+
+<h4>מעבר 2 — מיזוג חמדן</h4>
+<ul>
+  <li>כל שאר היחידות הקצרות (עלים קצרים + חתיכות מהפיצול בנקודות) ממוזגות יחד ברציפות עד שמתקרבים לגודל היעד (175). לא חוצים את הגבול הקשיח.</li>
+  <li>יחידות ״עצמאיות״ מהמעבר הראשון פועלות כ<strong>שבירת שורה קשיחה</strong> — לא מיזוג דרכן.</li>
+</ul>
+
+<h3>פיצול טקסטים ארוכים ללא סימני פיסוק</h3>
+<p>עבור טקסטים מעל 250 מילים ללא סימני פיסוק נעזרנו ב־<strong>GPT-4o</strong>.</p>
+
+<p><strong>מה נשלח ל־GPT-4o:</strong> הטקסט <strong>המקורי</strong> (עם ניקוד, פיסוק וכל מה שיש בו — כי הניקוי הסיר ממנו הכול). GPT-4o מתבקש להכניס את הסימן <code>|||</code> בין משפטים/נושאים שלמים, ולא לשנות ולא להוסיף אף מילה.</p>
+
+<p><strong>ה־prompt שנשלח ל־GPT-4o:</strong></p>
+<blockquote class="en"><em>"You are splitting Hebrew rabbinic texts at sentence boundaries. Insert the marker ' ||| ' where one complete sentence or topic ends and the next begins. RULES: (1) ' ||| ' must always have a space before and after it. (2) Place it only where a COMPLETE sentence or thought has ended — never mid-sentence, never mid-clause. (3) Aim for ~N parts of ~175 words each, but finish the current sentence before splitting — an uneven split is better than a mid-sentence cut. (4) Do NOT change, add, or remove any words. (5) Return ONLY the full text with markers."</em></blockquote>
+
+<p><strong>אם GPT-4o מחזיר טקסט ללא <code>|||</code>:</strong> הסגמנט נשמר כמות שהוא, ויטופל במעברים הבאים.</p>
+
+<h3>פיצול טקסטים ארוכים שנותרו</h3>
+<p>עבור כל הסגמנטים שנותרו עם <strong>250 מילים או יותר</strong> לאחר שני השלבים הקודמים, נפצל על פי התוכן במקום על פי זיהוי סוף משפט.</p>
+
+<blockquote class="en"><em>"CONTEXT: This text has no punctuation. It is NOT one long sentence — it contains multiple rulings, arguments, or topics written continuously. Find the topic transitions. You MUST insert at least N markers. Good break points: new halakhic topic, new authority quoted, transition words: ועוד / ואמנם / ולענין / וכן / אבל / ומ״מ / ועתה / כיצד / דין / הלכה."</em></blockquote>
+
+<h3>פיצול מכני</h3>
+<p><strong>קריטריון:</strong> כל הסגמנטים שנותרו עם <strong>250 מילים או יותר</strong>.</p>
+<p>הסגמנט מחולק לחלקים <strong>שווים במספר מילים</strong> בגבולות מילים (לעולם לא חוצה מילה). אין ניסיון למצוא נקודת חתך הגיונית; זה fallback מכני לסגמנטים שגם ה־AI לא הצליח לפצל.</p>
+
+<h3>מיזוג סגמנטים קצרים</h3>
+<p><strong>קריטריון:</strong> סגמנטים עם <strong>פחות מ־50 מילים</strong>.</p>
+<p><strong>כלל המיזוג:</strong> הסגמנט הקצר ממוזג עם <strong>השכן שיוצר סגמנט משולב קטן יותר</strong> (קודם נבדק השכן הקודם, לאחר מכן הבא). האלגוריתם חוזר בלולאה עד שאין יותר שינויים. קדימות: אם שני שכנים שקולים — מיזוג עם הקודם.</p>
+</section>
+
+<section id="structure">
+<h2>מבנה קבצי ה־JSON</h2>
+
+<h3>שדות טקסט בסיסיים</h3>
+<table>
+<thead><tr><th style="width:190px">שדה</th><th>תיאור</th></tr></thead>
+<tbody>
+<tr><td><code>sentence</code></td><td>טקסט עברי נקי. באורך של 150–200 מילים. מקסימום: 250 מילים. מינימום: 5 מילים. פיצול בגבולות משפט בלבד, לעולם לא בתוך מילה.</td></tr>
+<tr><td><code>orig_sentence</code></td><td>הטקסט המקורי מספריא, לפני כל ניקוי.</td></tr>
+<tr><td><code>heb_sentence</code></td><td>זהה ל־<code>sentence</code>.</td></tr>
+<tr><td><code>text_length</code></td><td>מספר המילים בפועל ב־<code>sentence</code>.</td></tr>
+</tbody>
+</table>
+
+<h3>שדות מיקום ומספור</h3>
+<table>
+<thead><tr><th style="width:190px">שדה</th><th>תיאור</th></tr></thead>
+<tbody>
+<tr><td><code>location</code></td><td>שדה נבנה: היררכיה הפנימית של ספריא + שם המהדורה + מספר הסגמנט.</td></tr>
+<tr><td><code>segment</code></td><td>מזהה ייחודי. מקטעי טקסט של אותו חיבור ימוספרו במספרים עוקבים.</td></tr>
+<tr><td><code>from_word</code></td><td>מיקום המילה הראשונה של המקטע בטקסט המקור אחרי הניקוי.<br>לדוגמה: מקור של 400 מילים שפוצל ל־2 חלקים — חלק 1: <code>from_word=1</code>, חלק 2: <code>from_word=201</code>. סגמנטים שלא פוצלו: <code>from_word=1</code>.</td></tr>
+<tr><td><code>to_word</code></td><td>מיקום המילה האחרונה: <code>to_word = from_word + text_length - 1</code>.</td></tr>
+</tbody>
+</table>
+
+<h3>שדות זהות וכינוי</h3>
+<table>
+<thead><tr><th style="width:190px">שדה</th><th>תיאור</th></tr></thead>
+<tbody>
+<tr><td><code>title</code></td><td>כותרת אנגלית. לתצוגה בלבד. נלקח ישירות ממטא־דאטה של ספריא.</td></tr>
+<tr><td><code>he_title</code></td><td>כותרת עברית. לתצוגה בלבד. נלקח ממטא־דאטה של ספריא.</td></tr>
+<tr><td><code>type</code></td><td>אופי המקור: <code>print edition</code> כאשר המהדורה מזוהה, או <code>born digital</code> כאשר לא.</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="categories">
+<h2>שדה הקטגוריות (<span class="mono">categories</span>)</h2>
+
+<p>שדה <code>categories</code> הוא רשימה (list) שמצטברת מספר סוגי מטא־דאטה שונים, בסדר שבו הם נוספו.</p>
+
+<p><strong>המבנה בפועל:</strong></p>
+<pre>[...היררכיית ספריא...] → [מיפוי קטגוריאלי בעברית] → [מזהה החיבור — אם נמצא] → [שם הספר] → "Sefaria" → [type]</pre>
+
+<p>דוגמה לרשומה טיפוסית (מהקובץ <code>Halakhah-Tur-Tur-Sefaria.jsonl</code>):</p>
+<pre>"categories": ["Halakhah", "Tur", "הלכה — ראשונים", "Tur", "Sefaria", "born digital"]</pre>
+
+<p>ודוגמה לרשומה עם מזהה חיבור מהאונטולוגיה:</p>
+<pre>"categories": ["Midrash", "Aggadic Midrash", "Midrash Rabbah", "מדרש אגדה - קלאסי",
+               "1.1:1:1.1", "Bereishit Rabbah", "Sefaria", "born digital"]</pre>
+
+<div class="note">
+  <strong>שם הספר בעמדה קבועה:</strong> בכל הקבצים שם הספר מופיע תמיד בעמדה שלפני <code>"Sefaria"</code>,
+  כך שניתן לחלץ אותו באופן דטרמיניסטי. בקבצים שבהם שם הספר משמש גם כצומת בהיררכיה
+  (למשל <code>Tur</code>, <code>Zohar</code>) הוא מופיע פעמיים — פעם במקומו ההיררכי ופעם בעמדה הקבועה.
+</div>
+
+<h3>תת־הסוגים בשדה</h3>
+<table>
+<thead><tr><th class="num">#</th><th style="width:230px">תת־סוג</th><th>תיאור</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><strong>היררכיה (Sefaria hierarchy)</strong></td><td>קטגוריות היררכיות המשקפות את המבנה הפנימי מרמת הספר ומטה, לפי הטקסונומיה של ספריא. מתקבל כמו שהוא, אלא אם נמצאה טעות בספריא.<br>לדוגמה: <code>["Talmud","Bavli","Seder Moed","Shabbat"]</code>.</td></tr>
+<tr><td class="num">2</td><td><strong>מיפוי קטגוריאלי (Scholarly Mapping)</strong></td><td>שיוך כל טקסט לטקסונומיה המדעית: תנ״ך, משנה־תוספתא, תלמוד בבלי/ירושלמי, מדרשי התנאים, מדרשים קלאסיים/תנחומאיים/ביניים/מאוחרים/קטנים, ספרות הזוהר, ספרות ההיכלות, דרוש ומחשבה, ספרות בית שני, ילקוטים, פסיקה, שאלות ותשובות.</td></tr>
+<tr><td class="num">3</td><td><strong>מזהה החיבור (Composition ID)</strong></td><td>מזהה מהרשימה הרשמית של חיבורים מדרשיים. מאפשר זיהוי מדויק של החיבור, ללא תלות בשמות שמשתמשת בהם ספריא.</td></tr>
+<tr><td class="num">4</td><td><strong>שם הספר (Book name)</strong></td><td>שם הספר כפי שמופיע בשם הקובץ, בעמדה שלפני שם המקור.</td></tr>
+<tr><td class="num">5</td><td><strong>מקור (Source)</strong></td><td>מהיכן הגיע הטקסט. בקורפוס זה הערך הוא תמיד <code>Sefaria</code>.</td></tr>
+<tr><td class="num">6</td><td><strong>סוג (Type)</strong></td><td><code>print edition</code> — מהדורת דפוס מזוהה; <code>born digital</code> — אין מהדורה מזוהה. מתאר את האופי הפיזי של המקור.</td></tr>
+</tbody>
+</table>
+</section>
+
+<section id="sources">
+<h2>שדות מקור ומטא־דאטה</h2>
+
+<table>
+<thead><tr><th style="width:190px">שדה</th><th>תיאור</th></tr></thead>
+<tbody>
+<tr><td><code>references</code></td><td>קישורי הפניה צולבת של ספריא. לא רלוונטי לצרכינו — נשאר כמו שהוא מספריא.</td></tr>
+<tr><td><code>versions</code></td><td>מידע על מהדורה/גרסה על פי עדות ספריא. לתצוגה בלבד. נשמר כפי שהגיע מספריא, <strong>למעט</strong> מקרים בהם המקור סווג כ״לא לגיטימי״ (ראו להלן).</td></tr>
+<tr><td><code>versionSource</code></td><td>URL/מזהה של מקור הגרסה. לתצוגה בלבד. מכיל מחרוזות מקור גולמיות של ספריא. נשמר כפי שהגיע מספריא, <strong>למעט</strong> מקרים בהם המקור סווג כ״לא לגיטימי״.</td></tr>
+<tr><td><code>Date</code></td><td>תאריך עיבוד/תמונת מצב (snapshot) של הקורפוס, בפורמט <code>MM/YY</code>. נוסף בכל הסגמנטים בערך אחיד <code>"06/26"</code>.</td></tr>
+</tbody>
+</table>
+
+<h3>סיווג מקורות (<span class="mono">versions</span>) ל־״born digital״</h3>
+
+<p>לכל מחרוזת <code>versions</code> ייחודית בקורפוס בוצע סיווג ידני לפי הכללים הבאים:</p>
+<ul>
+  <li>מקור שהוא <strong>אתר אינטרנט</strong> → קיצור: מילה אחת לשם האתר (לדוגמה <code>SEFARIA</code>).</li>
+  <li>מקור שהוא <strong>מהדורת דפוס</strong> → קיצור: שם העורך או מקום ההדפסה.</li>
+  <li>מקור שהוא <strong>כתב יד</strong> → קיצור: שם הספרייה + מספר מדף.</li>
+  <li><strong>אין מקור לגיטימי</strong> → <code>versions = "born digital"</code>, <code>versionSource = ""</code>.</li>
+</ul>
+
+<div class="note">
+  בהתאם לכלל האחרון, ארבע קבוצות אתרים (<code>MECHON-MAMRE</code>, <code>TSEL</code>, <code>GRIMOAR</code>, <code>TANACH-US</code>)
+  נשפטו כלא־לגיטימיות, ובוצעה מוטציה ישירה על הקורפוס.
+</div>
+
+<h3>מבנה שם הקובץ</h3>
+<pre>{היררכיית ספריא}-{שם הספר}-{ABBR}:Sefaria.jsonl   ← מהדורת דפוס
+{היררכיית ספריא}-{שם הספר}-Sefaria.jsonl          ← born digital</pre>
+<p>דוגמאות:</p>
+<pre>Midrash-Aggadic Midrash-Midrash Rabbah-Bereishit Rabbah-Sefaria.jsonl
+Midrash-Aggadah-Aggadat Bereshit-KRAKOW1903:Sefaria.jsonl
+Tanakh-Rishonim on Tanakh-Rashi-Torah-Rashi on Genesis-ROSENBAUM_SILBERMANN1929:Sefaria.jsonl</pre>
+<p>כאשר הקיצור מכיל מקף פנימי, המקף מומר לקו תחתון (<code>ROSENBAUM_SILBERMANN1929</code>) כדי שהמקף יישאר מפריד־שדות בלעדי.</p>
+</section>
+
+<section id="validation">
+<h2>בדיקות אימות</h2>
+
+<table>
+<thead><tr><th class="num">#</th><th style="width:230px">בדיקה</th><th>מה בודקים</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td><strong>שדות חובה</strong></td><td>כל 14 השדות הנדרשים (<code>location, segment, sentence, orig_sentence, heb_sentence, from_word, to_word, text_length, title, categories, references, versions, versionSource, he_title</code>) קיימים בכל רשומה.</td></tr>
+<tr><td class="num">2</td><td><strong>שדות לא צפויים</strong></td><td>אין שדות נוספים מעבר ל־14 המוגדרים (השדות <code>Date</code> ו־<code>type</code> נוספו לאחר הוולידציה הראשונה ונבחנו בנפרד).</td></tr>
+<tr><td class="num">3</td><td><strong>טיפוסי נתונים</strong></td><td><code>segment, from_word, to_word, text_length</code> הם <code>int</code>; <code>categories</code> ו־<code>references</code> הן <code>list</code>.</td></tr>
+<tr><td class="num">4</td><td><strong><code>text_length</code> מדויק</strong></td><td><code>text_length == len(sentence.split())</code> — ספירת מילים אמיתית.</td></tr>
+<tr><td class="num">5</td><td><strong><code>sentence == heb_sentence</code></strong></td><td>שני השדות זהים לחלוטין.</td></tr>
+<tr><td class="num">6</td><td><strong>עקביות ב־<code>from_word</code>/<code>to_word</code></strong></td><td><code>from_word >= 1</code>; <code>to_word = from_word + text_length - 1</code>; לסגמנטים מפוצלים (<code>_part_N</code>) — הסגמנטים מכסים טווח רצוף ללא פערים וחפיפות.</td></tr>
+<tr><td class="num">7</td><td><strong>אין טקסט ריק</strong></td><td><code>sentence</code> ו־<code>orig_sentence</code> אינם ריקים.</td></tr>
+<tr><td class="num">8</td><td><strong>רצף <code>segment</code> IDs בתוך קובץ</strong></td><td>ה־IDs בתוך כל קובץ הם רציפים ובלי כפילויות.</td></tr>
+<tr><td class="num">9</td><td><strong>ייחודיות גלובלית</strong></td><td>אין שני סגמנטים עם אותו ID בכל הקורפוס.</td></tr>
+<tr><td class="num">10</td><td><strong><code>categories</code> לא ריק</strong></td><td>הרשימה אינה ריקה.</td></tr>
+<tr><td class="num">11</td><td><strong>טווח מילים</strong></td><td>לא יותר מ־250 מילים; לא פחות מ־5 מילים.</td></tr>
+<tr><td class="num">12</td><td><strong><code>location</code> לא ריק</strong></td><td>השדה מכיל ערך.</td></tr>
+</tbody>
+</table>
+</section>
+
+<footer>
+  <p>תיעוד הקורפוס <strong>act_jsonl_v6</strong> · 1,416 קבצים · 329,493 סגמנטים · תמונת מצב 06/26</p>
+</footer>
+
+</div>
+</body>
+</html>

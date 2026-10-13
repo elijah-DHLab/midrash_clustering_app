@@ -1,0 +1,530 @@
+﻿category,old_file,in_store,v7_match,score,status
+Apocrypha,Apocrypha-Ben Sira-.json,,Second_Temple-Apocrypha-Ben_Sira-CAMBRIDGE1899_Sefaria.jsonl,0.72,check
+Apocrypha,Apocrypha-Book of Jubilees-.json,,Second_Temple-Apocrypha-Book_of_Jubilees-VIENNA1870_Sefaria.jsonl,0.79,check
+Apocrypha,Apocrypha-Book of Tobit-.json,,Second_Temple-Apocrypha-Book_of_Tobit-NEUBAUER1878_Sefaria.jsonl,0.77,check
+Apocrypha,Apocrypha-Letter of Aristeas-.json,,Second_Temple-Apocrypha-Letter_of_Aristeas-Sefaria.jsonl,0.8,check
+Apocrypha,Apocrypha-Megillat Antiochus-.json,,Second_Temple-Apocrypha-Megillat_Antiochus-Sefaria.jsonl,0.8,check
+Apocrypha,Apocrypha-Prayer of Manasseh-.json,,Second_Temple-Apocrypha-Prayer_of_Manasseh-KAHANA1937_Sefaria.jsonl,0.8,check
+Apocrypha,Apocrypha-Psalm 151-.json,,Second_Temple-Apocrypha-Psalm_151-Sefaria.jsonl,0.73,check
+Apocrypha,Apocrypha-Psalm CLIV-.json,,Second_Temple-Apocrypha-Psalm_154-QUMRAN_PS154_Sefaria.jsonl,0.6,check
+Apocrypha,Apocrypha-Sefer Yehudit-.json,,,0.46,none
+Apocrypha,Apocrypha-The Book of Maccabees I-.json,,Second_Temple-Apocrypha-The_Book_of_Maccabees_I-Sefaria.jsonl,0.82,check
+Apocrypha,Apocrypha-The Book of Maccabees II-.json,,Second_Temple-Apocrypha-The_Book_of_Maccabees_II-Sefaria.jsonl,0.83,check
+Apocrypha,Apocrypha-The Book of Susanna-.json,,Second_Temple-Apocrypha-The_Book_of_Susanna-LEIPZIG1830_Sefaria.jsonl,0.81,check
+Apocrypha,Apocrypha-The Testaments of the Twelve Patriarchs-.json,,Second_Temple-Apocrypha-The_Testaments_of_the_Twelve_Patriarchs-Sefaria.jsonl,0.88,likely
+Apocrypha,Apocrypha-The Wisdom of Solomon-.json,,Second_Temple-Apocrypha-The_Wisdom_of_Solomon-WARSAW1885_Sefaria.jsonl,0.82,check
+Halakhah,Halakhah-Abudarham-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.65,check
+Halakhah,Halakhah-Arukh HaShulchan-.json,,,0.54,none
+Halakhah,Halakhah-Avodat HaKodesh (Chida)-Kaf Achat-.json,,,0.53,none
+Halakhah,Halakhah-Avodat HaKodesh (Chida)-Kesher Gudal-.json,,,0.53,none
+Halakhah,Halakhah-Avodat HaKodesh (Chida)-Moreh BeEtzba-.json,,,0.55,none
+Halakhah,Halakhah-Avodat HaKodesh (Chida)-Sansan LeYair-.json,,,0.55,none
+Halakhah,Halakhah-Avodat HaKodesh (Chida)-Shomer Yisrael-.json,,,0.5,none
+Halakhah,Halakhah-Avodat HaKodesh (Chida)-Tziporen Shamir-.json,,,0.54,none
+Halakhah,Halakhah-Avodat HaKodesh (Chida)-Yosef BeSeder-.json,,,0.51,none
+Halakhah,Halakhah-Avodat HaKodesh-.json,,,0.55,none
+Halakhah,Halakhah-Bedikat HaSakin-.json,,,0.55,none
+Halakhah,Halakhah-Ben Ish Hai-.json,,,0.56,none
+Halakhah,Halakhah-Chayei Adam-.json,,,0.56,none
+Halakhah,Halakhah-Chofetz Chaim-.json,,,0.58,none
+Halakhah,Halakhah-Chokhmat Adam-.json,,,0.58,none
+Halakhah,Halakhah-Dina d'Garmei-.json,,,0.58,none
+Halakhah,Halakhah-Ein HaTekhelet-.json,,,0.59,none
+Halakhah,Halakhah-Gevurat Anashim-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.6,check
+Halakhah,Halakhah-Hilchos Talmud Torah-.json,,,0.58,none
+Halakhah,Halakhah-Issur V'Heter L'Rabbeinu Yerucham-.json,,,0.48,none
+Halakhah,Halakhah-Issur veHeter leRashi-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.61,check
+Halakhah,Halakhah-Keset HaSofer-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.63,check
+Halakhah,Halakhah-Kitzur Sefer Haredim of Rabbi Elazar Azcari-.json,,,0.44,none
+Halakhah,Halakhah-Kitzur Shulchan Aruch-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.65,check
+Halakhah,Halakhah-Kol Bo-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.65,check
+Halakhah,Halakhah-Maaseh Rav-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.63,check
+Halakhah,Halakhah-Machzor Vitry-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.68,check
+Halakhah,Halakhah-Mateh Efrayim-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.63,check
+Halakhah,Halakhah-Minchat Chinukh-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.6,check
+Halakhah,"Halakhah-Mishneh Torah-Introduction-Mishneh Torah, Negative Mitzvot-.json",,,0.46,none
+Halakhah,"Halakhah-Mishneh Torah-Introduction-Mishneh Torah, Overview of Mishneh Torah Contents-.json",,,0.24,none
+Halakhah,"Halakhah-Mishneh Torah-Introduction-Mishneh Torah, Positive Mitzvot-.json",,,0.44,none
+Halakhah,"Halakhah-Mishneh Torah-Introduction-Mishneh Torah, Transmission of the Oral Law-.json",,,0.49,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Ahavah-Mishneh Torah, Blessings-.json",,,0.46,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Ahavah-Mishneh Torah, Circumcision-.json",,,0.44,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Ahavah-Mishneh Torah, Fringes-.json",,,0.46,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Ahavah-Mishneh Torah, Prayer and the Priestly Blessing-.json",,,0.36,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Ahavah-Mishneh Torah, Reading the Shema-.json",,,0.4,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Ahavah-Mishneh Torah, Tefillin, Mezuzah and the Torah Scroll-.json",,,0.33,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Ahavah-Mishneh Torah, The Order of Prayer-.json",,,0.42,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Avodah-Mishneh Torah, Admission into the Sanctuary-.json",,,0.45,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Avodah-Mishneh Torah, Daily Offerings and Additional Offerings-.json",,,0.42,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Avodah-Mishneh Torah, Sacrifices Rendered Unfit-.json",,,0.42,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Avodah-Mishneh Torah, Sacrificial Procedure-.json",,,0.37,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Avodah-Mishneh Torah, Service on the Day of Atonement-.json",,,0.46,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Avodah-Mishneh Torah, The Chosen Temple-.json",,,0.51,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Avodah-Mishneh Torah, Things Forbidden on the Altar-.json",,,0.34,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Avodah-Mishneh Torah, Trespass-.json",,,0.48,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Avodah-Mishneh Torah, Vessels of the Sanctuary and Those who Serve Therein-.json",,,0.15,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Haflaah-Mishneh Torah, Appraisals and Devoted Property-.json",,,0.32,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Haflaah-Mishneh Torah, Nazariteship-.json",,,0.44,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Haflaah-Mishneh Torah, Oaths-.json",,,0.47,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Haflaah-Mishneh Torah, Vows-.json",,,0.47,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Kedushah-Mishneh Torah, Forbidden Foods-.json",,,0.47,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Kedushah-Mishneh Torah, Forbidden Intercourse-.json",,,0.43,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Kedushah-Mishneh Torah, Ritual Slaughter-.json",,,0.46,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Kinyan-Mishneh Torah, Agents and Partners-.json",,,0.49,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Kinyan-Mishneh Torah, Neighbors-.json",,,0.58,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Kinyan-Mishneh Torah, Ownerless Property and Gifts-.json",,,0.49,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Kinyan-Mishneh Torah, Sales-.json",,,0.59,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Kinyan-Mishneh Torah, Slaves-.json",,,0.52,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Korbanot-Mishneh Torah, Festival Offering-.json",,,0.57,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Korbanot-Mishneh Torah, Firstlings-.json",,,0.58,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Korbanot-Mishneh Torah, Offerings for Those with Incomplete Atonement-.json",,,0.43,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Korbanot-Mishneh Torah, Offerings for Unintentional Transgressions-.json",,,0.45,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Korbanot-Mishneh Torah, Paschal Offering-.json",,,0.59,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Korbanot-Mishneh Torah, Substitution-.json",,,0.53,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Madda-Mishneh Torah, Foreign Worship and Customs of the Nations-.json",,,0.45,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Madda-Mishneh Torah, Foundations of the Torah-.json",,,0.42,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Madda-Mishneh Torah, Human Dispositions-.json",,,0.43,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Madda-Mishneh Torah, Repentance-.json",,,0.46,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Madda-Mishneh Torah, Torah Study-.json",,,0.45,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Mishpatim-Mishneh Torah, Borrowing and Deposit-.json",,,0.46,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Mishpatim-Mishneh Torah, Creditor and Debtor-.json",,,0.54,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Mishpatim-Mishneh Torah, Hiring-.json",,,0.59,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Mishpatim-Mishneh Torah, Inheritances-.json",,,0.55,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Mishpatim-Mishneh Torah, Plaintiff and Defendant-.json",,,0.5,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Nashim-Mishneh Torah, Divorce-.json",,Mishnah-Seder_Nashim-Mishnah_Nazir-Sefaria.jsonl,0.61,check
+Halakhah,"Halakhah-Mishneh Torah-Sefer Nashim-Mishneh Torah, Levirate Marriage and Release-.json",,,0.53,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Nashim-Mishneh Torah, Marriage-.json",,Mishnah-Seder_Nashim-Mishnah_Nedarim-Sefaria.jsonl,0.63,check
+Halakhah,"Halakhah-Mishneh Torah-Sefer Nashim-Mishneh Torah, Virgin Maiden-.json",,Mishnah-Seder_Nashim-Mishnah_Gittin-Sefaria.jsonl,0.61,check
+Halakhah,"Halakhah-Mishneh Torah-Sefer Nashim-Mishneh Torah, Woman Suspected of Infidelity-.json",,,0.53,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Nezikim-Mishneh Torah, Damages to Property-.json",,,0.56,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Nezikim-Mishneh Torah, Murderer and the Preservation of Life-.json",,,0.53,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Nezikim-Mishneh Torah, One Who Injures a Person or Property-.json",,,0.45,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Nezikim-Mishneh Torah, Robbery and Lost Property-.json",,,0.56,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Nezikim-Mishneh Torah, Theft-.json",,Mishnah-Seder_Nezikin-Mishnah_Shevuot-Sefaria.jsonl,0.64,check
+Halakhah,"Halakhah-Mishneh Torah-Sefer Shoftim-Mishneh Torah, Kings and Wars-.json",,,0.57,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Shoftim-Mishneh Torah, Mourning-.json",,Mishnah-Seder_Kodashim-Mishnah_Tamid-Sefaria.jsonl,0.6,check
+Halakhah,"Halakhah-Mishneh Torah-Sefer Shoftim-Mishneh Torah, Rebels-.json",,Mishnah-Seder_Kodashim-Mishnah_Temurah-Sefaria.jsonl,0.6,check
+Halakhah,"Halakhah-Mishneh Torah-Sefer Shoftim-Mishneh Torah, Testimony-.json",,Mishnah-Seder_Nashim-Mishnah_Gittin-Sefaria.jsonl,0.6,check
+Halakhah,"Halakhah-Mishneh Torah-Sefer Shoftim-Mishneh Torah, The Sanhedrin and the Penalties within their Jurisdiction-.json",,,0.39,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Taharah-Mishneh Torah, Defilement by Leprosy-.json",,,0.25,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Taharah-Mishneh Torah, Defilement by a Corpse-.json",,,0.25,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Taharah-Mishneh Torah, Defilement of Foods-.json",,,0.33,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Taharah-Mishneh Torah, Immersion Pools-.json",,,0.35,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Taharah-Mishneh Torah, Other Sources of Defilement-.json",,,0.28,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Taharah-Mishneh Torah, Red Heifer-.json",,,0.34,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Taharah-Mishneh Torah, Those Who Defile Bed or Seat-.json",,,0.31,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Taharah-Mishneh Torah, Vessels-.json",,,0.34,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zemanim-Mishneh Torah, Eruvin-.json",,Mishnah-Seder_Zeraim-Mishnah_Terumot-Sefaria.jsonl,0.64,check
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zemanim-Mishneh Torah, Fasts-.json",,Mishnah-Seder_Zeraim-Mishnah_Maasrot-Sefaria.jsonl,0.65,check
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zemanim-Mishneh Torah, Leavened and Unleavened Bread-.json",,,0.47,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zemanim-Mishneh Torah, Rest on a Holiday-.json",,,0.55,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zemanim-Mishneh Torah, Rest on the Tenth of Tishrei-.json",,,0.55,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zemanim-Mishneh Torah, Sabbath-.json",,,0.57,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zemanim-Mishneh Torah, Sanctification of the New Month-.json",,,0.52,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zemanim-Mishneh Torah, Scroll of Esther and Hanukkah-.json",,,0.48,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zemanim-Mishneh Torah, Sheqel Dues-.json",,Mishnah-Seder_Zeraim-Mishnah_Sheviit-Sefaria.jsonl,0.61,check
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zemanim-Mishneh Torah, Shofar, Sukkah and Lulav-.json",,,0.55,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zeraim-Mishneh Torah, Diverse Species-.json",,Mishnah-Seder_Zeraim-Mishnah_Maaser_Sheni-Sefaria.jsonl,0.64,check
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zeraim-Mishneh Torah, First Fruits and other Gifts to Priests Outside the Sanctuary-.json",,,0.47,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zeraim-Mishneh Torah, Gifts to the Poor-.json",,,0.58,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zeraim-Mishneh Torah, Heave Offerings-.json",,Mishnah-Seder_Zeraim-Mishnah_Sheviit-Sefaria.jsonl,0.61,check
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zeraim-Mishneh Torah, Sabbatical Year and the Jubilee-.json",,,0.54,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zeraim-Mishneh Torah, Second Tithes and Fourth Year's Fruit-.json",,,0.53,none
+Halakhah,"Halakhah-Mishneh Torah-Sefer Zeraim-Mishneh Torah, Tithes-.json",,Mishnah-Seder_Zeraim-Mishnah_Sheviit-Sefaria.jsonl,0.65,check
+Halakhah,Halakhah-Nehar Misrayim-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.62,check
+Halakhah,Halakhah-Piskei Challah-.json,,,0.55,none
+Halakhah,Halakhah-Ptil Tekhelet-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.63,check
+Halakhah,Halakhah-Sefer Chasidim-.json,,Kabbalah-Sefer_HaBahir-Sefaria.jsonl,0.62,check
+Halakhah,Halakhah-Sefer HaChinukh-.json,,Kabbalah-Sefer_HaCheshek-Sefaria.jsonl,0.67,check
+Halakhah,Halakhah-Sefer HaMitzvot HaKatzar-.json,,,0.55,none
+Halakhah,Halakhah-Sefer HaMitzvot-.json,,Kabbalah-Sefer_HaBahir-Sefaria.jsonl,0.61,check
+Halakhah,Halakhah-Sefer HaParnas-.json,,Kabbalah-Sefer_HaBahir-Sefaria.jsonl,0.67,check
+Halakhah,Halakhah-Sefer Hamitzvot of Rasag-.json,,,0.53,none
+Halakhah,Halakhah-Sefer Mitzvot Gadol-.json,,,0.55,none
+Halakhah,Halakhah-Sefer Mitzvot Katan-.json,,,0.55,none
+Halakhah,Halakhah-Sefer Yereim-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.65,check
+Halakhah,Halakhah-Sha'ar HaMayim HaAroch-.json,,,0.51,none
+Halakhah,Halakhah-Sha'ar HaMayim HaKatzar-.json,,,0.54,none
+Halakhah,Halakhah-Sheiltot d'Rav Achai Gaon-.json,,,0.33,none
+Halakhah,Halakhah-Shev Shmat'ta-.json,,,0.58,none
+Halakhah,Halakhah-Shulchan Aruch HaRav-.json,,,0.53,none
+Halakhah,"Halakhah-Shulchan Arukh-Shulchan Arukh, Choshen Mishpat-.json",,,0.45,none
+Halakhah,"Halakhah-Shulchan Arukh-Shulchan Arukh, Even HaEzer-.json",,,0.3,none
+Halakhah,"Halakhah-Shulchan Arukh-Shulchan Arukh, Orach Chayim-.json",,,0.48,none
+Halakhah,"Halakhah-Shulchan Arukh-Shulchan Arukh, Yoreh De'ah-.json",,,0.47,none
+Halakhah,Halakhah-Shulchan Shel Arba-.json,,,0.56,none
+Halakhah,Halakhah-Simla Chadasha-.json,,,0.59,none
+Halakhah,Halakhah-The Sabbath Epistle-.json,,,0.55,none
+Halakhah,Halakhah-Torat HaBayit HaAroch-.json,,,0.57,none
+Halakhah,Halakhah-Torat HaBayit HaKatzar-.json,,,0.55,none
+Halakhah,Halakhah-Treasures Hidden in the Sand-.json,,,0.53,none
+Halakhah,Halakhah-Tur and Commentaries-Bach-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.6,check
+Halakhah,Halakhah-Tur and Commentaries-Beit Yosef-.json,,,0.54,none
+Halakhah,Halakhah-Tur and Commentaries-Darchei Moshe-.json,,,0.51,none
+Halakhah,Halakhah-Tur and Commentaries-Drisha-.json,,,0.58,none
+Halakhah,Halakhah-Tur and Commentaries-Prisha-.json,,,0.58,none
+Halakhah,Halakhah-Tur and Commentaries-Tur-.json,,Halakhah-Tur-Tur-Sefaria.jsonl,0.65,check
+Kabbalah,Kabbalah-Assarah Perakim L'Ramchal-.json,,,0.56,none
+Kabbalah,Kabbalah-Avodat HaKodesh (Gabbai)-.json,,Kabbalah-Other_Kabbalah_Works-Avodat_HaKodesh_Ibn_Gabbai-Sefaria.jsonl,0.7,check
+Kabbalah,Kabbalah-Baal HaSulam's Introduction to Zohar-.json,,,0.55,none
+Kabbalah,Kabbalah-Be'ur Eser S'firot-.json,,,0.58,none
+Kabbalah,Kabbalah-Chesed LeAvraham-.json,,Kabbalah-Sefer_HaBahir-Sefaria.jsonl,0.64,check
+Kabbalah,Kabbalah-Da'at Tevunoth-.json,,Kabbalah-Get_HaShemot-Sefaria.jsonl,0.64,check
+Kabbalah,Kabbalah-Hechalot Rabbati-.json,,Kabbalah-Heikhalot_Rabbati-WERTHEIMER_Sefaria.jsonl,0.94,likely
+Kabbalah,Kabbalah-Ma'arekhet HaElokut-.json,,Kabbalah-Other_Kabbalah_Works-Maarekhet_HaElokut-Sefaria.jsonl,0.71,check
+Kabbalah,Kabbalah-Maggid Meisharim-.json,,Kabbalah-Other_Kabbalah_Works-Maggid_Meisharim-Sefaria.jsonl,0.7,check
+Kabbalah,Kabbalah-Megaleh Amukot-.json,,,0.55,none
+Kabbalah,Kabbalah-Mitpachat Sefarim-.json,,Kabbalah-Heikhalot_Rabbati-WERTHEIMER_Sefaria.jsonl,0.62,check
+Kabbalah,Kabbalah-Or Neerav-.json,,Kabbalah-Ramak-Ohr_Neerav-Sefaria.jsonl,0.84,check
+Kabbalah,Kabbalah-Pardes Rimonim-.json,,Kabbalah-Ramak-Pardes_Rimmonim-Sefaria.jsonl,0.87,likely
+Kabbalah,Kabbalah-Pri Etz Chaim-.json,,Kabbalah-Get_HaShemot-Sefaria.jsonl,0.7,check
+Kabbalah,Kabbalah-Pri Etz Hadar-.json,,Kabbalah-Sefer_HaBahir-Sefaria.jsonl,0.68,check
+Kabbalah,Kabbalah-Recanati on the Torah-.json,,Kabbalah-Other_Kabbalah_Works-Recanati_on_the_Torah-Sefaria.jsonl,0.74,check
+Kabbalah,Kabbalah-Sefer Etz Chaim-.json,,Kabbalah-Sefer_HaBahir-Sefaria.jsonl,0.78,check
+Kabbalah,Kabbalah-Sefer HaBahir-.json,,Kabbalah-Sefer_HaBahir-Sefaria.jsonl,1.0,exact
+Kabbalah,Kabbalah-Sefer HaKana-.json,,Kabbalah-Sefer_HaBahir-Sefaria.jsonl,0.84,check
+Kabbalah,Kabbalah-Sefer Yetzirah Gra Version-.json,,Kabbalah-Sefer_Yetzirah-Sefer_Yetzirah-WARSAW1884_Sefaria.jsonl,0.71,check
+Kabbalah,Kabbalah-Sefer Yetzirah-.json,,Kabbalah-Sefer_HaBahir-Sefaria.jsonl,0.76,check
+Kabbalah,Kabbalah-Sha'ar HaGilgulim-.json,,Kabbalah-Zohar-Zohar-Sefaria.jsonl,0.65,check
+Kabbalah,Kabbalah-Shaarei Kedusha-.json,,,0.59,none
+Kabbalah,Kabbalah-Shaarei Orah-.json,,Kabbalah-Zohar-Tikkunei_Zohar-CONSTANTINOPLE1740_Sefaria.jsonl,0.68,check
+Kabbalah,Kabbalah-Shaarei Tzedek-.json,,Kabbalah-Other_Kabbalah_Works-Shaarei_Tzedek-Sefaria.jsonl,0.69,check
+Kabbalah,Kabbalah-The Beginning of Wisdom-.json,,Kabbalah-Other_Kabbalah_Works-The_Beginning_of_Wisdom-Sefaria.jsonl,0.75,check
+Kabbalah,Kabbalah-The Wars of God-.json,,Kabbalah-Zohar-Zohar-Sefaria.jsonl,0.64,check
+Kabbalah,Kabbalah-Tikkunei Zohar-.json,,Kabbalah-Zohar-Tikkunei_Zohar-CONSTANTINOPLE1740_Sefaria.jsonl,0.88,likely
+Kabbalah,Kabbalah-Zohar Chadash-.json,,Kabbalah-Zohar-Zohar_Chadash-Sefaria.jsonl,0.88,likely
+Kabbalah,Kabbalah-Zohar-.json,,Kabbalah-Zohar-Zohar-Sefaria.jsonl,0.82,check
+Liturgy,Liturgy-Akdamut Milin-.json,,,0.42,none
+Liturgy,Liturgy-Birkat Hamazon-.json,,,0.39,none
+Liturgy,Liturgy-Hadran for Tanach-.json,,,0.41,none
+Liturgy,Liturgy-Hadran-.json,,,0.4,none
+Liturgy,Liturgy-Haggadah-Pesach Haggadah Edot Hamizrah-.json,,,0.58,none
+Liturgy,Liturgy-Haggadah-Pesach Haggadah-.json,,,0.56,none
+Liturgy,Liturgy-Hallel-.json,,,0.4,none
+Liturgy,Liturgy-High Holidays-Machzor Rosh Hashanah Ashkenaz Linear-.json,,,0.46,none
+Liturgy,Liturgy-High Holidays-Machzor Rosh Hashanah Sefard-.json,,,0.51,none
+Liturgy,Liturgy-High Holidays-Machzor Yom Kippur Ashkenaz Linear-.json,,,0.33,none
+Liturgy,Liturgy-High Holidays-Machzor Yom Kippur Sefard-.json,,,0.4,none
+Liturgy,Liturgy-High Holidays-Unetaneh Tokef-.json,,,0.3,none
+Liturgy,Liturgy-Kabbolos Shabbos-.json,,,0.45,none
+Liturgy,Liturgy-Keter Malchut-.json,,,0.45,none
+Liturgy,Liturgy-Keter Malkhut-.json,,,0.44,none
+Liturgy,Liturgy-Ketubah Text-.json,,,0.39,none
+Liturgy,Liturgy-Kinnot for Tisha B'Av (Ashkenaz)-.json,,,0.41,none
+Liturgy,Liturgy-Lekha Dodi-.json,,,0.26,none
+Liturgy,Liturgy-Linear Selichot Nusach Lita-.json,,,0.46,none
+Liturgy,Liturgy-Perek Shirah-.json,,,0.44,none
+Liturgy,Liturgy-Piyutim-Shir HaKavod-.json,,,0.35,none
+Liturgy,Liturgy-Piyutim-Yedid Nefesh-.json,,,0.34,none
+Liturgy,Liturgy-Seder Ma'amadot-.json,,,0.51,none
+Liturgy,Liturgy-Seder Tisha B'Av (Edot HaMizrach)-.json,,,0.43,none
+Liturgy,Liturgy-Selichot Edot HaMizrach-.json,,,0.45,none
+Liturgy,Liturgy-Selichot Nusach Ashkenaz Lita-.json,,,0.44,none
+Liturgy,Liturgy-Selichot Nusach Polin-.json,,,0.46,none
+Liturgy,Liturgy-Shabbat Siddur Sefard Linear-.json,,,0.23,none
+Liturgy,Liturgy-Shalom Alechem-.json,,,0.41,none
+Liturgy,Liturgy-Siddur Tehilat Hashem-.json,,,0.44,none
+Liturgy,Liturgy-Siddur-Siddur Ashkenaz-.json,,,0.43,none
+Liturgy,Liturgy-Siddur-Siddur Edot HaMizrach-.json,,,0.44,none
+Liturgy,Liturgy-Siddur-Siddur Sefard-.json,,,0.3,none
+Liturgy,Liturgy-Tikkun HaKlali-.json,,,0.47,none
+Liturgy,Liturgy-Weekday Siddur Sefard Linear-.json,,,0.37,none
+Liturgy,Liturgy-Yizkor-.json,,,0.4,none
+Midrash,Midrash-Aggadic Midrash-Derech Eretz Zuta-.json,yes,Tanaitic-Minor_Tractates-Tractate_Derekh_Eretz_Zuta-VILNA1883_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Ein Yaakov (Glick Edition)-.json,,Midrash-Aggadah-Ein_Yaakov_Glick_Edition-GLICK1916_Sefaria.jsonl,0.89,likely
+Midrash,Midrash-Aggadic Midrash-Ein Yaakov-.json,,,0,none
+Midrash,Midrash-Aggadic Midrash-Midrash Aggadah-.json,yes,Midrash-Aggadic_Midrash-Midrash_Aggadah-BUBER1894_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Lekach Tov-Midrash Lekach Tov on Ecclesiastes-.json,yes,Midrash-Aggadic_Midrash-Midrash_Lekach_Tov-Midrash_Lekach_Tov_on_Ecclesiastes-BERLIN1904_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Lekach Tov-Midrash Lekach Tov on Esther-.json,yes,Midrash-Aggadic_Midrash-Midrash_Lekach_Tov-Midrash_Lekach_Tov_on_Esther-VILNA1886_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Lekach Tov-Midrash Lekach Tov on Lamentations-.json,yes,Midrash-Aggadic_Midrash-Midrash_Lekach_Tov-Midrash_Lekach_Tov_on_Lamentations-LONDON1908_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Lekach Tov-Midrash Lekach Tov on Ruth-.json,yes,Midrash-Aggadic_Midrash-Midrash_Lekach_Tov-Midrash_Lekach_Tov_on_Ruth-MAINZ1887_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Lekach Tov-Midrash Lekach Tov on Song of Songs-.json,yes,Midrash-Aggadic_Midrash-Midrash_Lekach_Tov-Midrash_Lekach_Tov_on_Song_of_Songs-LONDON1908_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Lekach Tov-Midrash Lekach Tov-.json,yes,Midrash-Aggadic_Midrash-Midrash_Lekach_Tov-Midrash_Lekach_Tov-VILNA1884_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Mishlei-.json,yes,Midrash-Aggadic_Midrash-Midrash_Mishlei-BUBER_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Rabbah-Bamidbar Rabbah-.json,yes,Midrash-Aggadic_Midrash-Midrash_Rabbah-Bamidbar_Rabbah-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Rabbah-Bereishit Rabbah-.json,yes,Midrash-Aggadic_Midrash-Midrash_Rabbah-Bereishit_Rabbah-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Rabbah-Devarim Rabbah-.json,yes,Midrash-Aggadic_Midrash-Midrash_Rabbah-Devarim_Rabbah-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Rabbah-Eichah Rabbah-.json,yes,Midrash-Aggadic_Midrash-Midrash_Rabbah-Eichah_Rabbah-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Rabbah-Esther Rabbah-.json,yes,Midrash-Aggadic_Midrash-Midrash_Rabbah-Esther_Rabbah-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Rabbah-Kohelet Rabbah-.json,yes,Midrash-Aggadic_Midrash-Midrash_Rabbah-Kohelet_Rabbah-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Rabbah-Ruth Rabbah-.json,yes,Midrash-Aggadic_Midrash-Midrash_Rabbah-Ruth_Rabbah-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Rabbah-Shemot Rabbah-.json,yes,Midrash-Aggadic_Midrash-Midrash_Rabbah-Shemot_Rabbah-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Rabbah-Shir HaShirim Rabbah-.json,yes,Midrash-Aggadic_Midrash-Midrash_Rabbah-Shir_HaShirim_Rabbah-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Rabbah-Vayikra Rabbah-.json,yes,Midrash-Aggadic_Midrash-Midrash_Rabbah-Vayikra_Rabbah-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Tanchuma Buber-.json,yes,Midrash-Aggadic_Midrash-Midrash_Tanchuma_Buber-BUBER1885_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Tanchuma- (1).json,,Midrash-Aggadic_Midrash-Midrash_Tanchuma-Sefaria.jsonl,0.95,likely
+Midrash,Midrash-Aggadic Midrash-Midrash Tanchuma-.json,yes,Midrash-Aggadic_Midrash-Midrash_Tanchuma-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Tanchuma_Buber-.json,,Midrash-Aggadic_Midrash-Midrash_Tanchuma_Buber-BUBER1885_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Midrash Tehillim-.json,yes,Midrash-Aggadic_Midrash-Midrash_Tehillim-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Otzar Midrashim-.json,,Midrash-Aggadah-Otzar_Midrashim-NEWYORK1915_Sefaria.jsonl,0.89,likely
+Midrash,Midrash-Aggadic Midrash-Pesikta D'Rav Kahanna-.json,yes,Midrash-Aggadic_Midrash-Pesikta_DRav_Kahanna-MANDELBAUM1987_Sefaria.jsonl,0.99,likely
+Midrash,Midrash-Aggadic Midrash-Pesikta Rabbati-.json,yes,Midrash-Aggadic_Midrash-Pesikta_Rabbati-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Pirkei DeRabbi Eliezer-.json,yes,Midrash-Aggadic_Midrash-Pirkei_DeRabbi_Eliezer-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Seder Olam Rabbah-.json,yes,Midrash-Aggadic_Midrash-Seder_Olam_Rabbah-WARSAW1904_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Sefer HaYashar (midrash)-.json,,Midrash-Aggadah-Sefer_HaYashar_midrash-Sefaria.jsonl,0.88,likely
+Midrash,Midrash-Aggadic Midrash-Tanna Debei Eliyahu Rabbah-.json,yes,Midrash-Aggadic_Midrash-Tanna_Debei_Eliyahu_Rabbah-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Tanna debei Eliyahu Zuta-.json,yes,Midrash-Aggadic_Midrash-Tanna_debei_Eliyahu_Zuta-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Yalkut Shimoni on Nach-.json,yes,Midrash-Aggadic_Midrash-Yalkut_Shimoni_on_Nach-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Aggadic Midrash-Yalkut Shimoni on Torah-.json,yes,Midrash-Aggadic_Midrash-Yalkut_Shimoni_on_Torah-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Halachic Midrash-Mekhilta DeRabbi Shimon Bar Yochai-.json,yes,Midrash-Halachic_Midrash-Mekhilta_DeRabbi_Shimon_Bar_Yochai-HOFFMAN1905_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Halachic Midrash-Mekhilta d'Rabbi Yishmael-.json,yes,Midrash-Halachic_Midrash-Mekhilta_dRabbi_Yishmael-BEERI_Sefaria.jsonl,0.99,likely
+Midrash,Midrash-Halachic Midrash-Sifra-.json,yes,Midrash-Halachic_Midrash-Sifra-VENICE1545_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Halachic Midrash-Sifrei Bamidbar-.json,yes,Midrash-Halachic_Midrash-Sifrei_Bamidbar-Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Halachic Midrash-Sifrei Devarim-.json,yes,Midrash-Halachic_Midrash-Sifrei_Devarim-FINKELSTEIN1969_Sefaria.jsonl,1.0,exact
+Midrash,Midrash-Seder Olam Zutta-.json,yes,Midrash-Seder_Olam_Zutta-GROSSBERG1910_Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Kodashim-Mishnah Arakhin-.json,yes,Mishnah-Seder_Kodashim-Mishnah_Arakhin-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Kodashim-Mishnah Bekhorot-.json,yes,Mishnah-Seder_Kodashim-Mishnah_Bekhorot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Kodashim-Mishnah Chullin-.json,yes,Mishnah-Seder_Kodashim-Mishnah_Chullin-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Kodashim-Mishnah Keritot-.json,yes,Mishnah-Seder_Kodashim-Mishnah_Keritot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Kodashim-Mishnah Kinnim-.json,yes,Mishnah-Seder_Kodashim-Mishnah_Kinnim-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Kodashim-Mishnah Meilah-.json,yes,Mishnah-Seder_Kodashim-Mishnah_Meilah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Kodashim-Mishnah Menachot-.json,yes,Mishnah-Seder_Kodashim-Mishnah_Menachot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Kodashim-Mishnah Middot-.json,yes,Mishnah-Seder_Kodashim-Mishnah_Middot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Kodashim-Mishnah Tamid-.json,yes,Mishnah-Seder_Kodashim-Mishnah_Tamid-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Kodashim-Mishnah Temurah-.json,yes,Mishnah-Seder_Kodashim-Mishnah_Temurah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Kodashim-Mishnah Zevachim-.json,yes,Mishnah-Seder_Kodashim-Mishnah_Zevachim-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Moed-Mishnah Beitzah-.json,yes,Mishnah-Seder_Moed-Mishnah_Beitzah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Moed-Mishnah Chagigah-.json,yes,Mishnah-Seder_Moed-Mishnah_Chagigah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Moed-Mishnah Eruvin-.json,yes,Mishnah-Seder_Moed-Mishnah_Eruvin-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Moed-Mishnah Megillah-.json,yes,Mishnah-Seder_Moed-Mishnah_Megillah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Moed-Mishnah Moed Katan-.json,yes,Mishnah-Seder_Moed-Mishnah_Moed_Katan-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Moed-Mishnah Pesachim-.json,yes,Mishnah-Seder_Moed-Mishnah_Pesachim-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Moed-Mishnah Rosh Hashanah-.json,yes,Mishnah-Seder_Moed-Mishnah_Rosh_Hashanah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Moed-Mishnah Shabbat-.json,yes,Mishnah-Seder_Moed-Mishnah_Shabbat-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Moed-Mishnah Shekalim-.json,yes,Mishnah-Seder_Moed-Mishnah_Shekalim-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Moed-Mishnah Sukkah-.json,yes,Mishnah-Seder_Moed-Mishnah_Sukkah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Moed-Mishnah Taanit-.json,yes,Mishnah-Seder_Moed-Mishnah_Taanit-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Moed-Mishnah Yoma-.json,yes,Mishnah-Seder_Moed-Mishnah_Yoma-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nashim-Mishnah Gittin-.json,yes,Mishnah-Seder_Nashim-Mishnah_Gittin-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nashim-Mishnah Ketubot-.json,yes,Mishnah-Seder_Nashim-Mishnah_Ketubot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nashim-Mishnah Kiddushin-.json,yes,Mishnah-Seder_Nashim-Mishnah_Kiddushin-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nashim-Mishnah Nazir-.json,yes,Mishnah-Seder_Nashim-Mishnah_Nazir-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nashim-Mishnah Nedarim-.json,yes,Mishnah-Seder_Nashim-Mishnah_Nedarim-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nashim-Mishnah Sotah-.json,yes,Mishnah-Seder_Nashim-Mishnah_Sotah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nashim-Mishnah Yevamot-.json,yes,Mishnah-Seder_Nashim-Mishnah_Yevamot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nezikin-Mishnah Avodah Zarah-.json,yes,Mishnah-Seder_Nezikin-Mishnah_Avodah_Zarah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nezikin-Mishnah Bava Batra-.json,yes,Mishnah-Seder_Nezikin-Mishnah_Bava_Batra-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nezikin-Mishnah Bava Kamma-.json,yes,Mishnah-Seder_Nezikin-Mishnah_Bava_Kamma-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nezikin-Mishnah Bava Metzia-.json,yes,Mishnah-Seder_Nezikin-Mishnah_Bava_Metzia-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nezikin-Mishnah Eduyot-.json,yes,Mishnah-Seder_Nezikin-Mishnah_Eduyot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nezikin-Mishnah Horayot-.json,yes,Mishnah-Seder_Nezikin-Mishnah_Horayot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nezikin-Mishnah Makkot-.json,yes,Mishnah-Seder_Nezikin-Mishnah_Makkot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nezikin-Mishnah Sanhedrin-.json,yes,Mishnah-Seder_Nezikin-Mishnah_Sanhedrin-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nezikin-Mishnah Shevuot-.json,yes,Mishnah-Seder_Nezikin-Mishnah_Shevuot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Nezikin-Pirkei Avot-.json,yes,Mishnah-Seder_Nezikin-Pirkei_Avot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Tahorot-Mishnah Kelim-.json,yes,Mishnah-Seder_Tahorot-Mishnah_Kelim-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Tahorot-Mishnah Makhshirin-.json,yes,Mishnah-Seder_Tahorot-Mishnah_Makhshirin-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Tahorot-Mishnah Mikvaot-.json,yes,Mishnah-Seder_Tahorot-Mishnah_Mikvaot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Tahorot-Mishnah Negaim-.json,yes,Mishnah-Seder_Tahorot-Mishnah_Negaim-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Tahorot-Mishnah Niddah-.json,yes,Mishnah-Seder_Tahorot-Mishnah_Niddah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Tahorot-Mishnah Oholot-.json,yes,Mishnah-Seder_Tahorot-Mishnah_Oholot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Tahorot-Mishnah Oktzin-.json,yes,Mishnah-Seder_Tahorot-Mishnah_Oktzin-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Tahorot-Mishnah Parah-.json,yes,Mishnah-Seder_Tahorot-Mishnah_Parah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Tahorot-Mishnah Tahorot-.json,yes,Mishnah-Seder_Tahorot-Mishnah_Tahorot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Tahorot-Mishnah Tevul Yom-.json,yes,Mishnah-Seder_Tahorot-Mishnah_Tevul_Yom-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Tahorot-Mishnah Yadayim-.json,yes,Mishnah-Seder_Tahorot-Mishnah_Yadayim-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Tahorot-Mishnah Zavim-.json,yes,Mishnah-Seder_Tahorot-Mishnah_Zavim-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Zeraim-Mishnah Berakhot-.json,yes,Mishnah-Seder_Zeraim-Mishnah_Berakhot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Zeraim-Mishnah Bikkurim-.json,yes,Mishnah-Seder_Zeraim-Mishnah_Bikkurim-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Zeraim-Mishnah Challah-.json,yes,Mishnah-Seder_Zeraim-Mishnah_Challah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Zeraim-Mishnah Demai-.json,yes,Mishnah-Seder_Zeraim-Mishnah_Demai-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Zeraim-Mishnah Kilayim-.json,yes,Mishnah-Seder_Zeraim-Mishnah_Kilayim-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Zeraim-Mishnah Maaser Sheni-.json,yes,Mishnah-Seder_Zeraim-Mishnah_Maaser_Sheni-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Zeraim-Mishnah Maasrot-.json,yes,Mishnah-Seder_Zeraim-Mishnah_Maasrot-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Zeraim-Mishnah Orlah-.json,yes,Mishnah-Seder_Zeraim-Mishnah_Orlah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Zeraim-Mishnah Peah-.json,yes,Mishnah-Seder_Zeraim-Mishnah_Peah-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Zeraim-Mishnah Sheviit-.json,yes,Mishnah-Seder_Zeraim-Mishnah_Sheviit-Sefaria.jsonl,1.0,exact
+Mishnah,Mishnah-Seder Zeraim-Mishnah Terumot-.json,yes,Mishnah-Seder_Zeraim-Mishnah_Terumot-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Guides-Darchei HaTalmud-.json,,,0.43,none
+Talmud,Talmud-Bavli-Guides-Mevo HaTalmud (Chajes)-.json,,Talmud-Bavli-Seder_Moed-Chagigah-Sefaria.jsonl,0.62,check
+Talmud,Talmud-Bavli-Seder Kodashim-Arakhin-.json,yes,Talmud-Bavli-Seder_Kodashim-Arakhin-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Kodashim-Bekhorot-.json,yes,Talmud-Bavli-Seder_Kodashim-Bekhorot-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Kodashim-Chullin-.json,yes,Talmud-Bavli-Seder_Kodashim-Chullin-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Kodashim-Keritot-.json,yes,Talmud-Bavli-Seder_Kodashim-Keritot-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Kodashim-Meilah-.json,yes,Talmud-Bavli-Seder_Kodashim-Meilah-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Kodashim-Menachot-.json,yes,Talmud-Bavli-Seder_Kodashim-Menachot-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Kodashim-Tamid-.json,yes,Talmud-Bavli-Seder_Kodashim-Tamid-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Kodashim-Temurah-.json,yes,Talmud-Bavli-Seder_Kodashim-Temurah-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Kodashim-Zevachim-.json,yes,Talmud-Bavli-Seder_Kodashim-Zevachim-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Moed-Beitzah-.json,yes,Talmud-Bavli-Seder_Moed-Beitzah-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Moed-Chagigah-.json,yes,Talmud-Bavli-Seder_Moed-Chagigah-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Moed-Eruvin-.json,yes,Talmud-Bavli-Seder_Moed-Eruvin-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Moed-Megillah-.json,yes,Talmud-Bavli-Seder_Moed-Megillah-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Moed-Moed Katan-.json,yes,Talmud-Bavli-Seder_Moed-Moed_Katan-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Moed-Pesachim-.json,yes,Talmud-Bavli-Seder_Moed-Pesachim-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Moed-Rosh Hashanah-.json,yes,Talmud-Bavli-Seder_Moed-Rosh_Hashanah-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Moed-Shabbat-.json,yes,Talmud-Bavli-Seder_Moed-Shabbat-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Moed-Sukkah-.json,yes,Talmud-Bavli-Seder_Moed-Sukkah-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Moed-Taanit-.json,yes,Talmud-Bavli-Seder_Moed-Taanit-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Moed-Yoma-.json,yes,Talmud-Bavli-Seder_Moed-Yoma-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nashim-Gittin-.json,yes,Talmud-Bavli-Seder_Nashim-Gittin-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nashim-Ketubot-.json,yes,Talmud-Bavli-Seder_Nashim-Ketubot-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nashim-Kiddushin-.json,yes,Talmud-Bavli-Seder_Nashim-Kiddushin-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nashim-Nazir-.json,yes,Talmud-Bavli-Seder_Nashim-Nazir-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nashim-Nedarim-.json,yes,Talmud-Bavli-Seder_Nashim-Nedarim-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nashim-Sotah-.json,yes,Talmud-Bavli-Seder_Nashim-Sotah-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nashim-Yevamot-.json,yes,Talmud-Bavli-Seder_Nashim-Yevamot-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nezikin-Avodah Zarah-.json,yes,Talmud-Bavli-Seder_Nezikin-Avodah_Zarah-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nezikin-Bava Batra-.json,yes,Talmud-Bavli-Seder_Nezikin-Bava_Batra-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nezikin-Bava Kamma-.json,yes,Talmud-Bavli-Seder_Nezikin-Bava_Kamma-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nezikin-Bava Metzia-.json,yes,Talmud-Bavli-Seder_Nezikin-Bava_Metzia-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nezikin-Horayot-.json,yes,Talmud-Bavli-Seder_Nezikin-Horayot-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nezikin-Makkot-.json,yes,Talmud-Bavli-Seder_Nezikin-Makkot-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nezikin-Sanhedrin-.json,yes,Talmud-Bavli-Seder_Nezikin-Sanhedrin-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Nezikin-Shevuot-.json,yes,Talmud-Bavli-Seder_Nezikin-Shevuot-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Tahorot-Niddah-.json,yes,Talmud-Bavli-Seder_Tahorot-Niddah-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Bavli-Seder Zeraim-Berakhot-.json,yes,Talmud-Bavli-Seder_Zeraim-Berakhot-Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Moed-Jerusalem Talmud Beitzah-.json,yes,Talmud-Yerushalmi-Seder_Moed-Jerusalem_Talmud_Beitzah-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Moed-Jerusalem Talmud Chagigah-.json,yes,Talmud-Yerushalmi-Seder_Moed-Jerusalem_Talmud_Chagigah-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Moed-Jerusalem Talmud Eruvin-.json,yes,Talmud-Yerushalmi-Seder_Moed-Jerusalem_Talmud_Eruvin-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Moed-Jerusalem Talmud Megillah-.json,yes,Talmud-Yerushalmi-Seder_Moed-Jerusalem_Talmud_Megillah-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Moed-Jerusalem Talmud Moed Kattan-.json,yes,Talmud-Yerushalmi-Seder_Moed-Jerusalem_Talmud_Moed_Kattan-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Moed-Jerusalem Talmud Pesachim-.json,yes,Talmud-Yerushalmi-Seder_Moed-Jerusalem_Talmud_Pesachim-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Moed-Jerusalem Talmud Rosh Hashanah-.json,yes,Talmud-Yerushalmi-Seder_Moed-Jerusalem_Talmud_Rosh_Hashanah-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Moed-Jerusalem Talmud Shabbat-.json,yes,Talmud-Yerushalmi-Seder_Moed-Jerusalem_Talmud_Shabbat-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Moed-Jerusalem Talmud Shekalim-.json,yes,Talmud-Yerushalmi-Seder_Moed-Jerusalem_Talmud_Shekalim-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Moed-Jerusalem Talmud Sukkah-.json,yes,Talmud-Yerushalmi-Seder_Moed-Jerusalem_Talmud_Sukkah-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Moed-Jerusalem Talmud Ta'anit-.json,yes,Talmud-Yerushalmi-Seder_Moed-Jerusalem_Talmud_Taanit-GUGGENHEIMER_Sefaria.jsonl,0.99,likely
+Talmud,Talmud-Yerushalmi-Seder Moed-Jerusalem Talmud Yoma-.json,yes,Talmud-Yerushalmi-Seder_Moed-Jerusalem_Talmud_Yoma-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nashim-Jerusalem Talmud Gittin-.json,yes,Talmud-Yerushalmi-Seder_Nashim-Jerusalem_Talmud_Gittin-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nashim-Jerusalem Talmud Ketubot-.json,yes,Talmud-Yerushalmi-Seder_Nashim-Jerusalem_Talmud_Ketubot-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nashim-Jerusalem Talmud Kiddushin-.json,yes,Talmud-Yerushalmi-Seder_Nashim-Jerusalem_Talmud_Kiddushin-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nashim-Jerusalem Talmud Nazir-.json,yes,Talmud-Yerushalmi-Seder_Nashim-Jerusalem_Talmud_Nazir-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nashim-Jerusalem Talmud Nedarim-.json,yes,Talmud-Yerushalmi-Seder_Nashim-Jerusalem_Talmud_Nedarim-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nashim-Jerusalem Talmud Sotah-.json,yes,Talmud-Yerushalmi-Seder_Nashim-Jerusalem_Talmud_Sotah-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nashim-Jerusalem Talmud Yevamot-.json,yes,Talmud-Yerushalmi-Seder_Nashim-Jerusalem_Talmud_Yevamot-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nezikin-Jerusalem Talmud Avodah Zarah-.json,yes,Talmud-Yerushalmi-Seder_Nezikin-Jerusalem_Talmud_Avodah_Zarah-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nezikin-Jerusalem Talmud Bava Batra-.json,yes,Talmud-Yerushalmi-Seder_Nezikin-Jerusalem_Talmud_Bava_Batra-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nezikin-Jerusalem Talmud Bava Kamma-.json,yes,Talmud-Yerushalmi-Seder_Nezikin-Jerusalem_Talmud_Bava_Kamma-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nezikin-Jerusalem Talmud Bava Metsia-.json,yes,Talmud-Yerushalmi-Seder_Nezikin-Jerusalem_Talmud_Bava_Metsia-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nezikin-Jerusalem Talmud Horayot-.json,yes,Talmud-Yerushalmi-Seder_Nezikin-Jerusalem_Talmud_Horayot-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nezikin-Jerusalem Talmud Makkot-.json,yes,Talmud-Yerushalmi-Seder_Nezikin-Jerusalem_Talmud_Makkot-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nezikin-Jerusalem Talmud Sanhedrin-.json,yes,Talmud-Yerushalmi-Seder_Nezikin-Jerusalem_Talmud_Sanhedrin-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Nezikin-Jerusalem Talmud Shevuot-.json,yes,Talmud-Yerushalmi-Seder_Nezikin-Jerusalem_Talmud_Shevuot-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Tahorot-Jerusalem Talmud Niddah-.json,yes,Talmud-Yerushalmi-Seder_Tahorot-Jerusalem_Talmud_Niddah-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Zeraim-Jerusalem Talmud Berakhot-.json,yes,Talmud-Yerushalmi-Seder_Zeraim-Jerusalem_Talmud_Berakhot-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Zeraim-Jerusalem Talmud Bikkurim-.json,yes,Talmud-Yerushalmi-Seder_Zeraim-Jerusalem_Talmud_Bikkurim-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Zeraim-Jerusalem Talmud Demai-.json,yes,Talmud-Yerushalmi-Seder_Zeraim-Jerusalem_Talmud_Demai-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Zeraim-Jerusalem Talmud Hallah-.json,yes,Talmud-Yerushalmi-Seder_Zeraim-Jerusalem_Talmud_Hallah-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Zeraim-Jerusalem Talmud Kilayim-.json,yes,Talmud-Yerushalmi-Seder_Zeraim-Jerusalem_Talmud_Kilayim-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Zeraim-Jerusalem Talmud Ma'aser Sheni-.json,yes,Talmud-Yerushalmi-Seder_Zeraim-Jerusalem_Talmud_Maaser_Sheni-GUGGENHEIMER_Sefaria.jsonl,0.99,likely
+Talmud,Talmud-Yerushalmi-Seder Zeraim-Jerusalem Talmud Ma'asrot-.json,yes,Talmud-Yerushalmi-Seder_Zeraim-Jerusalem_Talmud_Maasrot-GUGGENHEIMER_Sefaria.jsonl,0.99,likely
+Talmud,Talmud-Yerushalmi-Seder Zeraim-Jerusalem Talmud Orlah-.json,yes,Talmud-Yerushalmi-Seder_Zeraim-Jerusalem_Talmud_Orlah-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Zeraim-Jerusalem Talmud Peah-.json,yes,Talmud-Yerushalmi-Seder_Zeraim-Jerusalem_Talmud_Peah-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Talmud,Talmud-Yerushalmi-Seder Zeraim-Jerusalem Talmud Shevi'it-.json,yes,Talmud-Yerushalmi-Seder_Zeraim-Jerusalem_Talmud_Sheviit-GUGGENHEIMER_Sefaria.jsonl,0.99,likely
+Talmud,Talmud-Yerushalmi-Seder Zeraim-Jerusalem Talmud Terumot-.json,yes,Talmud-Yerushalmi-Seder_Zeraim-Jerusalem_Talmud_Terumot-GUGGENHEIMER_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Megillat Taanit-.json,yes,Tanaitic-Megillat_Taanit-WARSAW1874_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Avot D'Rabbi Natan-.json,yes,Tanaitic-Minor_Tractates-Avot_DRabbi_Natan-VILNA1883_Sefaria.jsonl,0.99,likely
+Tanaitic,Tanaitic-Minor Tractates-Tractate Avadim-.json,yes,Tanaitic-Minor_Tractates-Tractate_Avadim-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Tractate Derekh Eretz Rabbah-.json,yes,Tanaitic-Minor_Tractates-Tractate_Derekh_Eretz_Rabbah-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Tractate Derekh Eretz Zuta-.json,yes,Tanaitic-Minor_Tractates-Tractate_Derekh_Eretz_Zuta-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Tractate Gerim-.json,yes,Tanaitic-Minor_Tractates-Tractate_Gerim-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Tractate Kallah Rabbati-.json,yes,Tanaitic-Minor_Tractates-Tractate_Kallah_Rabbati-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Tractate Kallah-.json,yes,Tanaitic-Minor_Tractates-Tractate_Kallah-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Tractate Kutim-.json,yes,Tanaitic-Minor_Tractates-Tractate_Kutim-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Tractate Mezuzah-.json,yes,Tanaitic-Minor_Tractates-Tractate_Mezuzah-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Tractate Sefer Torah-.json,yes,Tanaitic-Minor_Tractates-Tractate_Sefer_Torah-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Tractate Semachot-.json,yes,Tanaitic-Minor_Tractates-Tractate_Semachot-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Tractate Soferim-.json,yes,Tanaitic-Minor_Tractates-Tractate_Soferim-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Tractate Tefillin-.json,yes,Tanaitic-Minor_Tractates-Tractate_Tefillin-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Minor Tractates-Tractate Tzitzit-.json,yes,Tanaitic-Minor_Tractates-Tractate_Tzitzit-VILNA1883_Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Kodashim-Tosefta Arakhin-.json,yes,Tanaitic-Tosefta-Seder_Kodashim-Tosefta_Arakhin-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Kodashim-Tosefta Bekhorot-.json,yes,Tanaitic-Tosefta-Seder_Kodashim-Tosefta_Bekhorot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Kodashim-Tosefta Chullin-.json,yes,Tanaitic-Tosefta-Seder_Kodashim-Tosefta_Chullin-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Kodashim-Tosefta Keritot-.json,yes,Tanaitic-Tosefta-Seder_Kodashim-Tosefta_Keritot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Kodashim-Tosefta Meilah-.json,yes,Tanaitic-Tosefta-Seder_Kodashim-Tosefta_Meilah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Kodashim-Tosefta Menahot-.json,yes,Tanaitic-Tosefta-Seder_Kodashim-Tosefta_Menahot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Kodashim-Tosefta Temurah-.json,yes,Tanaitic-Tosefta-Seder_Kodashim-Tosefta_Temurah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Kodashim-Tosefta Zevahim-.json,yes,Tanaitic-Tosefta-Seder_Kodashim-Tosefta_Zevahim-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Moed-Tosefta Beitsah-.json,yes,Tanaitic-Tosefta-Seder_Moed-Tosefta_Beitsah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Moed-Tosefta Chagigah-.json,yes,Tanaitic-Tosefta-Seder_Moed-Tosefta_Chagigah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Moed-Tosefta Eiruvin-.json,yes,Tanaitic-Tosefta-Seder_Moed-Tosefta_Eiruvin-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Moed-Tosefta Megillah-.json,yes,Tanaitic-Tosefta-Seder_Moed-Tosefta_Megillah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Moed-Tosefta Moed Kattan-.json,yes,Tanaitic-Tosefta-Seder_Moed-Tosefta_Moed_Kattan-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Moed-Tosefta Pesachim-.json,yes,Tanaitic-Tosefta-Seder_Moed-Tosefta_Pesachim-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Moed-Tosefta Rosh HaShanah-.json,yes,Tanaitic-Tosefta-Seder_Moed-Tosefta_Rosh_HaShanah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Moed-Tosefta Shabbat-.json,yes,Tanaitic-Tosefta-Seder_Moed-Tosefta_Shabbat-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Moed-Tosefta Shekalim-.json,yes,Tanaitic-Tosefta-Seder_Moed-Tosefta_Shekalim-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Moed-Tosefta Sukkah-.json,yes,Tanaitic-Tosefta-Seder_Moed-Tosefta_Sukkah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Moed-Tosefta Ta'anit-.json,yes,Tanaitic-Tosefta-Seder_Moed-Tosefta_Taanit-Sefaria.jsonl,0.99,likely
+Tanaitic,Tanaitic-Tosefta-Seder Moed-Tosefta Yoma-.json,yes,Tanaitic-Tosefta-Seder_Moed-Tosefta_Yoma-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nashim-Tosefta Gittin-.json,yes,Tanaitic-Tosefta-Seder_Nashim-Tosefta_Gittin-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nashim-Tosefta Ketubot-.json,yes,Tanaitic-Tosefta-Seder_Nashim-Tosefta_Ketubot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nashim-Tosefta Kiddushin-.json,yes,Tanaitic-Tosefta-Seder_Nashim-Tosefta_Kiddushin-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nashim-Tosefta Nazir-.json,yes,Tanaitic-Tosefta-Seder_Nashim-Tosefta_Nazir-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nashim-Tosefta Nedarim-.json,yes,Tanaitic-Tosefta-Seder_Nashim-Tosefta_Nedarim-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nashim-Tosefta Sotah-.json,yes,Tanaitic-Tosefta-Seder_Nashim-Tosefta_Sotah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nashim-Tosefta Yevamot-.json,yes,Tanaitic-Tosefta-Seder_Nashim-Tosefta_Yevamot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nezikin-Tosefta Avodah Zarah-.json,yes,Tanaitic-Tosefta-Seder_Nezikin-Tosefta_Avodah_Zarah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nezikin-Tosefta Bava Batra-.json,yes,Tanaitic-Tosefta-Seder_Nezikin-Tosefta_Bava_Batra-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nezikin-Tosefta Bava Kamma-.json,yes,Tanaitic-Tosefta-Seder_Nezikin-Tosefta_Bava_Kamma-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nezikin-Tosefta Bava Metzia-.json,yes,Tanaitic-Tosefta-Seder_Nezikin-Tosefta_Bava_Metzia-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nezikin-Tosefta Eduyot-.json,yes,Tanaitic-Tosefta-Seder_Nezikin-Tosefta_Eduyot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nezikin-Tosefta Horayot-.json,yes,Tanaitic-Tosefta-Seder_Nezikin-Tosefta_Horayot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nezikin-Tosefta Makkot-.json,yes,Tanaitic-Tosefta-Seder_Nezikin-Tosefta_Makkot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nezikin-Tosefta Sanhedrin-.json,yes,Tanaitic-Tosefta-Seder_Nezikin-Tosefta_Sanhedrin-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Nezikin-Tosefta Shevuot-.json,yes,Tanaitic-Tosefta-Seder_Nezikin-Tosefta_Shevuot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Keilim Batra-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Keilim_Batra-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Keilim Metsia-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Keilim_Metsia-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Kelim Kamma-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Kelim_Kamma-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Makhshirin-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Makhshirin-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Mikvaot-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Mikvaot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Negaim-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Negaim-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Niddah-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Niddah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Ohalot-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Ohalot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Parah-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Parah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Tahorot-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Tahorot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Tevul Yom-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Tevul_Yom-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Tohorot-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Tohorot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Uktsin-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Uktsin-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Yadayim-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Yadayim-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Tahorot-Tosefta Zavim-.json,yes,Tanaitic-Tosefta-Seder_Tahorot-Tosefta_Zavim-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Zeraim-Tosefta Berakhot-.json,yes,Tanaitic-Tosefta-Seder_Zeraim-Tosefta_Berakhot-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Zeraim-Tosefta Bikkurim-.json,yes,Tanaitic-Tosefta-Seder_Zeraim-Tosefta_Bikkurim-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Zeraim-Tosefta Challah-.json,yes,Tanaitic-Tosefta-Seder_Zeraim-Tosefta_Challah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Zeraim-Tosefta Demai-.json,yes,Tanaitic-Tosefta-Seder_Zeraim-Tosefta_Demai-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Zeraim-Tosefta Kilaim-.json,yes,Tanaitic-Tosefta-Seder_Zeraim-Tosefta_Kilaim-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Zeraim-Tosefta Ma'aser Sheni-.json,yes,Tanaitic-Tosefta-Seder_Zeraim-Tosefta_Maaser_Sheni-Sefaria.jsonl,0.99,likely
+Tanaitic,Tanaitic-Tosefta-Seder Zeraim-Tosefta Ma'asrot-.json,yes,Tanaitic-Tosefta-Seder_Zeraim-Tosefta_Maasrot-Sefaria.jsonl,0.99,likely
+Tanaitic,Tanaitic-Tosefta-Seder Zeraim-Tosefta Orlah-.json,yes,Tanaitic-Tosefta-Seder_Zeraim-Tosefta_Orlah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Zeraim-Tosefta Peah-.json,yes,Tanaitic-Tosefta-Seder_Zeraim-Tosefta_Peah-Sefaria.jsonl,1.0,exact
+Tanaitic,Tanaitic-Tosefta-Seder Zeraim-Tosefta Shevi'it-.json,yes,Tanaitic-Tosefta-Seder_Zeraim-Tosefta_Sheviit-Sefaria.jsonl,0.99,likely
+Tanaitic,Tanaitic-Tosefta-Seder Zeraim-Tosefta Terumot-.json,yes,Tanaitic-Tosefta-Seder_Zeraim-Tosefta_Terumot-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Amos-.json,,Tanakh-Prophets-Amos-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Ezekiel-.json,,Tanakh-Prophets-Ezekiel-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Habakkuk-.json,,Tanakh-Prophets-Habakkuk-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Haggai-.json,,Tanakh-Prophets-Haggai-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Hosea-.json,,Tanakh-Prophets-Hosea-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-I Kings-.json,,Tanakh-Prophets-I_Kings-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-I Samuel-.json,,Tanakh-Prophets-I_Samuel-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-II Kings-.json,,Tanakh-Prophets-II_Kings-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-II Samuel-.json,,Tanakh-Prophets-II_Samuel-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Isaiah-.json,,Tanakh-Prophets-Isaiah-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Jeremiah-.json,,Tanakh-Prophets-Jeremiah-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Joel-.json,,Tanakh-Prophets-Joel-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Jonah-.json,,Tanakh-Prophets-Jonah-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Joshua-.json,,Tanakh-Prophets-Joshua-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Judges-.json,,Tanakh-Prophets-Judges-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Malachi-.json,,Tanakh-Prophets-Malachi-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Micah-.json,,Tanakh-Prophets-Micah-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Nahum-.json,,Tanakh-Prophets-Nahum-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Obadiah-.json,,Tanakh-Prophets-Obadiah-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Zechariah-.json,,Tanakh-Prophets-Zechariah-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Prophets-Zephaniah-.json,,Tanakh-Prophets-Zephaniah-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Torah-Deuteronomy-.json,,Tanakh-Torah-Deuteronomy-KOKHAV2020_Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Torah-Exodus-.json,,Tanakh-Torah-Exodus-KOKHAV2020_Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Torah-Genesis-.json,,Tanakh-Torah-Genesis-KOKHAV2020_Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Torah-Leviticus-.json,,Tanakh-Torah-Leviticus-KOKHAV2020_Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Torah-Numbers-.json,,Tanakh-Torah-Numbers-KOKHAV2020_Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-Daniel-.json,,Tanakh-Writings-Daniel-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-Ecclesiastes-.json,,Tanakh-Writings-Ecclesiastes-LAKEWOOD2001_Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-Esther-.json,,Tanakh-Writings-Esther-LAKEWOOD2001_Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-Ezra-.json,,Tanakh-Writings-Ezra-GORDON1933_Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-I Chronicles-.json,,Tanakh-Writings-I_Chronicles-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-II Chronicles-.json,,Tanakh-Writings-II_Chronicles-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-Job-.json,,Tanakh-Writings-Job-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-Lamentations-.json,,Tanakh-Writings-Lamentations-LAKEWOOD2001_Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-Nehemiah-.json,,Tanakh-Writings-Nehemiah-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-Proverbs-.json,,Tanakh-Writings-Proverbs-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-Psalms-.json,,Tanakh-Writings-Psalms-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-Ruth-.json,,Tanakh-Writings-Ruth-Sefaria.jsonl,1.0,exact
+Tanakh,Tanakh-Writings-Song of Songs-.json,,Tanakh-Writings-Song_of_Songs-Sefaria.jsonl,1.0,exact

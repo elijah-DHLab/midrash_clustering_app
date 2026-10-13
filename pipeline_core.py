@@ -10,6 +10,7 @@ today's CLI scripts) and, later, on a different machine (e.g. a lab server)
 by just setting different env vars.
 """
 
+import bisect
 import hashlib
 import json
 import os
@@ -25,15 +26,18 @@ from cluster_visualization_report import _grouping_label
 # Paths
 # ---------------------------------------------------------------------------
 
+_HERE = os.path.dirname(os.path.abspath(__file__))
+
+# Since October 2026 the corpus is Sefaria act_jsonl_v7 (s3://elasticsearch-back-c/jsons/
+# sefaria-jsons/act_jsonl_v7/, documented in Inputs/v7_README.html) and the input table is
+# Inputs/corpus_catalog.xlsx (Inputs/build_catalog.py). The old corpus and table -
+# SefariasData/rabbinic and avg_text_length_per_file.xlsx - are reachable through the env vars.
 MODEL_PATH = os.environ.get(
-    "MIDRASH_MODEL_PATH",
-    "G:/.shortcut-targets-by-id/1K7DwC8_x5-sEu7JpzotvjF1nWhGNkGuj/Zohar/fasttext_model.bin",
+    "MIDRASH_MODEL_PATH", "G:/My Drive/Haifa/MIDRASH/models/fasttext_v7_2026-10.bin"
 )
-DATA_DIR = os.environ.get(
-    "MIDRASH_DATA_DIR", "G:/My Drive/Haifa/MIDRASH/SefariasData/rabbinic"
-)
+DATA_DIR = os.environ.get("MIDRASH_DATA_DIR", os.path.join(_HERE, "corpus_v7"))
 METADATA_PATH = os.environ.get(
-    "MIDRASH_METADATA_PATH", "Inputs/avg_text_length_per_file.xlsx"
+    "MIDRASH_METADATA_PATH", os.path.join(_HERE, "Inputs", "corpus_catalog.xlsx")
 )
 RESULTS_DIR = os.environ.get("MIDRASH_RESULTS_DIR", "Results")
 CACHE_DIR = os.environ.get("MIDRASH_CACHE_DIR", "cache")
@@ -67,7 +71,9 @@ def load_metadata(metadata_path: str = None) -> pd.DataFrame:
     presets, as they are here.
     """
     path = metadata_path or METADATA_PATH
-    df = pd.read_excel(path, dtype=str)
+    df = pd.read_excel(path, dtype=str)   # the first sheet: `catalog` in corpus_catalog.xlsx
+    if "filename" not in df.columns and "file" in df.columns:
+        df = df.rename(columns={"file": "filename"})
     df = df.dropna(subset=["hierarchy"]).reset_index(drop=True)
     df["level1"] = df["filename"].apply(lambda f: _grouping_label(f, 1))
     df["level2"] = df["filename"].apply(lambda f: _grouping_label(f, 2))
@@ -84,6 +90,17 @@ def files_for_experiment(metadata: pd.DataFrame, experiment_key: str) -> list:
 # ---------------------------------------------------------------------------
 # Chunking
 # ---------------------------------------------------------------------------
+
+
+def location_prefix(filename: str) -> str:
+    """The part of every `location` in a file that only repeats the file's name.
+
+    v7:  Midrash-Aggadic_Midrash-Midrash_Rabbah-Bereishit_Rabbah-Sefaria.jsonl
+         -> Midrash_Aggadic_Midrash_Midrash_Rabbah_Bereishit_Rabbah_Sefaria_   (then 52_10)
+    old: Apocrypha-Book of Tobit-.json -> Apocrypha_Book_of_Tobit__            (then 1_1)
+    """
+    stem = filename[: -len(".jsonl")] if filename.endswith(".jsonl") else filename[: -len(".json")]
+    return stem.replace("-", "_").replace(" ", "_") + "_"
 
 
 def _parse_hierarchy_tuple(value):
@@ -116,6 +133,9 @@ def build_chunks(
         filepath = os.path.join(resolved_data_dir, filename)
 
         full_text = []
+        # Where each source row starts in full_text, and where that row is in the book.
+        row_starts, row_refs, row_segments = [], [], []
+        prefix = location_prefix(filename)
         with open(filepath, "r", encoding="utf-8") as f:
             for line in f:
                 line = line.strip()
@@ -123,22 +143,50 @@ def build_chunks(
                     continue
                 try:
                     obj = json.loads(line)
-                    full_text.extend(obj.get("sentence", "").split())
                 except json.JSONDecodeError as e:
                     print(f"Error in file {filename}: {e}")
+                    continue
+                words = obj.get("sentence", "").split()
+                if not words:
+                    continue
+                row_starts.append(len(full_text))
+                loc = str(obj.get("location", ""))
+                row_refs.append(loc[len(prefix):] if loc.startswith(prefix) else loc)
+                row_segments.append(obj.get("segment", ""))
+                full_text.extend(words)
 
-        chunks = [
-            " ".join(full_text[i : i + chunk_size])
-            for i in range(0, len(full_text), chunk_size)
-        ]
-        for idx, chunk in enumerate(chunks):
+        def row_of(word_index):
+            return bisect.bisect_right(row_starts, word_index) - 1
+
+        def ref_spans(start, end, first, last):
+            """'1–23: 1_7 | 24–50: 1_10' - which words of the chunk (1-based) come from which
+            location. Consecutive rows with the same location (a v7 row split in two) are one span."""
+            spans = []
+            for r in range(first, last + 1):
+                lo = max(row_starts[r], start) - start + 1
+                hi = (min(row_starts[r + 1] - 1, end) if r + 1 < len(row_starts) else end) - start + 1
+                if spans and spans[-1][2] == row_refs[r]:
+                    spans[-1][1] = hi
+                else:
+                    spans.append([lo, hi, row_refs[r]])
+            return " | ".join(f"{lo}–{hi}: {ref}" for lo, hi, ref in spans)
+
+        for idx, start in enumerate(range(0, len(full_text), chunk_size)):
+            end = min(start + chunk_size, len(full_text)) - 1
+            first, last = row_of(start), row_of(end)
             records.append(
                 {
                     "filename": filename,
                     "hierarchy": row["hierarchy"],
                     "hierarchy_list": row["hierarchy_list"],
-                    "chunk": chunk,
+                    "chunk": " ".join(full_text[start : end + 1]),
                     "chunk_number": idx + 1,
+                    # `location` gives a row's first Sefaria section only (v7 README), so a
+                    # chunk is placed by the rows its first and last word come from.
+                    "start_ref": row_refs[first],
+                    "end_ref": row_refs[last],
+                    "ref_spans": ref_spans(start, end, first, last),
+                    "start_segment": row_segments[first],
                 }
             )
 
