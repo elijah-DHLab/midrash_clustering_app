@@ -220,8 +220,14 @@
   .ngrams span { display: block; white-space: nowrap; }
 
   .downloads { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
-  .downloads a .what { display: block; margin-top: 3px; font: 400 12px "Heebo", sans-serif; direction: rtl;
-                       color: var(--muted); max-width: 30ch; white-space: normal; }
+  /* What a download holds, shown on hover. */
+  .downloads a { position: relative; }
+  .downloads a[data-what]:hover::after, .downloads a[data-what]:focus-visible::after {
+    content: attr(data-what); position: absolute; top: calc(100% + 6px); right: 0; z-index: 10;
+    width: max-content; max-width: 34ch; padding: 7px 10px; direction: rtl; text-align: right;
+    font: 400 12.5px/1.5 "Heebo", sans-serif; color: var(--ink); background: var(--plate);
+    border: 1px solid var(--rule); border-radius: 2px; box-shadow: 0 2px 8px rgba(0,0,0,.12);
+  }
   .downloads a {
     font-size: 13px; color: var(--ink); text-decoration: none;
     border: 1px solid var(--rule); border-radius: 2px; padding: 6px 11px; background: var(--plate);
@@ -437,8 +443,8 @@
       {% endif %}
       <div class="downloads">
         {% for name, size, what in downloads %}
-          <a href="{% url 'download' token name %}" download><span class="ltr">{{ name }}</span>
-            <span>{{ size|filesizeformat }}</span>{% if what %}<span class="what">{{ what }}</span>{% endif %}</a>
+          <a href="{% url 'download' token name %}" download{% if what %} data-what="{{ what }}" aria-label="{{ name }}: {{ what }}"{% endif %}><span class="ltr">{{ name }}</span>
+            <span>{{ size|filesizeformat }}</span></a>
         {% endfor %}
       </div>
     {% endif %}
