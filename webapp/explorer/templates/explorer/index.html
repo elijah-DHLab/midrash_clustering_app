@@ -105,8 +105,17 @@
 
     </div><!-- /controls-body -->
     <div class="actions">
+      <div class="exp-fields">
+        <label><span>שם הניסוי</span>
+          <input type="text" name="exp_name" id="exp_name" value="{{ exp_name|default:'' }}"
+                 placeholder="למשל: מדרשי רבה, k=8" autocomplete="off"></label>
+        <label><span>מי מריץ/ה</span>
+          <input type="text" name="runner" id="runner" value="{{ runner|default:'' }}" placeholder="שם"></label>
+      </div>
+      <p class="exp-hint" id="exp-hint" hidden>כדי להריץ, כתבו שם לניסוי ומי מריץ/ה — כך יופיע ביומן.</p>
       <button type="submit" class="primary" id="go" name="action" value="cluster">הרצת קלאסטרינג</button>
       <button type="submit" class="quiet" id="sweep" name="action" value="sweep">איזה k? בדיקת המרפק</button>
+      <a class="to-log" href="{% url 'runs' %}">יומן הניסויים ←</a>
     </div>
   </form>
 
@@ -260,6 +269,24 @@
   window.addEventListener("scroll", fitControls, { passive: true });
   window.addEventListener("resize", fitControls);
   fitControls();
+
+  // A clustering run needs a name and a runner; the runner is remembered in this browser.
+  var expName = document.getElementById("exp_name"), runnerBox = document.getElementById("runner");
+  var expHint = document.getElementById("exp-hint");
+  try { if (runnerBox && !runnerBox.value) runnerBox.value = localStorage.getItem("midrash.runner") || ""; } catch (e) {}
+  if (runnerBox) runnerBox.addEventListener("change", function () {
+    try { localStorage.setItem("midrash.runner", runnerBox.value.trim()); } catch (e) {}
+  });
+  var goButton = document.getElementById("go");
+  if (goButton) goButton.addEventListener("click", function (ev) {
+    var missing = [expName, runnerBox].filter(function (b) { return b && !b.value.trim(); });
+    [expName, runnerBox].forEach(function (b) { if (b) b.classList.toggle("missing", missing.indexOf(b) !== -1); });
+    if (missing.length) { ev.preventDefault(); expHint.hidden = false; missing[0].focus(); return; }
+    try { localStorage.setItem("midrash.runner", runnerBox.value.trim()); } catch (e) {}
+  });
+  [expName, runnerBox].forEach(function (b) {
+    if (b) b.addEventListener("input", function () { b.classList.remove("missing"); });
+  });
 
   var boxes = function () { return document.querySelectorAll("input[name=files]"); };
   var counter = document.getElementById("count");

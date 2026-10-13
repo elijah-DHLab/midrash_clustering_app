@@ -4,10 +4,12 @@
 <section class="record">
   <div class="record-head">
     <div>
-      <div class="when">{{ r.day_label }} · {{ r.time_label }}{% if r.duration_label %} · {{ r.duration_label }}{% endif %}</div>
+      <div class="when">{{ r.day_label }} · {{ r.time_label }}{% if r.duration_label %} · {{ r.duration_label }}{% endif %}{% if r.meta.runner %} · הריץ/ה: {{ r.meta.runner }}{% endif %}</div>
       <div class="name{% if not r.meta.name %} unnamed{% endif %}">{{ r.meta.name|default:"ניסוי ללא שם" }}</div>
       {% if r.meta.tags %}<div style="margin-top:6px">{% for t in r.meta.tags %}<span class="chip tag">{{ t }}</span>{% endfor %}</div>{% endif %}
       {% if r.meta.notes %}<p class="notes">{{ r.meta.notes }}</p>{% endif %}
+      {% if r.reused_from %}<p class="section-note" style="margin:6px 0 0">אותם פרמטרים כמו
+        <a href="{% url 'result' r.reused_from %}">ניסוי קודם</a>, ולכן התוצאות נלקחו ממנו בלי לחשב מחדש.</p>{% endif %}
     </div>
     <div class="record-actions">
       <a class="button" href="{% url 'runs' %}">יומן הניסויים</a>
@@ -15,14 +17,16 @@
   </div>
 
   <details{% if not r.meta.name %} open{% endif %}>
-    <summary>{% if r.meta.name %}עריכת השם, ההערות והתגיות{% else %}שם, הערות ותגיות{% endif %}
+    <summary>עריכת פרטי הניסוי: שם, מריץ/ה, תגיות והערות
       <span class="hint">· כדי לזכור בעוד חודש למה הרצת את זה</span></summary>
     <div class="record-body">
       <form method="post" action="{% url 'run_meta' r.token %}">
         <div class="edit-grid">
           <label><span>שם הניסוי</span>
             <input type="text" name="name" value="{{ r.meta.name }}" placeholder="למשל: מדרשי רבה, k=8 מול k=10"></label>
-          <label><span>תגיות, מופרדות בפסיק</span>
+          <label><span>מי הריץ/ה</span>
+            <input type="text" name="runner" value="{{ r.meta.runner }}" placeholder="שם"></label>
+          <label class="wide"><span>תגיות, מופרדות בפסיק</span>
             <input type="text" name="tags" value="{{ r.meta.tags|join:', ' }}" placeholder="למשל: רבה, בדיקת k"></label>
           <label class="wide"><span>הערות</span>
             <textarea name="notes" placeholder="מה בדקת, מה ראית, מה לבדוק הלאה">{{ r.meta.notes }}</textarea></label>

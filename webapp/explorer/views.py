@@ -197,6 +197,9 @@ def run(request):
     # between 0 and 1 and the cost of a boundary is small; penalties above about 2
     # return nothing at all on a corpus of this size.
     penalty = float(request.POST.get("penalty", DEFAULT_PENALTY))
+    # Every experiment is named, and says who ran it, when it is started.
+    exp_name = request.POST.get("exp_name", "").strip()
+    runner = request.POST.get("runner", "").strip()
 
     if not filenames:
         return render(request, "explorer/index.html",
@@ -204,7 +207,7 @@ def run(request):
 
     form_back = dict(selected=set(filenames), k=k, grouping_level=grouping_level,
                      smoothing=smoothing, want_cpd=want_cpd,
-                     block_size=block_size, penalty=penalty)
+                     block_size=block_size, penalty=penalty, exp_name=exp_name, runner=runner)
     too_large = _too_large(filenames, chunk_size, model)
     if too_large:
         return render(request, "explorer/index.html",
@@ -225,12 +228,18 @@ def run(request):
                                smoothing=smoothing, want_cpd=want_cpd,
                                block_size=block_size, penalty=penalty))
 
+    if not exp_name or not runner:
+        return render(request, "explorer/index.html",
+                      _context(chunk_size, model=model, error="יש לכתוב שם לניסוי ואת שם המריץ/ה לפני ההרצה.",
+                               **form_back))
+
     # Hand the work to a thread and give the page a job to watch. Anything large
     # takes minutes, and a request that returns only at the end cannot say so.
     form = {
         "chunk_size": chunk_size, "model": model, "selected": sorted(filenames), "k": k,
         "grouping_level": grouping_level, "smoothing": smoothing,
         "want_cpd": want_cpd, "block_size": block_size, "penalty": penalty,
+        "exp_name": exp_name, "runner": runner,
     }
     # The model belongs in the key: the same selection read in the two spaces is two
     # different runs, and serving one for the other would be silently wrong. Whether
@@ -240,7 +249,12 @@ def run(request):
                      True, block_size, penalty, model)
     cached = _cached_token(key)
     if cached:
-        return _render_result(request, cached, from_cache=True)
+        # Same parameters as an earlier run: its outputs are reused, but this is a new
+        # experiment in the log, with its own name, runner and time.
+        token = uuid.uuid4().hex[:12]
+        runs.copy_as_new(cached, token)
+        runs.save_meta(token, exp_name, runner=runner)
+        return redirect("result", token)
 
     if not _BUSY.acquire(blocking=False):
         return render(request, "explorer/index.html",
@@ -615,8 +629,10 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
             json.dumps({"summary": summary, "form": jobs.JOBS[job_id].get("form", {})},
                        ensure_ascii=False), encoding="utf-8")
         # The experiment record: when, with what, on what, by which code, and what came out.
-        runs.write(token, jobs.JOBS[job_id].get("form", {}), summary,
+        form = jobs.JOBS[job_id].get("form", {})
+        runs.write(token, form, summary,
                    started=jobs.JOBS[job_id]["started"], finished=time.time(), change_points=rows)
+        runs.save_meta(token, form.get("exp_name", ""), runner=form.get("runner", ""))
         _cache_put(jobs.JOBS[job_id].get("key", token), token)
         jobs.finish(job_id, token, summary)
     except Exception as exc:                                  # surfaced on the page
@@ -668,6 +684,8 @@ def _render_result(request, token, from_cache=False):
     form["selected"] = set(form.get("selected") or [])
     chunk_size = form.pop("chunk_size", None)
     form.setdefault("model", store.default_model())
+    # The next run is a new experiment: its name starts empty; the runner stays.
+    form.pop("exp_name", None)
     downloads = [(p.name, p.stat().st_size, DOWNLOADS.get(p.name, ""))
                  for p in sorted(out_dir.iterdir(), key=lambda p: _download_order(p.name))
                  if not p.name.startswith("_") and p.suffix != ".json"]
@@ -698,7 +716,7 @@ def run_meta(request, token):
     if request.method != "POST" or runs.load(token) is None:
         raise Http404
     runs.save_meta(token, request.POST.get("name", ""), request.POST.get("notes", ""),
-                   request.POST.get("tags", ""))
+                   request.POST.get("tags", ""), request.POST.get("runner", ""))
     back = request.POST.get("next") or ""
     return redirect(back if back.startswith("/") else reverse("result", args=[token]))
 

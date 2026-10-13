@@ -18,7 +18,7 @@
 
   {% if runs %}
   <div class="toolbar">
-    <input type="search" id="q" placeholder="חיפוש לפי שם, ספר, הערה או תגית" aria-label="חיפוש">
+    <input type="search" id="q" placeholder="חיפוש לפי שם, מריץ/ה, ספר, הערה או תגית" aria-label="חיפוש">
     <select id="store" aria-label="מרחב אמבדינג">
       <option value="">כל מרחבי האמבדינג</option>
       {% for s in stores %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
@@ -33,7 +33,7 @@
     {% ifchanged r.day_label %}<div class="day" data-day>{{ r.day_label }}</div>{% endifchanged %}
     <article class="entry" data-href="{% url 'result' r.token %}" data-token="{{ r.token }}"
              data-store="{{ r.versions.store_label|default:r.params.model }}"
-             data-search="{{ r.meta.name }} {{ r.meta.notes }} {{ r.meta.tags|join:' ' }} {{ r.selection.titles|join:' ' }} {{ r.versions.store_label }}">
+             data-search="{{ r.meta.name }} {{ r.meta.runner }} {{ r.meta.notes }} {{ r.meta.tags|join:' ' }} {{ r.selection.titles|join:' ' }} {{ r.versions.store_label }}">
       <input type="checkbox" class="pick" aria-label="סימון להשוואה">
       <div class="time">{{ r.time_label }}<small>{{ r.duration_label }}</small></div>
       <div class="main">
@@ -42,6 +42,7 @@
         {% else %}
           <div class="title unnamed">ניסוי ללא שם</div>
         {% endif %}
+        {% if r.meta.runner %}<div class="runner">הריץ/ה: {{ r.meta.runner }}</div>{% endif %}
         {% if r.meta.notes %}<div class="notes">{{ r.meta.notes }}</div>{% endif %}
         <div>
           {% for t in r.meta.tags %}<span class="chip tag">{{ t }}</span>{% endfor %}
@@ -50,6 +51,7 @@
           <span class="chip ltr">k = {{ r.params.k }}</span>
           {% if r.params.smoothing %}<span class="chip">בהחלקה</span>{% endif %}
           {% if r.params.block_size %}<span class="chip">בלוק<b>{{ r.params.block_size }}</b> · פנלטי<b>{{ r.params.penalty }}</b></span>{% endif %}
+          {% if r.reused_from %}<span class="chip soft" title="אותם פרמטרים כמו ניסוי קודם, ולכן התוצאות נלקחו ממנו בלי לחשב מחדש">תוצאות מניסוי זהה</span>{% endif %}
           {% if r.imported %}<span class="chip soft" title="הריצה נעשתה לפני שהיומן נוסף: המועד לפי תאריך הקובץ, והגרסאות לא נשמרו">לפני היומן</span>{% endif %}
         </div>
         <div class="books">

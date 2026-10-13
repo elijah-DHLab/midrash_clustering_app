@@ -18,13 +18,13 @@
   <div class="pair">
     <div class="card">
       <span class="letter">א</span>
-      <div class="when">{{ a.day_label }} · {{ a.time_label }}</div>
+      <div class="when">{{ a.day_label }} · {{ a.time_label }}{% if a.meta.runner %} · {{ a.meta.runner }}{% endif %}</div>
       <h3 class="{% if not a.meta.name %}unnamed{% endif %}">{{ a.meta.name|default:"ניסוי ללא שם" }}</h3>
       <a href="{% url 'result' a.token %}">פתיחת הניסוי ←</a>
     </div>
     <div class="card">
       <span class="letter">ב</span>
-      <div class="when">{{ b.day_label }} · {{ b.time_label }}</div>
+      <div class="when">{{ b.day_label }} · {{ b.time_label }}{% if b.meta.runner %} · {{ b.meta.runner }}{% endif %}</div>
       <h3 class="{% if not b.meta.name %}unnamed{% endif %}">{{ b.meta.name|default:"ניסוי ללא שם" }}</h3>
       <a href="{% url 'result' b.token %}">פתיחת הניסוי ←</a>
     </div>

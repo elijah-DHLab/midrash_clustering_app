@@ -214,15 +214,33 @@ def load_meta(token):
     try:
         return json.loads((_dir(token) / META_FILE).read_text(encoding="utf-8"))
     except (OSError, ValueError):
-        return {"name": "", "notes": "", "tags": []}
+        return {"name": "", "runner": "", "notes": "", "tags": []}
 
 
-def save_meta(token, name, notes, tags):
-    meta = {"name": name.strip()[:200], "notes": notes.strip()[:5000],
-            "tags": [t.strip() for t in tags.replace("،", ",").split(",") if t.strip()][:20],
+def save_meta(token, name, notes="", tags="", runner=""):
+    """The reader's own description of a run: given when it is started, editable later."""
+    if isinstance(tags, str):
+        tags = tags.replace("،", ",").split(",")
+    meta = {"name": name.strip()[:200], "runner": runner.strip()[:100], "notes": notes.strip()[:5000],
+            "tags": [t.strip() for t in tags if t.strip()][:20],
             "edited": _iso(datetime.datetime.now().timestamp())}
     (_dir(token) / META_FILE).write_text(json.dumps(meta, ensure_ascii=False, indent=1), encoding="utf-8")
     return meta
+
+
+def copy_as_new(token, new_token):
+    """A run asked for again with the same parameters: the outputs are reused, but it is a
+    new experiment in the log, with its own time and its own name."""
+    import shutil
+    src, dst = _dir(token), _dir(new_token)
+    shutil.copytree(src, dst, ignore=shutil.ignore_patterns(META_FILE))
+    now = datetime.datetime.now().timestamp()
+    path = dst / RUN_FILE
+    if path.exists():
+        record = json.loads(path.read_text(encoding="utf-8"))
+        record.update({"token": new_token, "started": _iso(now), "finished": _iso(now),
+                       "reused_from": token})
+        path.write_text(json.dumps(record, ensure_ascii=False, indent=1), encoding="utf-8")
 
 
 def all_runs():

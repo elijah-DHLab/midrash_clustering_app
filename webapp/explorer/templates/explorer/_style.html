@@ -322,6 +322,7 @@
   .entry .time { font: 500 17px "IBM Plex Mono", monospace; direction: ltr; text-align: right; }
   .entry .time small { display: block; font: 400 11.5px "Heebo", sans-serif; color: var(--muted); direction: rtl; }
   .entry .title { font: 500 18px/1.35 "Frank Ruhl Libre", serif; margin: 0 0 6px; }
+  .entry .runner { font-size: 12.5px; color: var(--muted); margin: -4px 0 6px; }
   .entry .title.unnamed { color: var(--muted); font-weight: 400; }
   .entry .notes { color: var(--ink-2); font-size: 13.5px; margin: -2px 0 8px; max-width: 70ch;
                   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -421,4 +422,13 @@
   .ari-bar .gauge { margin: 0 0 4px; }
   .gauge-scale { direction: ltr; }
   @media (max-width: 860px) { .pair, .three, .twocol { grid-template-columns: 1fr; } .edit-grid { grid-template-columns: 1fr; } }
+
+  /* ---- Naming the experiment, above the run button ---- */
+  .exp-fields { display: grid; grid-template-columns: 1.4fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .exp-fields label span { display: block; font-size: 12px; color: var(--ink-2); margin-bottom: 3px; }
+  .exp-fields input { padding: 7px 9px; font-size: 14px; }
+  .exp-fields input.missing { border-color: var(--rubric); background: var(--rubric-soft); }
+  .exp-hint { margin: -4px 0 8px; font-size: 12.5px; color: var(--rubric); }
+  .to-log { display: block; margin-top: 10px; text-align: center; font-size: 13px; color: var(--ink-2); text-decoration: none; }
+  .to-log:hover { color: var(--rubric); }
 </style>
