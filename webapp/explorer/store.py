@@ -14,7 +14,8 @@ lets the same selection be read in either space and the readings compared.
 Layout, under STORE_DIR:
 
     <model>/<chunk_size>/<safe filename>.npz   vec (float32 n x dim), chunk, chunk_number,
-                                               and from v7 on start_ref, end_ref, ref_spans, start_segment
+                                               and from v7 on start_ref, end_ref, ref_spans and the
+                                               word-exact start_/end_segment(_word), start_/end_unit(_word)
     <model>/<chunk_size>/index.json            per file: n_chunks, words, hierarchy
     <model>/model.json                         label and provenance, shown in the app
 
@@ -163,7 +164,9 @@ def load_selection(filenames, chunk_size: int, model: str) -> pd.DataFrame:
                 "vec": list(z["vec"]),
             })
             # Where each chunk sits in its book - only in stores built from act_jsonl_v7.
-            for key in ("start_ref", "end_ref", "ref_spans", "start_segment"):
+            for key in ("start_ref", "end_ref", "ref_spans", "start_segment", "start_segment_word",
+                        "end_segment", "end_segment_word", "start_unit", "start_unit_word",
+                        "end_unit", "end_unit_word"):
                 if key in z.files:
                     frame[key] = z[key]
             frames.append(frame)

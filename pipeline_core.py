@@ -135,6 +135,11 @@ def build_chunks(
         full_text = []
         # Where each source row starts in full_text, and where that row is in the book.
         row_starts, row_refs, row_segments = [], [], []
+        # The text unit a row was cut from, and the row's first word within it. v7 splits a
+        # long Sefaria unit into rows whose from_word continues the previous row's to_word;
+        # the unit is named by the location of its first row, because in some books (Pesikta
+        # Rabbati, the Yalkut, ...) every part's location also gets a part-number suffix.
+        row_units, row_from = [], []
         prefix = location_prefix(filename)
         with open(filepath, "r", encoding="utf-8") as f:
             for line in f:
@@ -153,10 +158,20 @@ def build_chunks(
                 loc = str(obj.get("location", ""))
                 row_refs.append(loc[len(prefix):] if loc.startswith(prefix) else loc)
                 row_segments.append(obj.get("segment", ""))
+                from_word = int(obj.get("from_word") or 1)
+                continues = from_word > 1 and row_units
+                row_units.append(row_units[-1] if continues else row_refs[-1])
+                row_from.append(from_word)
                 full_text.extend(words)
 
         def row_of(word_index):
             return bisect.bisect_right(row_starts, word_index) - 1
+
+        def place(word_index):
+            """(row, word in the v7 row, text unit, word in the unit) of one word, all 1-based."""
+            r = row_of(word_index)
+            offset = word_index - row_starts[r]
+            return r, offset + 1, row_units[r], row_from[r] + offset
 
         def ref_spans(start, end, first, last):
             """'1–23: 1_7 | 24–50: 1_10' - which words of the chunk (1-based) come from which
@@ -173,7 +188,8 @@ def build_chunks(
 
         for idx, start in enumerate(range(0, len(full_text), chunk_size)):
             end = min(start + chunk_size, len(full_text)) - 1
-            first, last = row_of(start), row_of(end)
+            first, first_word, first_unit, first_unit_word = place(start)
+            last, last_word, last_unit, last_unit_word = place(end)
             records.append(
                 {
                     "filename": filename,
@@ -186,7 +202,16 @@ def build_chunks(
                     "start_ref": row_refs[first],
                     "end_ref": row_refs[last],
                     "ref_spans": ref_spans(start, end, first, last),
+                    # Word-exact ends of the chunk: in the v7 rows (segment id and word
+                    # within the row), and in Sefaria's text unit (from_word + offset).
                     "start_segment": row_segments[first],
+                    "start_segment_word": first_word,
+                    "end_segment": row_segments[last],
+                    "end_segment_word": last_word,
+                    "start_unit": first_unit,
+                    "start_unit_word": first_unit_word,
+                    "end_unit": last_unit,
+                    "end_unit_word": last_unit_word,
                 }
             )
 

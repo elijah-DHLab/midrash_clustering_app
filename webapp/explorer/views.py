@@ -82,9 +82,9 @@ def _cache_key(filenames, chunk_size, k, smoothing, grouping_level, want_cpd,
     payload = json.dumps({
         # Bumped when a run starts producing something an older one lacks (2: the
         # cluster table; 3: the full chunks.csv and segments.csv; 4: the clusters'
-        # histograms along the axis; 5: the figure zooms along time only), so a cached
-        # run is never served without it.
-        "outputs": 5,
+        # histograms along the axis; 5: the figure zooms along time only; 6: word-exact
+        # chunk ends in chunks.csv), so a cached run is never served without it.
+        "outputs": 6,
         "files": sorted(filenames), "chunk_size": chunk_size, "k": k, "model": model,
         "smoothing": smoothing, "grouping_level": grouping_level,
         "cpd": [want_cpd, block_size, penalty],
@@ -378,7 +378,9 @@ CHUNK_COLUMNS = [
     "chronological_index", "filename", "he_title",
     "cat1", "cat2", "cat3", "scholarly_category", "composition_id", "edition",
     "hierarchy", "grouping_label", "chunk_number",
-    "start_ref", "end_ref", "ref_spans", "start_segment",
+    "start_ref", "end_ref", "ref_spans",
+    "start_segment", "start_segment_word", "end_segment", "end_segment_word",
+    "start_unit", "start_unit_word", "end_unit", "end_unit_word",
     "scluster", "own_cluster_sim", "nearest_other_cluster", "cluster_margin", "density",
     "segment", "chunk",
 ]
