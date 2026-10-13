@@ -15,12 +15,13 @@ import numpy as np
 import pandas as pd
 from django.conf import settings
 from django.http import FileResponse, Http404, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from django.urls import reverse
 
 import pipeline_core
 import cluster_visualization_report as cvr
 
-from . import jobs, store
+from . import jobs, runs, store
 
 K_RANGE = list(range(2, 31))
 DEFAULT_K = 10
@@ -411,14 +412,20 @@ def _write_chunks_csv(df, model, path):
     out.to_csv(path, index=False, encoding="utf-8-sig")
 
 
+# A reference like 4_67:5 inside Hebrew text is reordered by the bidi algorithm (it
+# showed as 5_67:4); wrapping it in a left-to-right isolate keeps it as written, on the
+# page and in a spreadsheet alike.
+LRI, PDI = "⁦", "⁩"
+
+
 def _range(names, row):
     """'פסיקתא רבתי 11_1:2540–2589', or 'בראשית רבה 1_1:101 – 1_2:6' across two units:
     the text unit and the word within it at each end of the chunk."""
     title = names.get(row.filename, {}).get("he") or row.filename
     if row.start_unit == row.end_unit:
-        return "%s %s:%s–%s" % (title, row.start_unit, row.start_unit_word, row.end_unit_word)
-    return "%s %s:%s – %s:%s" % (title, row.start_unit, row.start_unit_word,
-                                 row.end_unit, row.end_unit_word)
+        return "%s %s%s:%s–%s%s" % (title, LRI, row.start_unit, row.start_unit_word, row.end_unit_word, PDI)
+    return "%s %s%s:%s – %s:%s%s" % (title, LRI, row.start_unit, row.start_unit_word,
+                                     row.end_unit, row.end_unit_word, PDI)
 
 
 def _place(df, names, position, end=False):
@@ -429,7 +436,7 @@ def _place(df, names, position, end=False):
     side = "end" if end else "start"
     if "%s_unit" % side not in row:
         return title
-    return "%s %s:%s" % (title, row["%s_unit" % side], row["%s_unit_word" % side])
+    return "%s %s%s:%s%s" % (title, LRI, row["%s_unit" % side], row["%s_unit_word" % side], PDI)
 
 
 def _write_segments_csv(df, change_points, model, path):
@@ -573,6 +580,7 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
         (out_dir / "_embed.html").write_text(
             fig.to_html(full_html=False, include_plotlyjs="cdn", config=plot_config),
             encoding="utf-8")
+        rows = []
         if change_points:
             names = store.titles_for(model)
             ordered = df.sort_values("chronological_index").reset_index(drop=True)
@@ -606,6 +614,9 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
         (out_dir / "summary.json").write_text(
             json.dumps({"summary": summary, "form": jobs.JOBS[job_id].get("form", {})},
                        ensure_ascii=False), encoding="utf-8")
+        # The experiment record: when, with what, on what, by which code, and what came out.
+        runs.write(token, jobs.JOBS[job_id].get("form", {}), summary,
+                   started=jobs.JOBS[job_id]["started"], finished=time.time(), change_points=rows)
         _cache_put(jobs.JOBS[job_id].get("key", token), token)
         jobs.finish(job_id, token, summary)
     except Exception as exc:                                  # surfaced on the page
@@ -663,7 +674,42 @@ def _render_result(request, token, from_cache=False):
     return render(request, "explorer/index.html",
                   _context(chunk_size, figure_html=(out_dir / "_embed.html").read_text(encoding="utf-8"),
                            summary=stored["summary"], token=token, downloads=downloads,
-                           from_cache=from_cache, **form))
+                           from_cache=from_cache, run_record=runs.load(token),
+                           other_runs=[r for r in runs.all_runs() if r["token"] != token],
+                           **form))
+
+
+# ---------------------------------------------------------------------------
+# The experiment log
+# ---------------------------------------------------------------------------
+
+def runs_list(request):
+    """Every run, newest first, with its parameters, books and results at a glance."""
+    all_runs = runs.all_runs()
+    return render(request, "explorer/runs.html", {
+        "runs": all_runs,
+        "stores": sorted({r["versions"].get("store_label") or r["params"].get("model") or ""
+                          for r in all_runs} - {""}),
+    })
+
+
+def run_meta(request, token):
+    """Save the name, notes and tags the reader gives a run."""
+    if request.method != "POST" or runs.load(token) is None:
+        raise Http404
+    runs.save_meta(token, request.POST.get("name", ""), request.POST.get("notes", ""),
+                   request.POST.get("tags", ""))
+    back = request.POST.get("next") or ""
+    return redirect(back if back.startswith("/") else reverse("result", args=[token]))
+
+
+def runs_compare(request):
+    a, b = runs.load(request.GET.get("a", "")), runs.load(request.GET.get("b", ""))
+    if a is None or b is None:
+        raise Http404
+    return render(request, "explorer/compare.html", {
+        "a": a, "b": b, "cmp": runs.compare(a, b),
+        "ab": [{"letter": "א", "run": a}, {"letter": "ב", "run": b}]})
 
 
 def _sweep(df, current_k, k_min=2, k_max=20):

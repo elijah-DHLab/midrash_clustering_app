@@ -1,0 +1,424 @@
+{% comment %} The design shared by every page: fonts, the paper-and-rubric palette, the masthead,
+   tables and buttons. Included in each page's <head>. {% endcomment %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Heebo:wght@300;400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* A printed page, not an application: paper, ink, hairlines, and one rubric red —
+     the colour early Hebrew printing kept for headings. Hebrew reads right to left,
+     so the controls sit on the right and the plate opens to their left. */
+  :root {
+    --paper:   #f5f3ee;
+    --plate:   #fffefb;
+    --ink:     #1a1815;
+    --ink-2:   #4b4640;
+    --muted:   #8a8378;
+    --rule:    #ddd7cc;
+    --rule-2:  #ebe6dc;
+    --rubric:  #8c2f28;
+    --rubric-soft: #f0e2df;
+    --field:   #fffefb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper:   #14130f;
+      --plate:   #1b1915;
+      --ink:     #ece7dc;
+      --ink-2:   #b3ab9d;
+      --muted:   #8a8378;
+      --rule:    #302c25;
+      --rule-2:  #262219;
+      --rubric:  #cd6a5c;
+      --rubric-soft: #2e211e;
+      --field:   #211e19;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--paper); }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 400 15px/1.65 "Heebo", "Segoe UI", system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Digits and file names stay left to right inside the Hebrew page. */
+  .ltr { direction: ltr; unicode-bidi: isolate; }
+  .num { font: 500 15px "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums;
+         direction: ltr; unicode-bidi: isolate; }
+
+  header.masthead {
+    border-bottom: 1px solid var(--rule);
+    padding: 20px 28px 15px;
+    display: flex; align-items: baseline; justify-content: space-between;
+    gap: 20px; flex-wrap: wrap;
+  }
+  .masthead h1 {
+    margin: 0; font: 500 26px/1.2 "Frank Ruhl Libre", "David", serif; letter-spacing: 0;
+  }
+  .masthead h1 em { font-style: normal; color: var(--rubric); }
+  .masthead p { margin: 5px 0 0; color: var(--muted); font-size: 13px; max-width: 62ch; }
+  .masthead .imprint {
+    font: 400 12px/1.6 "IBM Plex Mono", monospace; color: var(--muted); text-align: left;
+    direction: ltr;
+  }
+
+  .wrap { display: grid; grid-template-columns: 410px minmax(0, 1fr); align-items: start; }
+  @media (max-width: 1040px) { .wrap { grid-template-columns: 1fr; } }
+
+  form.controls {
+    border-left: 1px solid var(--rule);
+    padding: 2px 24px 0;
+    position: sticky; top: 0; height: 100vh;
+    display: flex; flex-direction: column; min-height: 0;
+  }
+  .controls-body { flex: 1 1 auto; overflow-y: auto; min-height: 0; scrollbar-width: thin; }
+  @media (max-width: 1040px) {
+    form.controls { position: static; height: auto; border-left: 0; border-bottom: 1px solid var(--rule); }
+    .controls-body { overflow: visible; }
+  }
+  /* min-width: 0 - a fieldset otherwise grows to its widest catalogue path, and the panel
+     scrolled sideways with "נבחרו" cut off at its edge. */
+  fieldset { border: 0; margin: 0; padding: 18px 0; border-bottom: 1px solid var(--rule-2); min-width: 0; }
+  legend {
+    padding: 0; font: 500 12px/1 "Heebo", sans-serif; letter-spacing: .06em; color: var(--muted);
+  }
+  .field { display: grid; gap: 5px; margin-top: 12px; }
+  .field > span { font-size: 13px; color: var(--ink-2); }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  select, input[type=number] {
+    width: 100%; font: 400 14px "Heebo", sans-serif; color: var(--ink);
+    background: var(--field); border: 1px solid var(--rule); border-radius: 2px;
+    padding: 7px 9px; appearance: none;
+  }
+  select { background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+                              linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+           background-position: 15px 52%, 20px 52%;
+           background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-left: 26px; }
+  input[type=number] { font-family: "IBM Plex Mono", monospace; direction: ltr; text-align: right; }
+  select:focus-visible, input:focus-visible, button:focus-visible, a:focus-visible {
+    outline: 2px solid var(--rubric); outline-offset: 1px;
+  }
+  label.check { display: flex; align-items: center; gap: 8px; font-size: 14px; cursor: pointer; }
+  input[type=checkbox] { accent-color: var(--rubric); width: 14px; height: 14px; flex: none; }
+  .note { margin: 8px 0 0; font-size: 12.5px; line-height: 1.6; color: var(--muted); }
+
+  .picker-head {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin: 12px 0 8px; font-size: 13px; color: var(--muted);
+  }
+  .picker-head a { color: var(--rubric); text-decoration: none; border-bottom: 1px solid transparent; }
+  .picker-head a:hover { border-bottom-color: var(--rubric); }
+  details.corpus { border-top: 1px solid var(--rule-2); }
+  details.corpus:last-of-type { border-bottom: 1px solid var(--rule-2); }
+  details.corpus > summary {
+    cursor: pointer; list-style: none; padding: 9px 2px;
+    display: flex; align-items: center; gap: 9px;
+  }
+  details.corpus > summary::-webkit-details-marker { display: none; }
+  details.corpus > summary:hover .he { color: var(--rubric); }
+  details.corpus[open] > summary .he { color: var(--rubric); }
+  /* The row opens the list and the checkbox selects the whole rubric. Without a visible
+     triangle nothing says the row opens at all, and the corpus name sat inside the
+     checkbox's label, so clicking it selected everything instead. */
+  .twisty {
+    width: 0; height: 0; flex: none; transition: transform .14s ease;
+    border-block: 4px solid transparent; border-right: 6px solid var(--muted);
+  }
+  details.corpus[open] > summary .twisty {
+    transform: rotate(-90deg); border-right-color: var(--rubric);
+  }
+  .grow { flex: 1 1 auto; }
+  details.corpus > summary:hover { background: var(--hover, rgba(140,47,40,.045)); }
+  .open-hint, .shut-hint {
+    flex: none; font-size: 12px; color: var(--rubric); opacity: 0;
+    transition: opacity .14s ease; white-space: nowrap;
+  }
+  details.corpus > summary:hover .open-hint,
+  details.corpus > summary:hover .shut-hint { opacity: .9; }
+  details.corpus[open] .open-hint, details.corpus:not([open]) .shut-hint { display: none; }
+  .count { font: 400 12px "IBM Plex Mono", monospace; color: var(--muted); direction: ltr; }
+  .files { max-height: 280px; overflow: auto; padding: 2px 22px 10px 2px;
+           scrollbar-width: thin; overscroll-behavior: contain; }
+  .files label {
+    display: flex; gap: 8px; align-items: baseline; white-space: nowrap;
+    line-height: 1.8; padding: 1px 0; color: var(--ink-2); cursor: pointer;
+    /* A block-level row is capped at the container's width, so a long catalogue path
+       spills out of its own box and the row never asks the list to scroll sideways.
+       Sizing the row to its content, with the container width as the floor, gives the
+       horizontal scrollbar something to measure and keeps the hover band full-width. */
+    width: max-content; min-width: 100%;
+  }
+  .files label:hover { color: var(--ink); }
+  .files .n { padding-right: 10px; font: 400 11.5px "IBM Plex Mono", monospace;
+              color: var(--muted); direction: ltr; }
+  .files::-webkit-scrollbar { height: 7px; width: 7px; }
+  .files::-webkit-scrollbar-thumb { background: var(--rule); border-radius: 4px; }
+  .he { font: 400 16px/1.5 "Frank Ruhl Libre", "David", serif; }
+
+  button {
+    width: 100%; cursor: pointer; border-radius: 2px;
+    font: 500 15px "Heebo", sans-serif; padding: 10px 14px;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  button.primary { background: var(--rubric); color: #fffefb; border: 1px solid var(--rubric); }
+  button.primary:hover:not(:disabled) { background: #74251f; border-color: #74251f; }
+  button.primary:disabled { opacity: .55; cursor: default; }
+  button.quiet { background: var(--plate); color: var(--ink); border: 1px solid var(--rule); margin-top: 8px; }
+  button.quiet:hover { border-color: var(--ink-2); }
+  .actions {
+    flex: none; z-index: 2; margin: 0 -24px;
+    padding: 14px 24px 16px; background: var(--paper); border-top: 1px solid var(--rule);
+  }
+
+  main { padding: 22px 28px 40px; }
+  .plate { background: var(--plate); border: 1px solid var(--rule); padding: 8px 8px 2px; }
+  .plate-caption {
+    padding: 10px 6px 12px; font: 400 13px/1.7 "Frank Ruhl Libre", serif;
+    color: var(--muted); border-top: 1px solid var(--rule-2); margin-top: 6px;
+  }
+  .runline {
+    display: flex; flex-wrap: wrap; gap: 6px 26px; align-items: baseline;
+    margin: 0 0 16px; padding-bottom: 14px; border-bottom: 1px solid var(--rule);
+  }
+  .runline .item { font-size: 13px; color: var(--muted); }
+  .runline .item b { color: var(--ink); margin-left: 6px; }
+  .runline .tag {
+    font-size: 12px; color: var(--rubric); border: 1px solid var(--rubric-soft);
+    background: var(--rubric-soft); padding: 2px 9px; border-radius: 2px;
+  }
+  /* The cluster table: one row per cluster, read alongside the plot. */
+  .clusters-wrap { overflow-x: auto; margin: 22px 0 8px; }
+  .clusters-head { font: 500 18px "Frank Ruhl Libre", serif; margin: 0 0 4px; }
+  .clusters-note { color: var(--muted); font-size: 13px; margin: 0 0 10px; max-width: 78ch; }
+  table.clusters { border-collapse: collapse; width: 100%; font-size: 13.5px; background: var(--plate); }
+  table.clusters th { font: 500 12px "Heebo", sans-serif; color: var(--muted); text-align: right;
+                      border-bottom: 1px solid var(--rule); padding: 7px 10px; white-space: nowrap;
+                      cursor: pointer; user-select: none; }
+  table.clusters th[aria-sort]::after { content: " ▾"; }
+  table.clusters th[aria-sort=ascending]::after { content: " ▴"; }
+  table.clusters td { border-bottom: 1px solid var(--rule-2); padding: 7px 10px; vertical-align: top;
+                      text-align: right; }
+  table.clusters tr:hover td { background: var(--rule-2); }
+  .swatch { display: inline-block; width: 11px; height: 11px; border-radius: 50%;
+            vertical-align: -1px; margin-left: 6px; }
+  .texts > span { display: block; white-space: nowrap; }
+  .texts .pct { color: var(--muted); font: 400 11.5px "IBM Plex Mono", monospace; margin-right: 6px; }
+  .texts .lift { color: var(--rubric); font: 500 11.5px "IBM Plex Mono", monospace; margin-right: 4px;
+                 direction: ltr; unicode-bidi: isolate; }
+  .texts .more { color: var(--muted); font-size: 12px; }
+  /* A cluster's chunks along the chronological axis, earliest on the left as in the figure. */
+  .hist { display: flex; direction: ltr; align-items: flex-end; gap: 1px; width: 160px; height: 26px;
+          margin-top: 2px; border-bottom: 1px solid var(--rule); }
+  .hist i { flex: 1; min-height: 1px; background: var(--muted); opacity: .55; }
+  .hist i.nil { opacity: .12; }   /* not .empty: that is the page's placeholder box */
+  .hist i:hover { opacity: 1; background: var(--rubric); }
+  .conc { margin-top: 3px; font-size: 12px; color: var(--muted); cursor: help; }
+  .ngrams { color: var(--ink-2); font-family: "Frank Ruhl Libre", serif; font-size: 14px; line-height: 1.55; }
+  .ngrams span { display: block; white-space: nowrap; }
+
+  .downloads { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 16px; }
+  /* What a download holds, shown on hover. */
+  .downloads a { position: relative; }
+  .downloads a[data-what]:hover::after, .downloads a[data-what]:focus-visible::after {
+    content: attr(data-what); position: absolute; top: calc(100% + 6px); right: 0; z-index: 10;
+    width: max-content; max-width: 34ch; padding: 7px 10px; direction: rtl; text-align: right;
+    font: 400 12.5px/1.5 "Heebo", sans-serif; color: var(--ink); background: var(--plate);
+    border: 1px solid var(--rule); border-radius: 2px; box-shadow: 0 2px 8px rgba(0,0,0,.12);
+  }
+  .downloads a {
+    font-size: 13px; color: var(--ink); text-decoration: none;
+    border: 1px solid var(--rule); border-radius: 2px; padding: 6px 11px; background: var(--plate);
+  }
+  .downloads a:hover { border-color: var(--ink-2); }
+  .downloads a span { color: var(--muted); font: 400 11.5px "IBM Plex Mono", monospace; direction: ltr; }
+  .error { border-right: 3px solid var(--rubric); background: var(--rubric-soft);
+           padding: 12px 14px; margin-bottom: 18px; font-size: 14px; }
+  .notice { border-right: 3px solid var(--muted); background: var(--plate);
+            border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+            padding: 12px 14px; margin: 0 0 16px; font-size: 14px; color: var(--ink-2);
+            max-width: 78ch; }
+  .notice b { color: var(--ink); }
+  /* A figure on screen is a record of the run that made it, not of the form as it
+     now stands; when the two part company the page has to say so. */
+  .stale {
+    border-right: 3px solid var(--rubric); background: var(--rubric-soft);
+    padding: 11px 14px; margin: 0 0 14px; font-size: 14px; color: var(--ink);
+  }
+  .plate.stale-figure { opacity: .45; filter: saturate(.6); transition: opacity .2s; }
+  .empty { color: var(--muted); font: 400 17px/1.8 "Frank Ruhl Libre", serif;
+           text-align: center; padding: 70px 20px; border: 1px dashed var(--rule); }
+
+  .progress { border: 1px solid var(--rule); background: var(--plate); padding: 18px 20px; }
+  .progress h2 { margin: 0 0 12px; font: 500 18px "Frank Ruhl Libre", serif; }
+  .bar { height: 3px; background: var(--rule-2); overflow: hidden; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--rubric); transition: width .6s linear; }
+  .bar-text { margin: 10px 0 0; font-size: 14px; }
+  .bar-text span { color: var(--muted); font-size: 13px; }
+  ol.stages { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap;
+              gap: 4px 18px; font-size: 12.5px; color: var(--muted); }
+  ol.stages li.done { color: var(--ink-2); }
+  ol.stages li.now { color: var(--rubric); font-weight: 500; }
+
+  .reading { max-width: 70ch; margin: 0 0 18px; font: 400 15px/1.85 "Frank Ruhl Libre", serif; color: var(--ink-2); }
+  .reading p { margin: 0 0 10px; }
+  .reading b { color: var(--ink); font-weight: 700; }
+  .reading .fine { font: 400 13px/1.7 "Heebo", sans-serif; color: var(--muted); }
+
+  /* ---- Navigation between the explorer and the experiment log ---- */
+  .nav { display: flex; gap: 22px; margin-top: 12px; }
+  .nav a { font: 500 14px "Heebo", sans-serif; color: var(--muted); text-decoration: none;
+           padding-bottom: 4px; border-bottom: 2px solid transparent; }
+  .nav a:hover { color: var(--ink); }
+  .nav a.here { color: var(--ink); border-bottom-color: var(--rubric); }
+  .nav .count { margin-right: 6px; font: 400 11.5px "IBM Plex Mono", monospace; color: var(--muted); }
+
+  /* ---- Shared pieces of the log and the comparison ---- */
+  .page { max-width: 1180px; margin: 0 auto; padding: 26px 28px 60px; }
+  .page-head h2 { margin: 0; font: 500 28px/1.25 "Frank Ruhl Libre", serif; }
+  .page-head p { margin: 6px 0 0; color: var(--ink-2); max-width: 72ch; font-size: 14.5px; }
+  .section-title { font: 500 19px/1.3 "Frank Ruhl Libre", serif; margin: 34px 0 4px; }
+  .section-note { color: var(--muted); font-size: 13px; margin: 0 0 12px; max-width: 76ch; }
+  .chip { display: inline-block; font: 400 12.5px/1.6 "Heebo", sans-serif; color: var(--ink-2);
+          background: var(--plate); border: 1px solid var(--rule); border-radius: 999px;
+          padding: 0 9px; margin: 0 0 4px 4px; white-space: nowrap; }
+  .chip b { font: 500 12px "IBM Plex Mono", monospace; color: var(--ink); direction: ltr;
+            unicode-bidi: isolate; margin-right: 3px; }
+  .chip.tag { color: var(--rubric); border-color: var(--rubric-soft); background: var(--rubric-soft); }
+  .chip.soft { color: var(--muted); border-style: dashed; }
+  a.button, button.small {
+    display: inline-flex; align-items: center; gap: 6px; width: auto; cursor: pointer;
+    font: 500 13.5px "Heebo", sans-serif; padding: 7px 14px; border-radius: 2px; text-decoration: none;
+    background: var(--plate); color: var(--ink); border: 1px solid var(--rule); margin: 0;
+  }
+  a.button:hover, button.small:hover:not(:disabled) { border-color: var(--ink-2); }
+  a.button.primary, button.small.primary { background: var(--rubric); color: #fffefb; border-color: var(--rubric); }
+  button.small:disabled { opacity: .45; cursor: default; }
+  input[type=text], input[type=search], textarea {
+    width: 100%; font: 400 14px "Heebo", sans-serif; color: var(--ink); background: var(--field);
+    border: 1px solid var(--rule); border-radius: 2px; padding: 8px 10px;
+  }
+  textarea { resize: vertical; min-height: 64px; line-height: 1.6; }
+  input[type=text]:focus-visible, input[type=search]:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--rubric); outline-offset: 1px; }
+
+  /* ---- The log: runs grouped by day, one entry per run ---- */
+  .toolbar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center;
+             margin: 22px 0 6px; padding: 12px 0; border-top: 1px solid var(--rule);
+             border-bottom: 1px solid var(--rule); position: sticky; top: 0; background: var(--paper); z-index: 5; }
+  .toolbar input[type=search] { flex: 1 1 280px; max-width: 420px; }
+  .toolbar select { width: auto; min-width: 190px; }
+  .toolbar .spacer { flex: 1; }
+  .toolbar .shown { font-size: 13px; color: var(--muted); }
+  .day { font: 500 13px "Heebo", sans-serif; color: var(--rubric); letter-spacing: .03em;
+         margin: 26px 0 0; padding-bottom: 6px; }
+  .entry { display: grid; grid-template-columns: 28px 70px minmax(0, 1fr) 236px 22px; gap: 0 16px;
+           align-items: start; padding: 16px 14px; background: var(--plate);
+           border: 1px solid var(--rule); border-top: 0; cursor: pointer; transition: background .12s; }
+  .day + .entry { border-top: 1px solid var(--rule); }
+  .entry:hover { background: color-mix(in srgb, var(--plate) 86%, var(--rubric-soft)); }
+  .entry.picked { box-shadow: inset -3px 0 0 var(--rubric); }
+  .entry input[type=checkbox] { margin-top: 6px; }
+  .entry .time { font: 500 17px "IBM Plex Mono", monospace; direction: ltr; text-align: right; }
+  .entry .time small { display: block; font: 400 11.5px "Heebo", sans-serif; color: var(--muted); direction: rtl; }
+  .entry .title { font: 500 18px/1.35 "Frank Ruhl Libre", serif; margin: 0 0 6px; }
+  .entry .title.unnamed { color: var(--muted); font-weight: 400; }
+  .entry .notes { color: var(--ink-2); font-size: 13.5px; margin: -2px 0 8px; max-width: 70ch;
+                  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .entry .books { font: 400 14.5px/1.6 "Frank Ruhl Libre", serif; color: var(--ink-2); margin-top: 4px; }
+  .entry .books .more { font: 400 12.5px "Heebo", sans-serif; color: var(--muted); }
+  .figures { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; text-align: center; }
+  .figures div { border-right: 1px solid var(--rule-2); padding: 0 4px; }
+  .figures div:first-child { border-right: 0; }
+  .figures b { display: block; font: 500 20px "IBM Plex Mono", monospace; direction: ltr; }
+  .figures span { font-size: 11.5px; color: var(--muted); }
+  .entry .go { color: var(--muted); font-size: 20px; line-height: 1; margin-top: 4px; }
+  .entry:hover .go { color: var(--rubric); }
+  .nothing { text-align: center; color: var(--muted); padding: 60px 20px; font: 400 17px/1.8 "Frank Ruhl Libre", serif;
+             border: 1px dashed var(--rule); margin-top: 20px; }
+  @media (max-width: 860px) {
+    .entry { grid-template-columns: 24px minmax(0, 1fr); }
+    .entry .time, .entry .main, .entry .figures { grid-column: 2; }
+    .entry .figures { margin-top: 10px; }
+    .entry .go { display: none; }
+  }
+
+  /* ---- The record of one run, above its result ---- */
+  .record { background: var(--plate); border: 1px solid var(--rule); margin: 0 0 18px; }
+  .record-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px 24px;
+                 padding: 16px 18px 14px; align-items: start; }
+  .record-head .when { font: 500 13px "Heebo", sans-serif; color: var(--rubric); letter-spacing: .02em; }
+  .record-head .name { font: 500 22px/1.3 "Frank Ruhl Libre", serif; margin: 2px 0 0; }
+  .record-head .name.unnamed { color: var(--muted); font-weight: 400; }
+  .record-head .notes { margin: 6px 0 0; color: var(--ink-2); font-size: 14px; white-space: pre-line; max-width: 78ch; }
+  .record-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+  .record details { border-top: 1px solid var(--rule-2); }
+  .record summary { cursor: pointer; list-style: none; padding: 10px 18px; font: 500 13.5px "Heebo", sans-serif;
+                    color: var(--ink-2); display: flex; gap: 8px; align-items: center; }
+  .record summary::-webkit-details-marker { display: none; }
+  .record summary::before { content: "◂"; color: var(--muted); transition: transform .15s; }
+  .record details[open] > summary::before { transform: rotate(-90deg); color: var(--rubric); }
+  .record summary:hover { color: var(--ink); }
+  .record summary .hint { font-weight: 400; color: var(--muted); font-size: 12.5px; }
+  .record-body { padding: 4px 18px 18px; }
+  .facts { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px 22px; margin: 6px 0 14px; }
+  .facts div span { display: block; font-size: 12px; color: var(--muted); }
+  .facts div b { font: 500 15px "Heebo", sans-serif; }
+  .facts div b.num { font: 500 15px "IBM Plex Mono", monospace; }
+  .booklist { font: 400 15px/1.9 "Frank Ruhl Libre", serif; color: var(--ink-2); columns: 3 220px; column-gap: 28px; margin: 4px 0 14px; }
+  .booklist span { display: block; break-inside: avoid; }
+  .edit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; }
+  .edit-grid .wide { grid-column: 1 / -1; }
+  .edit-grid label span { display: block; font-size: 12.5px; color: var(--ink-2); margin-bottom: 4px; }
+  .compare-pick { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .compare-pick select { width: auto; min-width: 280px; max-width: 100%; }
+  .sublabel { font: 500 12px "Heebo", sans-serif; color: var(--muted); letter-spacing: .04em; margin: 16px 0 6px; }
+  .versions { font: 400 12.5px/1.8 "IBM Plex Mono", monospace; color: var(--ink-2); direction: ltr; text-align: left; }
+
+  /* ---- The comparison of two runs ---- */
+  .pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 22px; }
+  .pair .card { background: var(--plate); border: 1px solid var(--rule); padding: 14px 16px 12px; position: relative; }
+  .pair .card .letter { position: absolute; top: 10px; left: 14px; font: 700 28px "Frank Ruhl Libre", serif; color: var(--rubric); }
+  .pair .card .when { font: 500 12.5px "Heebo", sans-serif; color: var(--rubric); }
+  .pair .card h3 { margin: 2px 0 8px; font: 500 19px/1.3 "Frank Ruhl Libre", serif; padding-left: 34px; }
+  .pair .card h3.unnamed { color: var(--muted); font-weight: 400; }
+  .pair .card a { font-size: 13px; color: var(--ink-2); }
+  .verdict { margin: 18px 0 0; padding: 12px 16px; background: var(--plate); border-right: 3px solid var(--rubric);
+             border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule);
+             font: 400 15.5px/1.85 "Frank Ruhl Libre", serif; color: var(--ink-2); }
+  .verdict b { color: var(--ink); }
+  table.cmp { width: 100%; border-collapse: collapse; background: var(--plate); font-size: 14px; border: 1px solid var(--rule); }
+  table.cmp th { font: 500 12px "Heebo", sans-serif; color: var(--muted); text-align: right; padding: 8px 14px;
+                 border-bottom: 1px solid var(--rule); background: var(--paper); }
+  table.cmp td { padding: 8px 14px; border-bottom: 1px solid var(--rule-2); }
+  table.cmp td.v { font: 500 14px "IBM Plex Mono", monospace; direction: ltr; text-align: right; unicode-bidi: isolate; width: 28%; }
+  table.cmp td.v.he { font: 400 14.5px "Heebo", sans-serif; direction: rtl; }
+  table.cmp tr.diff td { background: var(--rubric-soft); }
+  table.cmp tr.diff td:first-child { box-shadow: inset -3px 0 0 var(--rubric); font-weight: 500; }
+  .three { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .three .col { background: var(--plate); border: 1px solid var(--rule); padding: 12px 14px; }
+  .three .col h4 { margin: 0 0 6px; font: 500 13px "Heebo", sans-serif; color: var(--ink-2); }
+  .three .col h4 b { font: 500 13px "IBM Plex Mono", monospace; color: var(--rubric); margin-right: 4px; }
+  .three .col ul { margin: 0; padding: 0; list-style: none; font: 400 14.5px/1.85 "Frank Ruhl Libre", serif; max-height: 320px; overflow: auto; }
+  .three .col .none { color: var(--muted); font-size: 13px; }
+  .gauge { height: 10px; background: var(--rule-2); border-radius: 999px; overflow: hidden; max-width: 460px; margin: 8px 0 4px; direction: ltr; }
+  .gauge i { display: block; height: 100%; background: var(--rubric); border-radius: 999px; }
+  .gauge-scale { display: flex; justify-content: space-between; max-width: 460px; font-size: 11.5px; color: var(--muted); }
+  .big-number { font: 500 34px "IBM Plex Mono", monospace; direction: ltr; unicode-bidi: isolate; }
+  .bar-cell { display: flex; align-items: center; gap: 8px; direction: ltr; justify-content: flex-end; }
+  .bar-cell i { display: inline-block; height: 8px; background: var(--rubric); opacity: .7; border-radius: 2px; }
+  .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .twocol .col { background: var(--plate); border: 1px solid var(--rule); padding: 10px 16px; }
+  .twocol .col h4 { margin: 4px 0 4px; font: 700 18px "Frank Ruhl Libre", serif; color: var(--rubric); }
+  .cp-list { list-style: none; margin: 0; padding: 0; }
+  .cp-list li { padding: 8px 0; border-bottom: 1px solid var(--rule-2); font-size: 14px; }
+  .cp-list li:last-child { border-bottom: 0; }
+  .cp-list li .place { font: 400 15px "Frank Ruhl Libre", serif; }
+  .cp-list li .score { font: 400 12px "IBM Plex Mono", monospace; color: var(--muted); direction: ltr; unicode-bidi: isolate; }
+  .plate-list { background: var(--plate); border: 1px solid var(--rule); padding: 10px 16px; }
+  .ari { display: flex; align-items: center; gap: 24px; flex-wrap: wrap; margin: 6px 0 4px; }
+  .ari-bar { flex: 1 1 320px; max-width: 460px; }
+  .ari-bar .gauge { margin: 0 0 4px; }
+  .gauge-scale { direction: ltr; }
+  @media (max-width: 860px) { .pair, .three, .twocol { grid-template-columns: 1fr; } .edit-grid { grid-template-columns: 1fr; } }
+</style>

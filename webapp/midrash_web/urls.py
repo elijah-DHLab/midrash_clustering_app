@@ -8,4 +8,7 @@ urlpatterns = [
     path("progress/<str:job_id>", views.progress, name="progress"),
     path("result/<str:job_id>", views.result, name="result"),
     path("download/<str:token>/<str:name>", views.download, name="download"),
+    path("runs/", views.runs_list, name="runs"),
+    path("runs/compare", views.runs_compare, name="compare"),
+    path("runs/<str:token>/meta", views.run_meta, name="run_meta"),
 ]

@@ -86,6 +86,22 @@ numbered cluster. Any figure should say which model produced it.
   - `change_points.csv`: each boundary with the place just before and after it;
   - `figure.html`.
 
+- **The experiment log** (`/runs/`) — every run, newest first, grouped by day, with its
+  parameters, books and results at a glance; search by name, book, note or tag, filter by
+  store, and tick two to compare them. Each result opens with its record: when it ran and
+  for how long, a name, notes and tags the reader gives it, and - folded away - every
+  parameter, the books, and the code commit, store and FastText model that produced it.
+- **Comparing two runs** (`/runs/compare?a=…&b=…`) — parameters side by side with the
+  differences marked, which books are shared or only in one, the results, the change
+  points with where each falls in the text, and, when both clustered the same chunks
+  (same books, chunk size and store), the adjusted Rand index and which cluster in one
+  corresponds to which in the other.
+
+Each run's record is `run.json` in its directory under `webapp/_runs/`, written when it
+finishes (`explorer/runs.py`); the name, notes and tags are `meta.json` beside it. Nothing
+is deleted. Runs made before the log are read from their `summary.json`, with the time
+taken from the file and no versions.
+
 Runs are cached on disk by their full parameter set, including the model, so repeating a
 run returns immediately. The cache lives in `webapp/_runs/` and is not in git; delete
 `webapp/_runs/index.json` to force recomputation.

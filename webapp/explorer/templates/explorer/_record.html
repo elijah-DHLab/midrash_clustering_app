@@ -1,0 +1,85 @@
+{% comment %} The record of one run, shown above its result: when it ran, the reader's name and notes
+   for it, and - folded away until asked for - its parameters, books and versions. {% endcomment %}
+{% with r=run_record %}
+<section class="record">
+  <div class="record-head">
+    <div>
+      <div class="when">{{ r.day_label }} · {{ r.time_label }}{% if r.duration_label %} · {{ r.duration_label }}{% endif %}</div>
+      <div class="name{% if not r.meta.name %} unnamed{% endif %}">{{ r.meta.name|default:"ניסוי ללא שם" }}</div>
+      {% if r.meta.tags %}<div style="margin-top:6px">{% for t in r.meta.tags %}<span class="chip tag">{{ t }}</span>{% endfor %}</div>{% endif %}
+      {% if r.meta.notes %}<p class="notes">{{ r.meta.notes }}</p>{% endif %}
+    </div>
+    <div class="record-actions">
+      <a class="button" href="{% url 'runs' %}">יומן הניסויים</a>
+    </div>
+  </div>
+
+  <details{% if not r.meta.name %} open{% endif %}>
+    <summary>{% if r.meta.name %}עריכת השם, ההערות והתגיות{% else %}שם, הערות ותגיות{% endif %}
+      <span class="hint">· כדי לזכור בעוד חודש למה הרצת את זה</span></summary>
+    <div class="record-body">
+      <form method="post" action="{% url 'run_meta' r.token %}">
+        <div class="edit-grid">
+          <label><span>שם הניסוי</span>
+            <input type="text" name="name" value="{{ r.meta.name }}" placeholder="למשל: מדרשי רבה, k=8 מול k=10"></label>
+          <label><span>תגיות, מופרדות בפסיק</span>
+            <input type="text" name="tags" value="{{ r.meta.tags|join:', ' }}" placeholder="למשל: רבה, בדיקת k"></label>
+          <label class="wide"><span>הערות</span>
+            <textarea name="notes" placeholder="מה בדקת, מה ראית, מה לבדוק הלאה">{{ r.meta.notes }}</textarea></label>
+        </div>
+        <div style="margin-top:10px"><button type="submit" class="small primary">שמירה</button></div>
+      </form>
+    </div>
+  </details>
+
+  <details>
+    <summary>פרמטרים, ספרים וגרסאות <span class="hint">· כל מה שצריך כדי לשחזר את הניסוי</span></summary>
+    <div class="record-body">
+      <div class="facts">
+        <div><span>מרחב האמבדינג</span><b>{{ r.versions.store_label|default:r.params.model }}</b></div>
+        <div><span>גודל צ'אנק</span><b class="num">{{ r.params.chunk_size }}</b> מילים</div>
+        <div><span>מספר קלאסטרים (k)</span><b class="num">{{ r.params.k }}</b></div>
+        <div><span>החלקה מול השכנים</span><b>{{ r.params.smoothing|yesno:"כן,לא" }}</b></div>
+        <div><span>תוויות הטקסטים לפי</span><b>{{ r.params.grouping_label|default:"–" }}</b></div>
+        <div><span>נקודות שינוי: בלוק · פנלטי</span><b class="num">{{ r.params.block_size|default_if_none:"–" }} · {{ r.params.penalty|default_if_none:"–" }}</b></div>
+        <div><span>צ'אנקים · מילים</span><b class="num">{{ r.selection.chunks }} · {{ r.selection.words }}</b></div>
+        <div><span>לכידות ממוצעת</span><b class="num">{{ r.results.cohesion_mean|default_if_none:"–" }}</b></div>
+      </div>
+
+      <div class="sublabel">הספרים ({{ r.selection.titles|length }})</div>
+      <div class="booklist">{% for t in r.selection.titles %}<span>{{ t }}</span>{% endfor %}</div>
+
+      <div class="sublabel">גרסאות</div>
+      {% if r.imported %}
+        <p class="section-note">הריצה נעשתה לפני שהיומן נוסף, ולכן המועד נלקח מתאריך הקבצים והגרסאות לא נשמרו.</p>
+      {% else %}
+        <div class="facts">
+          <div><span>גרסת הקוד</span><b class="ltr">{{ r.versions.code|default:"–" }}</b></div>
+          <div><span>מחסן האמבדינגים</span><b class="ltr">{{ r.versions.store }}</b></div>
+          <div><span>מודל FastText</span><b class="ltr" style="font-size:13px">{{ r.versions.fasttext|default:"–" }}</b></div>
+        </div>
+        {% if r.versions.store_note %}<p class="section-note ltr" style="text-align:left">{{ r.versions.store_note }}</p>{% endif %}
+      {% endif %}
+      <div class="sublabel">מזהה הריצה</div>
+      <span class="num" style="font-size:13px">{{ r.token }}</span>
+    </div>
+  </details>
+
+  {% if other_runs %}
+  <details>
+    <summary>השוואה לניסוי אחר</summary>
+    <div class="record-body">
+      <form method="get" action="{% url 'compare' %}" class="compare-pick">
+        <input type="hidden" name="a" value="{{ r.token }}">
+        <select name="b" aria-label="ניסוי להשוואה">
+          {% for o in other_runs %}
+            <option value="{{ o.token }}">{{ o.date_label }} {{ o.time_label }} · {{ o.meta.name|default:"ללא שם" }} · {{ o.versions.store_label|default:o.params.model }} · k={{ o.params.k }} · {{ o.selection.titles|length }} ספרים</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="small primary">השוואה</button>
+      </form>
+    </div>
+  </details>
+  {% endif %}
+</section>
+{% endwith %}

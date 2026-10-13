@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>יומן הניסויים · סייר הקלאסטרים המדרשי</title>
+{% include "explorer/_style.html" %}
+</head>
+<body>
+{% include "explorer/_masthead.html" with here="runs" %}
+
+<div class="page">
+  <div class="page-head">
+    <h2>יומן הניסויים</h2>
+    <p>כל הרצה נשמרת כאן עם המועד, הפרמטרים, הספרים, הגרסאות והתוצאות, וקובצי התוצאות נשארים
+       זמינים להורדה. לחיצה על ניסוי פותחת אותו כפי שהיה; סימון של שניים משווה ביניהם.</p>
+  </div>
+
+  {% if runs %}
+  <div class="toolbar">
+    <input type="search" id="q" placeholder="חיפוש לפי שם, ספר, הערה או תגית" aria-label="חיפוש">
+    <select id="store" aria-label="מרחב אמבדינג">
+      <option value="">כל מרחבי האמבדינג</option>
+      {% for s in stores %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+    </select>
+    <span class="shown" id="shown">{{ runs|length }} ניסויים</span>
+    <span class="spacer"></span>
+    <button type="button" class="small primary" id="compare" disabled>השוואה בין 2 ניסויים</button>
+  </div>
+
+  <div id="log">
+  {% for r in runs %}
+    {% ifchanged r.day_label %}<div class="day" data-day>{{ r.day_label }}</div>{% endifchanged %}
+    <article class="entry" data-href="{% url 'result' r.token %}" data-token="{{ r.token }}"
+             data-store="{{ r.versions.store_label|default:r.params.model }}"
+             data-search="{{ r.meta.name }} {{ r.meta.notes }} {{ r.meta.tags|join:' ' }} {{ r.selection.titles|join:' ' }} {{ r.versions.store_label }}">
+      <input type="checkbox" class="pick" aria-label="סימון להשוואה">
+      <div class="time">{{ r.time_label }}<small>{{ r.duration_label }}</small></div>
+      <div class="main">
+        {% if r.meta.name %}
+          <div class="title">{{ r.meta.name }}</div>
+        {% else %}
+          <div class="title unnamed">ניסוי ללא שם</div>
+        {% endif %}
+        {% if r.meta.notes %}<div class="notes">{{ r.meta.notes }}</div>{% endif %}
+        <div>
+          {% for t in r.meta.tags %}<span class="chip tag">{{ t }}</span>{% endfor %}
+          <span class="chip">{{ r.versions.store_label|default:r.params.model }}</span>
+          <span class="chip">צ'אנק<b>{{ r.params.chunk_size }}</b></span>
+          <span class="chip ltr">k = {{ r.params.k }}</span>
+          {% if r.params.smoothing %}<span class="chip">בהחלקה</span>{% endif %}
+          {% if r.params.block_size %}<span class="chip">בלוק<b>{{ r.params.block_size }}</b> · פנלטי<b>{{ r.params.penalty }}</b></span>{% endif %}
+          {% if r.imported %}<span class="chip soft" title="הריצה נעשתה לפני שהיומן נוסף: המועד לפי תאריך הקובץ, והגרסאות לא נשמרו">לפני היומן</span>{% endif %}
+        </div>
+        <div class="books">
+          {% for t in r.selection.titles|slice:":5" %}{{ t }}{% if not forloop.last %} · {% endif %}{% endfor %}
+          {% if r.selection.titles|length > 5 %}<span class="more"> ועוד {{ r.selection.titles|length|add:"-5" }}</span>{% endif %}
+        </div>
+      </div>
+      <div class="figures">
+        <div><b>{{ r.results.clusters }}</b><span>קלאסטרים</span></div>
+        <div><b>{{ r.results.change_points }}</b><span>נקודות שינוי</span></div>
+        <div><b>{{ r.selection.chunks }}</b><span>צ'אנקים</span></div>
+      </div>
+      <div class="go" aria-hidden="true">‹</div>
+    </article>
+  {% endfor %}
+  </div>
+  <div class="nothing" id="none" hidden>אין ניסוי שמתאים לחיפוש.</div>
+  {% else %}
+  <div class="nothing">עוד לא נשמרו ניסויים. כל הרצת קלאסטרינג תופיע כאן.</div>
+  {% endif %}
+</div>
+
+<script>
+(function () {
+  var entries = Array.prototype.slice.call(document.querySelectorAll(".entry"));
+  var q = document.getElementById("q"), storeSel = document.getElementById("store");
+  var shown = document.getElementById("shown"), none = document.getElementById("none");
+  var compare = document.getElementById("compare");
+  if (!entries.length) return;
+
+  // Picking two entries enables the comparison; a third pick replaces the oldest one.
+  var picked = [];
+  function syncPicks() {
+    entries.forEach(function (e) {
+      var on = picked.indexOf(e.dataset.token) !== -1;
+      e.classList.toggle("picked", on);
+      e.querySelector(".pick").checked = on;
+    });
+    compare.disabled = picked.length !== 2;
+    compare.textContent = picked.length === 2 ? "השוואה בין 2 הניסויים המסומנים"
+                        : picked.length === 1 ? "סמני ניסוי נוסף להשוואה" : "השוואה בין 2 ניסויים";
+  }
+  entries.forEach(function (e) {
+    var box = e.querySelector(".pick");
+    box.addEventListener("click", function (ev) {
+      ev.stopPropagation();
+      var i = picked.indexOf(e.dataset.token);
+      if (i !== -1) picked.splice(i, 1); else { picked.push(e.dataset.token); if (picked.length > 2) picked.shift(); }
+      syncPicks();
+    });
+    e.addEventListener("click", function () { window.location = e.dataset.href; });
+  });
+  compare.addEventListener("click", function () {
+    if (picked.length === 2)
+      window.location = "{% url 'compare' %}?a=" + picked[0] + "&b=" + picked[1];
+  });
+
+  // Search and the store filter hide entries, and a day heading with nothing under it.
+  function filter() {
+    var words = q.value.trim().toLowerCase().split(/\s+/).filter(Boolean), store = storeSel.value, n = 0;
+    entries.forEach(function (e) {
+      var text = e.dataset.search.toLowerCase();
+      var ok = (!store || e.dataset.store === store) && words.every(function (w) { return text.indexOf(w) !== -1; });
+      e.hidden = !ok; if (ok) n++;
+    });
+    document.querySelectorAll("[data-day]").forEach(function (d) {
+      var el = d.nextElementSibling, any = false;
+      while (el && !el.hasAttribute("data-day")) { if (!el.hidden) any = true; el = el.nextElementSibling; }
+      d.hidden = !any;
+    });
+    shown.textContent = n === entries.length ? n + " ניסויים" : n + " מתוך " + entries.length + " ניסויים";
+    none.hidden = n !== 0;
+  }
+  q.addEventListener("input", filter);
+  storeSel.addEventListener("change", filter);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>השוואת ניסויים · סייר הקלאסטרים המדרשי</title>
+{% include "explorer/_style.html" %}
+</head>
+<body>
+{% include "explorer/_masthead.html" with here="runs" %}
+
+<div class="page">
+  <div class="page-head">
+    <h2>השוואה בין שני ניסויים</h2>
+    <p><a href="{% url 'runs' %}">חזרה ליומן הניסויים</a></p>
+  </div>
+
+  <div class="pair">
+    <div class="card">
+      <span class="letter">א</span>
+      <div class="when">{{ a.day_label }} · {{ a.time_label }}</div>
+      <h3 class="{% if not a.meta.name %}unnamed{% endif %}">{{ a.meta.name|default:"ניסוי ללא שם" }}</h3>
+      <a href="{% url 'result' a.token %}">פתיחת הניסוי ←</a>
+    </div>
+    <div class="card">
+      <span class="letter">ב</span>
+      <div class="when">{{ b.day_label }} · {{ b.time_label }}</div>
+      <h3 class="{% if not b.meta.name %}unnamed{% endif %}">{{ b.meta.name|default:"ניסוי ללא שם" }}</h3>
+      <a href="{% url 'result' b.token %}">פתיחת הניסוי ←</a>
+    </div>
+  </div>
+
+  <div class="verdict">
+    {% if cmp.n_param_diffs == 0 %}<b>הפרמטרים זהים.</b>{% elif cmp.n_param_diffs == 1 %}<b>פרמטר אחד שונה</b>, מסומן באדום.{% else %}<b>{{ cmp.n_param_diffs }} פרמטרים שונים</b>, מסומנים באדום.{% endif %}
+    {% if not cmp.only_a and not cmp.only_b %}
+      שני הניסויים רצו על <b>אותם {{ cmp.common|length }} ספרים</b>.
+    {% else %}
+      <b>{{ cmp.common|length }}</b> ספרים משותפים, <b>{{ cmp.only_a|length }}</b> רק בא׳ ו־<b>{{ cmp.only_b|length }}</b> רק בב׳.
+    {% endif %}
+    {% if cmp.agreement.comparable %}
+      החלוקות לקלאסטרים מסכימות ב־<b>ARI {{ cmp.agreement.ari }}</b>.
+    {% endif %}
+  </div>
+
+  <h3 class="section-title">פרמטרים</h3>
+  <table class="cmp">
+    <thead><tr><th>פרמטר</th><th>א</th><th>ב</th></tr></thead>
+    <tbody>
+    {% for p in cmp.params %}
+      <tr class="{% if p.differs %}diff{% endif %}">
+        <td>{{ p.label }}</td><td class="v">{{ p.a|default_if_none:"–" }}</td><td class="v">{{ p.b|default_if_none:"–" }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <h3 class="section-title">הספרים</h3>
+  {% if not cmp.only_a and not cmp.only_b %}
+    <p class="section-note">אותם {{ cmp.common|length }} ספרים בשני הניסויים.</p>
+    <div class="booklist plate-list">{% for t in cmp.common %}<span>{{ t }}</span>{% endfor %}</div>
+  {% else %}
+  <div class="three">
+    <div class="col"><h4>בשני הניסויים<b>{{ cmp.common|length }}</b></h4>
+      {% if cmp.common %}<ul>{% for t in cmp.common %}<li>{{ t }}</li>{% endfor %}</ul>{% else %}<div class="none">אין</div>{% endif %}</div>
+    <div class="col"><h4>רק בא׳<b>{{ cmp.only_a|length }}</b></h4>
+      {% if cmp.only_a %}<ul>{% for t in cmp.only_a %}<li>{{ t }}</li>{% endfor %}</ul>{% else %}<div class="none">אין</div>{% endif %}</div>
+    <div class="col"><h4>רק בב׳<b>{{ cmp.only_b|length }}</b></h4>
+      {% if cmp.only_b %}<ul>{% for t in cmp.only_b %}<li>{{ t }}</li>{% endfor %}</ul>{% else %}<div class="none">אין</div>{% endif %}</div>
+  </div>
+  {% endif %}
+
+  <h3 class="section-title">תוצאות</h3>
+  <table class="cmp">
+    <thead><tr><th>מדד</th><th>א</th><th>ב</th></tr></thead>
+    <tbody>
+    {% for x in cmp.results %}
+      <tr class="{% if x.differs %}diff{% endif %}"><td>{{ x.label }}</td>
+        <td class="v">{{ x.a|default_if_none:"–" }}</td><td class="v">{{ x.b|default_if_none:"–" }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+
+  <h3 class="section-title">הסכמה בין החלוקות לקלאסטרים</h3>
+  {% if cmp.agreement.comparable %}
+    <p class="section-note">שני הניסויים חילקו את <b>אותם {{ cmp.agreement.chunks }} צ'אנקים</b>, ולכן אפשר לבדוק
+       עד כמה הם שמו את אותם צ'אנקים יחד. מדד ARI הוא 1 כשהחלוקות זהות (גם אם מספרי הקלאסטרים שונים),
+       וסביב 0 כשההתאמה ביניהן אינה טובה ממקרית.</p>
+    <div class="ari">
+      <div class="big-number">{{ cmp.agreement.ari }}</div>
+      <div class="ari-bar">
+        <div class="gauge"><i style="width: {{ cmp.agreement.ari_pct }}%"></i></div>
+        <div class="gauge-scale"><span>0 · מקרי</span><span>1 · זהה</span></div>
+      </div>
+    </div>
+
+    <p class="section-note" style="margin-top:22px">לכל קלאסטר בא׳: הקלאסטר בב׳ שקיבל את רוב הצ'אנקים שלו.
+       כששני האחוזים גבוהים, שני הניסויים מצאו את אותה קבוצה.</p>
+    <table class="cmp">
+      <thead><tr><th>קלאסטר בא׳</th><th>צ'אנקים</th><th>הקלאסטר המקביל בב׳</th>
+        <th>מהקלאסטר של א׳ נמצא בו</th><th>מהקלאסטר של ב׳ מגיע מא׳</th></tr></thead>
+      <tbody>
+      {% for m in cmp.agreement.mapping %}
+        <tr><td class="num">{{ m.a }}</td><td class="num">{{ m.chunks }}</td><td class="num">{{ m.b }}</td>
+          <td><div class="bar-cell"><span class="num">{{ m.share }}%</span><i style="width: {{ m.share }}px"></i></div></td>
+          <td><div class="bar-cell"><span class="num">{{ m.back }}%</span><i style="width: {{ m.back }}px"></i></div></td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <p class="section-note">אי אפשר להשוות את החלוקות צ'אנק מול צ'אנק: {{ cmp.agreement.why }}.
+       ההשוואה הזו אפשרית רק כששני הניסויים רצו על אותם ספרים, באותו גודל צ'אנק ובאותו מרחב אמבדינג.</p>
+  {% endif %}
+
+  <h3 class="section-title">נקודות השינוי</h3>
+  <p class="section-note">איפה בטקסט נופל כל גבול: הצ'אנק האחרון לפניו והראשון אחריו.</p>
+  <div class="twocol">
+    {% for r in ab %}
+    <div class="col">
+      <h4>{{ r.letter }}</h4>
+      {% if r.run.results.change_point_list %}
+        <ul class="cp-list">
+        {% for cp in r.run.results.change_point_list %}
+          <li>{% if cp.after %}<span class="place">{{ cp.before }} ← {{ cp.after }}</span>{% else %}<span class="place">צ'אנק {{ cp.chronological_index }}</span>{% endif %}
+              <span class="score">· {{ cp.score }}</span></li>
+        {% endfor %}
+        </ul>
+      {% else %}<p class="section-note">לא נמצאו נקודות שינוי.</p>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+</body>
+</html>

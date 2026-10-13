@@ -1,0 +1,18 @@
+{% comment %} The masthead of every page, with the way between the explorer and the experiment log.
+   `here` is "explore" or "runs". {% endcomment %}
+<header class="masthead">
+  <div>
+    <h1>סייר הקלאסטרים <em>המדרשי</em></h1>
+    <p>הצ'אנקים מקודדים פעם אחת ונשמרים; כל הרצה היא קלאסטרינג חדש של הפלח שבוחרים.</p>
+    <nav class="nav">
+      <a href="{% url 'index' %}"{% if here == "explore" %} class="here"{% endif %}>הרצת קלאסטרינג</a>
+      <a href="{% url 'runs' %}"{% if here == "runs" %} class="here"{% endif %}>יומן הניסויים</a>
+    </nav>
+  </div>
+  {% if model_label %}
+  <div class="imprint">
+    {{ model_label }}<br>
+    {% if chunk_size %}{{ chunk_size }}-word chunks{% endif %}
+  </div>
+  {% endif %}
+</header>
