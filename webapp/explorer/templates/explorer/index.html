@@ -213,11 +213,9 @@
   .hist { display: flex; direction: ltr; align-items: flex-end; gap: 1px; width: 160px; height: 26px;
           margin-top: 2px; border-bottom: 1px solid var(--rule); }
   .hist i { flex: 1; min-height: 1px; background: var(--muted); opacity: .55; }
-  .hist i.empty { opacity: .12; }
+  .hist i.nil { opacity: .12; }   /* not .empty: that is the page's placeholder box */
   .hist i:hover { opacity: 1; background: var(--rubric); }
-  .conc { margin-top: 4px; font-size: 12px; color: var(--ink-2); line-height: 1.45; }
-  .conc span { display: block; white-space: nowrap; }
-  .conc .pct { color: var(--muted); font: 400 11.5px "IBM Plex Mono", monospace; margin-right: 4px; }
+  .conc { margin-top: 3px; font-size: 12px; color: var(--muted); cursor: help; }
   .ngrams { color: var(--ink-2); font-family: "Frank Ruhl Libre", serif; font-size: 14px; line-height: 1.55; }
   .ngrams span { display: block; white-space: nowrap; }
 
@@ -466,7 +464,8 @@
           <p class="clusters-note">שורה לכל קלאסטר, בצבע שלו בתרשים. <b>מיקום כרונולוגי</b> מראה היכן
           הצ'אנקים של הקלאסטר נופלים לאורך הציר הכרונולוגי של הבחירה (המוקדם משמאל, כמו בתרשים): כל עמודה היא
           קטע של 1/40 מהציר, וגובהה הוא כמה צ'אנקים של הקלאסטר יש בו. ריחוף מעל עמודה מראה את הספר
-          שבאותו קטע. מתחת מפורטים הריכוזים: הספר העיקרי בכל ריכוז ואיזה חלק מהקלאסטר נמצא בו. ליד טקסט שמיוצג בקלאסטר הרבה יותר מבבחירה כולה מופיע <span style="color:var(--rubric)">×</span> ופי כמה. <b>לכידות</b> היא הדמיון הממוצע של הצ'אנקים
+          שבאותו קטע. קלאסטר שמתרכז בכמה מקומות נפרדים מסומן "2 ריכוזים" (או יותר); ריחוף מעליו
+          מפרט אותם, והפירוט המלא ב-clusters.csv. ליד טקסט שמיוצג בקלאסטר הרבה יותר מבבחירה כולה מופיע <span style="color:var(--rubric)">×</span> ופי כמה. <b>לכידות</b> היא הדמיון הממוצע של הצ'אנקים
           למרכז הקלאסטר. לחיצה על כותרת ממיינת.</p>
           <table class="clusters" id="clusters">
             <thead><tr>
@@ -490,8 +489,8 @@
                   {% if c.n_texts > 3 %}<span class="more">ועוד {{ c.n_texts|add:"-3" }}</span>{% endif %}
                 </td>
                 <td>
-                  <div class="hist">{% for b in c.bars %}<i{% if not b.n %} class="empty"{% endif %} style="height: {{ b.h }}%" title="{{ b.book }}: {{ b.n }} צ'אנקים"></i>{% endfor %}</div>
-                  {% if c.concentrations %}<div class="conc">{% for k in c.concentrations %}<span>{{ k.book }}<span class="pct">{{ k.share }}%</span></span>{% endfor %}</div>{% endif %}
+                  <div class="hist">{% for b in c.bars %}<i{% if not b.n %} class="nil"{% endif %} style="height: {{ b.h }}%" title="{{ b.book }}: {{ b.n }} צ'אנקים"></i>{% endfor %}</div>
+                  {% if c.concentrations|length > 1 %}<div class="conc" title="{% for k in c.concentrations %}{{ k.from }}–{{ k.to }}% מהציר: {{ k.share }}% מהקלאסטר{% if not forloop.last %} · {% endif %}{% endfor %}">{{ c.concentrations|length }} ריכוזים</div>{% endif %}
                 </td>
                 <td class="num">{{ c.cohesion|default_if_none:"–" }}</td>
                 <td class="num">{{ c.nearest|default_if_none:"–" }}</td>
