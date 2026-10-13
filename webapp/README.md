@@ -36,26 +36,24 @@ python webapp/build_store.py --sizes 25 50 75 100 --label v7 --title "Sefaria v7
 scholarly category, composition id, edition). For the older stores, built from the old
 dump, the Hebrew names came from Sefaria's API through `build_hebrew_titles.py`.
 
-A v7 store also keeps, per chunk, where it sits in its book: `start_ref` and `end_ref`
-(the v7 `location` without the file's own prefix, e.g. `52_10` = parasha 52, section 10),
-`ref_spans` (which words of the chunk come from which location, `1–44: 1_1 | 45–50: 1_2`)
-and `start_segment` (the v7 segment id, to find the source row). v7 records only the
-first Sefaria section of each ~175-word row, so a place is exact to the row, not the section.
+A v7 store also keeps, per chunk, where it sits in its book - computed only from what the v7
+files hold (`location`, `segment`, `from_word`), nothing fetched from Sefaria:
+- `start_unit` / `start_unit_word` and `end_unit` / `end_unit_word`: the text unit and the word
+  within it at each end. v7 cuts a long Sefaria unit into rows whose `from_word` continues the
+  previous row's `to_word`; the unit is named by the location of its first row, and the word is
+  `from_word` + offset. The location alone cannot be trusted for this: in 26 of the experiment
+  books (Pesikta Rabbati, the Yalkut, Tanhuma Buber, ...) each part of a split unit also gets a
+  part-number suffix, so `1_1_1_2_3` is word 501 of unit `1_1`, not a section `1_1_1_2_3`.
+- `ref_spans`: which words of the chunk come from which unit, and which words of the unit they
+  are: `1–10: 1_1 [541–550] | 11–50: 1_2 [1–40]`.
+- `start_segment` / `start_segment_word` and `end_segment` / `end_segment_word`: the v7 row (its
+  segment id) and the word within its `sentence`, to find the exact words in the source.
 
-The ends of each chunk are also kept word-exact, two ways:
-- in the v7 rows: `start_segment` / `start_segment_word` and `end_segment` / `end_segment_word`
-  (segment id, and the word within that row's `sentence`, 1-based);
-- in Sefaria's text unit: `start_unit` / `start_unit_word` and `end_unit` / `end_unit_word`.
-  v7 cuts a long unit into rows whose `from_word` continues the previous row's `to_word`;
-  the unit is named by the location of its first row and the word is `from_word` + offset.
-  The location alone cannot be trusted here: in 26 of the experiment books (Pesikta Rabbati,
-  the Yalkut, Tanhuma Buber, ...) each part of a split unit also gets a part-number suffix,
-  so `1_1_1_2_3` is word 501 of unit `1_1`, not a section `1_1_1_2_3`.
+A v7 row names only the first Sefaria section in it, so inside a unit the word is known but not
+the section it belongs to; that would need v7 itself to keep the section boundaries.
 
-Layout: `embedding_store/<model>/<chunk size>/<file>.npz`, plus `index.json` per size,
-`model.json` and `titles.json` per model. Keyed per source file, so any selection of
-texts is a concatenation of arrays already on disk and only a new chunk size costs
-anything.
+In the app's chunks.csv these appear as `range` (`פסיקתא רבתי 11_1:2540–2589`), `start_unit`,
+`end_unit`, `ref_spans` and the four segment columns.
 
 ## The models
 

@@ -174,17 +174,21 @@ def build_chunks(
             return r, offset + 1, row_units[r], row_from[r] + offset
 
         def ref_spans(start, end, first, last):
-            """'1–23: 1_7 | 24–50: 1_10' - which words of the chunk (1-based) come from which
-            location. Consecutive rows with the same location (a v7 row split in two) are one span."""
+            """'1–10: 1_1 [541–550] | 11–50: 1_2 [1–40]' - which words of the chunk (1-based)
+            come from which text unit, and which words of that unit they are. Rows of one
+            unit (a unit v7 split into several rows) are one span."""
             spans = []
             for r in range(first, last + 1):
-                lo = max(row_starts[r], start) - start + 1
-                hi = (min(row_starts[r + 1] - 1, end) if r + 1 < len(row_starts) else end) - start + 1
-                if spans and spans[-1][2] == row_refs[r]:
-                    spans[-1][1] = hi
+                lo = max(row_starts[r], start)
+                hi = min(row_starts[r + 1] - 1, end) if r + 1 < len(row_starts) else end
+                unit_lo = row_from[r] + lo - row_starts[r]
+                unit_hi = row_from[r] + hi - row_starts[r]
+                if spans and spans[-1][2] == row_units[r]:
+                    spans[-1][1], spans[-1][4] = hi, unit_hi
                 else:
-                    spans.append([lo, hi, row_refs[r]])
-            return " | ".join(f"{lo}–{hi}: {ref}" for lo, hi, ref in spans)
+                    spans.append([lo, hi, row_units[r], unit_lo, unit_hi])
+            return " | ".join(f"{lo - start + 1}–{hi - start + 1}: {unit} [{ulo}–{uhi}]"
+                              for lo, hi, unit, ulo, uhi in spans)
 
         for idx, start in enumerate(range(0, len(full_text), chunk_size)):
             end = min(start + chunk_size, len(full_text)) - 1
@@ -197,13 +201,11 @@ def build_chunks(
                     "hierarchy_list": row["hierarchy_list"],
                     "chunk": " ".join(full_text[start : end + 1]),
                     "chunk_number": idx + 1,
-                    # `location` gives a row's first Sefaria section only (v7 README), so a
-                    # chunk is placed by the rows its first and last word come from.
-                    "start_ref": row_refs[first],
-                    "end_ref": row_refs[last],
+                    # Only what the v7 files hold: a row's `location` names the first Sefaria
+                    # section in it, and from_word counts words within the unit the row was
+                    # cut from. The ends of the chunk, word-exact: in the v7 rows (segment id,
+                    # word within the row) and in the text unit (from_word + offset).
                     "ref_spans": ref_spans(start, end, first, last),
-                    # Word-exact ends of the chunk: in the v7 rows (segment id and word
-                    # within the row), and in Sefaria's text unit (from_word + offset).
                     "start_segment": row_segments[first],
                     "start_segment_word": first_word,
                     "end_segment": row_segments[last],

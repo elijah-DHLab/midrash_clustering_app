@@ -30,8 +30,8 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
 
-# Word-exact ends of each chunk (pipeline_core.build_chunks), kept beside start_segment.
-POSITION_FIELDS = ("start_segment_word", "end_segment", "end_segment_word",
+# Where each chunk sits in its book, word-exact (pipeline_core.build_chunks).
+POSITION_FIELDS = ("ref_spans", "start_segment", "start_segment_word", "end_segment", "end_segment_word",
                    "start_unit", "start_unit_word", "end_unit", "end_unit_word")
 CATALOG_FIELDS = ("cat1", "cat2", "cat3", "scholarly_category", "composition_id", "edition", "type")
 
@@ -100,10 +100,6 @@ def main():
                                 vec=vecs,
                                 chunk=chunks["chunk"].to_numpy(dtype=object),
                                 chunk_number=chunks["chunk_number"].to_numpy(),
-                                start_ref=chunks["start_ref"].astype(str).to_numpy(dtype=object),
-                                end_ref=chunks["end_ref"].astype(str).to_numpy(dtype=object),
-                                ref_spans=chunks["ref_spans"].astype(str).to_numpy(dtype=object),
-                                start_segment=chunks["start_segment"].astype(str).to_numpy(dtype=object),
                                 **{c: chunks[c].astype(str).to_numpy(dtype=object) for c in POSITION_FIELDS})
             index[filename] = {
                 "n_chunks": int(len(chunks)),

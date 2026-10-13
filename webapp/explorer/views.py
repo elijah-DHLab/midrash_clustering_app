@@ -83,8 +83,9 @@ def _cache_key(filenames, chunk_size, k, smoothing, grouping_level, want_cpd,
         # Bumped when a run starts producing something an older one lacks (2: the
         # cluster table; 3: the full chunks.csv and segments.csv; 4: the clusters'
         # histograms along the axis; 5: the figure zooms along time only; 6: word-exact
-        # chunk ends in chunks.csv), so a cached run is never served without it.
-        "outputs": 6,
+        # chunk ends in chunks.csv; 7: `range`, and places by text unit), so a cached run
+        # is never served without it.
+        "outputs": 7,
         "files": sorted(filenames), "chunk_size": chunk_size, "k": k, "model": model,
         "smoothing": smoothing, "grouping_level": grouping_level,
         "cpd": [want_cpd, block_size, penalty],
@@ -373,14 +374,15 @@ def _cluster_table(df, model):
 
 # chunks.csv, in this order: the book, our chronology, where in the book, what the
 # clustering made of the chunk, its text. A column the store lacks is left out - the
-# places in the book (start_ref ...) exist only in stores built from act_jsonl_v7.
+# places in the book exist only in stores built from act_jsonl_v7. `range` is for
+# reading, start_/end_unit for sorting and filtering, the segment columns for finding
+# the exact words in the v7 rows.
 CHUNK_COLUMNS = [
     "chronological_index", "filename", "he_title",
     "cat1", "cat2", "cat3", "scholarly_category", "composition_id", "edition",
     "hierarchy", "grouping_label", "chunk_number",
-    "start_ref", "end_ref", "ref_spans",
+    "range", "start_unit", "end_unit", "ref_spans",
     "start_segment", "start_segment_word", "end_segment", "end_segment_word",
-    "start_unit", "start_unit_word", "end_unit", "end_unit_word",
     "scluster", "own_cluster_sim", "nearest_other_cluster", "cluster_margin", "density",
     "segment", "chunk",
 ]
@@ -401,18 +403,33 @@ def _write_chunks_csv(df, model, path):
             out[col] = df["filename"].map(lambda f, c=col: names.get(f, {}).get(c, ""))
         elif col == "density" and "density_normalized" in df.columns:
             out[col] = df["density_normalized"].round(4)
+        elif col == "range" and "start_unit" in df.columns:
+            out[col] = [_range(names, row) for row in df.itertuples()]
     for col in ("own_cluster_sim", "cluster_margin"):
         if col in out.columns:
             out[col] = out[col].round(4)
     out.to_csv(path, index=False, encoding="utf-8-sig")
 
 
+def _range(names, row):
+    """'פסיקתא רבתי 11_1:2540–2589', or 'בראשית רבה 1_1:101 – 1_2:6' across two units:
+    the text unit and the word within it at each end of the chunk."""
+    title = names.get(row.filename, {}).get("he") or row.filename
+    if row.start_unit == row.end_unit:
+        return "%s %s:%s–%s" % (title, row.start_unit, row.start_unit_word, row.end_unit_word)
+    return "%s %s:%s – %s:%s" % (title, row.start_unit, row.start_unit_word,
+                                 row.end_unit, row.end_unit_word)
+
+
 def _place(df, names, position, end=False):
-    """'בראשית רבה 52_10': the book and the place of the chunk at a chronological index."""
+    """'בראשית רבה 52_10:34': the book, text unit and word at one end of the chunk at a
+    chronological index - its first word, or its last with end=True."""
     row = df.iloc[int(min(max(position, 0), len(df) - 1))]
     title = names.get(row["filename"], {}).get("he") or row["filename"]
-    ref = row.get("end_ref" if end else "start_ref", "")
-    return ("%s %s" % (title, ref)).strip() if isinstance(ref, str) else title
+    side = "end" if end else "start"
+    if "%s_unit" % side not in row:
+        return title
+    return "%s %s:%s" % (title, row["%s_unit" % side], row["%s_unit_word" % side])
 
 
 def _write_segments_csv(df, change_points, model, path):
