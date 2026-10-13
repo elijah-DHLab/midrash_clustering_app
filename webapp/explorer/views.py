@@ -81,9 +81,9 @@ def _cache_key(filenames, chunk_size, k, smoothing, grouping_level, want_cpd,
     """Identical parameters produce an identical run, so they need computing once."""
     payload = json.dumps({
         # Bumped when a run starts producing something an older one lacks (2: the
-        # cluster table; 3: the full chunks.csv and segments.csv), so a cached run is never
-        # served without it.
-        "outputs": 3,
+        # cluster table; 3: the full chunks.csv and segments.csv; 4: the clusters'
+        # histograms along the axis), so a cached run is never served without it.
+        "outputs": 4,
         "files": sorted(filenames), "chunk_size": chunk_size, "k": k, "model": model,
         "smoothing": smoothing, "grouping_level": grouping_level,
         "cpd": [want_cpd, block_size, penalty],
@@ -265,6 +265,34 @@ def run(request):
                            want_cpd=want_cpd, block_size=block_size, penalty=penalty))
 
 
+HIST_BINS = 40
+MIN_CONCENTRATION = 0.05   # a stretch holding less of the cluster than this is noise
+
+
+def _concentrations(counts):
+    """The stretches of the axis a cluster is concentrated in, as (first bin, last bin).
+
+    A cluster drawn from two books far apart has two, and a single band with a median
+    between them would put it where it hardly is. A stretch is a run of bins holding at
+    least 30% of the cluster's fullest bin, after a 1-2-1 smoothing; a dip of one bin
+    does not split a run."""
+    smooth = np.convolve(counts, [1, 2, 1], mode="same") / 4
+    if smooth.max() <= 0:
+        return []
+    on = smooth >= 0.3 * smooth.max()
+    for i in range(1, len(on) - 1):
+        if not on[i] and on[i - 1] and on[i + 1]:
+            on[i] = True
+    runs, start = [], None
+    for i, v in enumerate(list(on) + [False]):
+        if v and start is None:
+            start = i
+        elif not v and start is not None:
+            runs.append((start, i - 1))
+            start = None
+    return runs
+
+
 def _cluster_table(df, model):
     """One row per cluster: what it is made of, where it sits, how tight it is.
 
@@ -287,6 +315,12 @@ def _cluster_table(df, model):
     colours = dict(zip(ids, px.colors.sample_colorscale(px.colors.sequential.Plasma, positions)))
 
     pos = df["chronological_index"].rank(pct=True).to_numpy() * 100
+    # The axis cut into HIST_BINS equal stretches, and the book that fills most of each,
+    # so a bar of a cluster's histogram can say where on the axis it stands.
+    bins = np.clip(np.ceil(pos / 100 * HIST_BINS).astype(int) - 1, 0, HIST_BINS - 1)
+    files = df["filename"].to_numpy()
+    bin_book = [title(pd.Series(files[bins == b]).mode().iloc[0]) if (bins == b).any() else ""
+                for b in range(HIST_BINS)]
     file_share = df["filename"].value_counts(normalize=True)
     total = len(df)
     rows = []
@@ -296,6 +330,19 @@ def _cluster_table(df, model):
         n = int(mask.sum())
         texts = part["filename"].value_counts()
         p10, p50, p90 = np.percentile(pos[mask], [10, 50, 90])
+        counts = np.bincount(bins[mask], minlength=HIST_BINS)
+        top_bin = max(int(counts.max()), 1)
+        concentrations = []
+        for lo, hi in _concentrations(counts):
+            inside = mask & (bins >= lo) & (bins <= hi)
+            if inside.sum() < MIN_CONCENTRATION * n:
+                continue
+            book = pd.Series(files[inside]).value_counts()
+            concentrations.append({
+                "from": round(100 * lo / HIST_BINS), "to": round(100 * (hi + 1) / HIST_BINS),
+                "share": round(100 * int(inside.sum()) / n),
+                "book": title(book.index[0]) if len(book) else "",
+            })
         nearest = part["nearest_other_cluster"].dropna()
         ngrams = str(part["cluster_top_ngrams"].iloc[0]) if "cluster_top_ngrams" in part else ""
         ngrams = [] if ngrams.startswith("No n-grams") else ngrams.split("<br>")
@@ -312,6 +359,9 @@ def _cluster_table(df, model):
                       for f, c in texts.head(3).items()],
             "n_texts": int(len(texts)),
             "p10": round(float(p10), 1), "p50": round(float(p50), 1), "p90": round(float(p90), 1),
+            "bars": [{"h": round(100 * int(c) / top_bin), "n": int(c), "book": bin_book[b]}
+                     for b, c in enumerate(counts)],
+            "concentrations": concentrations,
             "cohesion": round(float(part["own_cluster_sim"].mean()), 3)
                         if "own_cluster_sim" in part else None,
             "nearest": int(nearest.mode().iloc[0]) if len(nearest) else None,
@@ -403,6 +453,11 @@ def _write_cluster_csv(rows, path):
         "texts_in_cluster": r["n_texts"],
         "top_texts": "; ".join("%s %d%% (x%.1f)" % (t["name"], t["share"], t["lift"]) for t in r["texts"]),
         "position_p10_pct": r["p10"], "position_median_pct": r["p50"], "position_p90_pct": r["p90"],
+        "concentrations": len(r.get("concentrations", [])),
+        # '0–15% בראשית רבה 46%; 55–70% מדרש תנחומא 38%': where on the axis, the book
+        # filling it, and the share of the cluster's chunks there.
+        "concentration_ranges": "; ".join("%d–%d%% %s %d%%" % (c["from"], c["to"], c["book"], c["share"])
+                                          for c in r.get("concentrations", [])),
         "cohesion_mean_sim": r["cohesion"],
         "nearest_cluster": r["nearest"],
         "top_ngrams": "; ".join(r["ngrams"]),
@@ -551,6 +606,21 @@ def result(request, job_id):
     return _render_result(request, job_id)
 
 
+# What each download holds, shown beside its button, in the order the buttons appear.
+DOWNLOADS = {
+    "chunks.csv": "כל צ'אנק: הספר ופרטי הקטלוג, המקום בספר, הקלאסטר, הדמיון והצפיפות, והטקסט",
+    "clusters.csv": "שורה לכל קלאסטר: טקסטים עיקריים, ריכוזים לאורך הציר, צירופים אופייניים",
+    "segments.csv": "שורה לכל מקטע בין נקודות שינוי: מאיפה עד איפה בטקסט, אילו ספרים, אילו קלאסטרים",
+    "change_points.csv": "כל נקודת שינוי: המקום שלפניה ואחריה, והקלאסטרים שזזו בה",
+    "figure.html": "התרשים, לפתיחה בדפדפן",
+}
+
+
+def _download_order(name):
+    order = list(DOWNLOADS)
+    return order.index(name) if name in order else len(order)
+
+
 def _render_result(request, token, from_cache=False):
     out_dir = pathlib.Path(settings.RUNS_DIR) / token
     if not (out_dir / "summary.json").exists():
@@ -560,7 +630,8 @@ def _render_result(request, token, from_cache=False):
     form["selected"] = set(form.get("selected") or [])
     chunk_size = form.pop("chunk_size", None)
     form.setdefault("model", store.default_model())
-    downloads = [(p.name, p.stat().st_size) for p in sorted(out_dir.iterdir())
+    downloads = [(p.name, p.stat().st_size, DOWNLOADS.get(p.name, ""))
+                 for p in sorted(out_dir.iterdir(), key=lambda p: _download_order(p.name))
                  if not p.name.startswith("_") and p.suffix != ".json"]
     return render(request, "explorer/index.html",
                   _context(chunk_size, figure_html=(out_dir / "_embed.html").read_text(encoding="utf-8"),
