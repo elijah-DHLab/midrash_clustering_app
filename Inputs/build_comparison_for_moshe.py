@@ -66,6 +66,9 @@ S_CHECK = "מקבילה אפשרית - לבדוק"
 S_DUP = "כפילות בישן - אותו קובץ חדש"
 S_NO_NEW = "אין מקבילה בקורפוס החדש"
 S_NO_OLD = "אין מקבילה בקורפוס הישן"
+CATEGORY_ORDER = ["מדרש", "ספרות תנאית", "משנה", "תלמוד", "תוספתא - מהדורת ליברמן ומפרשים", 'תנ"ך',
+                  "ספרות בית שני", "קבלה", "הלכה", "תפילה", "מחשבה", "מוסר", 'שו"ת', "ספרי עזר"]
+STATUS_ORDER = [S_SAME, S_RENAMED, S_CHECK, S_DUP, S_NO_NEW, S_NO_OLD]
 FILLS = {S_SAME: "E3F1DF", S_RENAMED: "E3F1DF", S_CHECK: "FFF2CC", S_DUP: "EDEDED",
          S_NO_NEW: "F8D7D3", S_NO_OLD: "DCE6F2"}
 
@@ -164,9 +167,13 @@ def main():
             "הערות": "; ".join(note),
         })
     df = pd.DataFrame(out)
-    df["_order"] = df["קטגוריה"]
-    df = df.sort_values(["_order", "בניסויים", "קובץ בקורפוס החדש", "קובץ בקורפוס הישן"],
-                        ascending=[True, False, True, True]).drop(columns="_order")
+    # The experiment corpora first, and in each category the pairs before what has none,
+    # so the sheet opens on file-against-file rows rather than on a column of absences.
+    df["_cat"] = df["קטגוריה"].map(lambda c: CATEGORY_ORDER.index(c) if c in CATEGORY_ORDER
+                                   else len(CATEGORY_ORDER))
+    df["_status"] = df["סטטוס"].map(STATUS_ORDER.index)
+    df = df.sort_values(["_cat", "_status", "בניסויים", "קובץ בקורפוס הישן", "קובץ בקורפוס החדש"],
+                        ascending=[True, True, False, True, True]).drop(columns=["_cat", "_status"])
 
     summary = (df.assign(old=df["קובץ בקורפוס הישן"].ne("— אין מקבילה —"),
                          new=df["קובץ בקורפוס החדש"].ne("— אין מקבילה —"))
@@ -207,8 +214,10 @@ def main():
     ]})
 
     with pd.ExcelWriter(OUT, engine="openpyxl") as xl:
-        summary.to_excel(xl, sheet_name="סיכום", index=False)
+        # The file-by-file sheet first: it is what the workbook is for, and a viewer that
+        # opens on the first tab (Drive's preview) should show it.
         df.to_excel(xl, sheet_name="השוואה", index=False)
+        summary.to_excel(xl, sheet_name="סיכום", index=False)
         notes.to_excel(xl, sheet_name="הסבר", index=False, header=False)
         for name, ws in xl.sheets.items():
             ws.sheet_view.rightToLeft = True
