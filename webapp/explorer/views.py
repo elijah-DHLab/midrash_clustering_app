@@ -82,8 +82,9 @@ def _cache_key(filenames, chunk_size, k, smoothing, grouping_level, want_cpd,
     payload = json.dumps({
         # Bumped when a run starts producing something an older one lacks (2: the
         # cluster table; 3: the full chunks.csv and segments.csv; 4: the clusters'
-        # histograms along the axis), so a cached run is never served without it.
-        "outputs": 4,
+        # histograms along the axis; 5: the figure zooms along time only), so a cached
+        # run is never served without it.
+        "outputs": 5,
         "files": sorted(filenames), "chunk_size": chunk_size, "k": k, "model": model,
         "smoothing": smoothing, "grouping_level": grouping_level,
         "cpd": [want_cpd, block_size, penalty],
