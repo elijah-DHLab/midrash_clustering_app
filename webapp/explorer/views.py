@@ -523,6 +523,13 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
         # Wheel zoom, and a figure that keeps its view when the page re-renders.
         fig.update_layout(hovermode="closest", hoverdistance=12,
                           uirevision="explorer")
+        # Zoom is along the time axis only: with the cluster axis free, zooming in on a
+        # stretch also zoomed in on the middle clusters and dropped the outer ones from
+        # view. Dragging marks a stretch of time across all the clusters; double-click
+        # returns to the whole. (A rangeslider was tried: the text labels under the axis
+        # fall on it, and above WEBGL_ABOVE points plotly draws nothing inside it.)
+        fig.update_yaxes(fixedrange=True)
+        fig.update_layout(dragmode="zoom")
 
         # build_figure draws a change point as a red dashed line with a red score
         # beside it. Collecting those indices lets the page hide and show them with
