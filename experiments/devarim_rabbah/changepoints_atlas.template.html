@@ -1,0 +1,239 @@
+<title>אטלס נקודות השינוי</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700&family=Assistant:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one strip per work, the work's length mapped to the full width (start on the right, as the text
+   reads), change points as upright marks; grouped by genre, a summary of density per genre above. */
+:root {
+  --bg: #f4f6f5; --panel: #ffffff; --ink: #18202b; --ink-2: #4d5866; --muted: #8a94a1;
+  --rule: #dde2e2; --strip: #e6eaea; --unit: #c8cfd0; --mark: #18202b; --focus: #b5462f;
+  --g-classic: #2f5d8a; --g-late: #a3402f; --g-tannaitic: #4f7d4a; --g-mishnah_tosefta: #a07a2a;
+  --g-yerushalmi: #2c7c7a; --g-bavli: #6a4f8c;
+  --display: "Frank Ruhl Libre", "David", "Times New Roman", serif;
+  --body: "Assistant", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12161c; --panel: #181e26; --ink: #e8ecef; --ink-2: #aab3bd; --muted: #76808c;
+  --rule: #2a323d; --strip: #222a34; --unit: #3a4450; --mark: #e8ecef; --focus: #e2836c;
+  --g-classic: #7aa6d6; --g-late: #e0846f; --g-tannaitic: #8fc286; --g-mishnah_tosefta: #d6b366;
+  --g-yerushalmi: #6cc3c0; --g-bavli: #b29ad6; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12161c; --panel: #181e26; --ink: #e8ecef; --ink-2: #aab3bd; --muted: #76808c;
+  --rule: #2a323d; --strip: #222a34; --unit: #3a4450; --mark: #e8ecef; --focus: #e2836c;
+  --g-classic: #7aa6d6; --g-late: #e0846f; --g-tannaitic: #8fc286; --g-mishnah_tosefta: #d6b366;
+  --g-yerushalmi: #6cc3c0; --g-bavli: #b29ad6; color-scheme: dark }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font: 400 15px/1.6 var(--body); direction: rtl;
+       padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1180px; margin: 0 auto; padding-block: 32px 64px; }
+h1 { font: 700 clamp(28px, 4vw, 40px)/1.15 var(--display); margin: 0; text-wrap: balance; }
+.lede { color: var(--ink-2); max-width: 68ch; margin: 10px 0 0; font-size: 16px; }
+.lede b { color: var(--ink); font-weight: 600; }
+.num { font-family: var(--mono); font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; }
+
+/* Summary: change points per 10,000 words, by genre */
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 10px; margin: 26px 0 8px; }
+.gcard { background: var(--panel); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; cursor: pointer;
+         text-align: right; font: inherit; color: inherit; display: grid; gap: 2px; }
+.gcard:hover { border-color: var(--ink-2); }
+.gcard[aria-pressed="false"] { opacity: .42; }
+.gcard:focus-visible, .chip:focus-visible, select:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+.gname { display: flex; gap: 8px; align-items: center; font-weight: 600; }
+.sw { width: 10px; height: 10px; border-radius: 2px; flex: none; }
+.gstat { font: 500 22px var(--mono); }
+.gsub { font-size: 12.5px; color: var(--muted); }
+.note { font-size: 13px; color: var(--muted); margin: 6px 0 0; max-width: 90ch; }
+
+/* Controls */
+.controls { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 22px 0 6px; padding: 10px 0;
+            border-block: 1px solid var(--rule); position: sticky; top: env(safe-area-inset-top, 0px); background: var(--bg); z-index: 4; }
+.controls label { font-size: 13px; color: var(--ink-2); display: flex; gap: 6px; align-items: center; }
+select, input[type=search] { font: inherit; font-size: 14px; color: var(--ink); background: var(--panel); border: 1px solid var(--rule);
+         border-radius: 4px; padding: 5px 8px; }
+input[type=search] { width: 200px; max-width: 100%; }
+.legend { display: flex; gap: 14px; align-items: center; font-size: 12.5px; color: var(--muted); margin-inline-start: auto; flex-wrap: wrap; }
+.legend i { display: inline-block; vertical-align: middle; margin-inline-end: 5px; }
+.legend .lm { width: 2px; height: 14px; background: var(--mark); }
+.legend .lu { width: 1px; height: 14px; background: var(--unit); }
+.legend .lr { width: 0; height: 14px; border-inline-start: 2px dashed var(--focus); }
+
+/* Rows */
+.group h2 { font: 500 19px var(--display); margin: 26px 0 6px; display: flex; gap: 10px; align-items: baseline; }
+.group h2 .sw { width: 12px; height: 12px; }
+.group h2 small { font: 400 12.5px var(--body); color: var(--muted); }
+.row { display: grid; grid-template-columns: 190px minmax(0, 1fr) 128px; gap: 14px; align-items: center; padding: 5px 0;
+       border-bottom: 1px solid var(--rule); }
+.row.target { background: color-mix(in srgb, var(--panel) 70%, transparent); border: 1px solid var(--rule); border-radius: 6px;
+              padding: 12px 10px; margin-bottom: 8px; }
+.wt { font: 500 15px var(--display); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.target .wt { font-size: 17px; }
+.meta { font-size: 12px; color: var(--muted); text-align: left; white-space: nowrap; }
+.strip { position: relative; height: 22px; background: var(--strip); border-radius: 3px; }
+.target .strip { height: 34px; }
+.strip .u { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--unit); }
+.strip .gfill { position: absolute; top: 0; bottom: 0; right: 0; width: 3px; border-radius: 0 3px 3px 0; }
+.strip .cp { position: absolute; top: -3px; bottom: -3px; width: 12px; margin-right: -6px; border: 0; padding: 0; background: none; cursor: pointer; }
+.strip .cp::after { content: ""; position: absolute; top: 0; bottom: 0; right: 5px; width: 2px; background: var(--mark); border-radius: 1px; }
+.strip .cp:hover::after, .strip .cp.on::after { background: var(--focus); width: 3px; right: 4.5px; }
+.strip .ref { position: absolute; top: -6px; bottom: -6px; border-inline-start: 2px dashed var(--focus); }
+.strip .reflab { position: absolute; top: -22px; font-size: 11.5px; color: var(--focus); white-space: nowrap; transform: translateX(50%); }
+.target .strip { margin-top: 16px; }
+
+/* Reading panel for the selected change point */
+.reader { position: fixed; left: max(16px, env(safe-area-inset-left, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+          width: min(460px, calc(100vw - 32px)); background: var(--panel); border: 1px solid var(--rule); border-radius: 8px;
+          box-shadow: 0 10px 30px rgba(0,0,0,.18); padding: 14px 16px; z-index: 10; }
+.reader h3 { margin: 0 0 2px; font: 600 16px var(--display); }
+.reader .where { font-size: 12.5px; color: var(--muted); margin-bottom: 10px; }
+.reader .side { font: 400 15px/1.75 var(--display); margin: 0; }
+.reader .lab { font: 600 11.5px var(--body); letter-spacing: .04em; color: var(--muted); display: block; margin-top: 8px; }
+.reader .cut { display: block; border-top: 2px dashed var(--focus); margin: 8px 0 0; }
+.reader button.x { position: absolute; top: 8px; left: 10px; border: 0; background: none; font-size: 20px; color: var(--muted); cursor: pointer; }
+@media (max-width: 700px) {
+  .row { grid-template-columns: minmax(0, 1fr) auto; }
+  .meta { white-space: normal; max-width: 9em; }
+  .row .strip { grid-column: 1 / -1; grid-row: 2; }
+  .legend { margin-inline-start: 0; }
+}
+@media (prefers-reduced-motion: no-preference) { .strip .cp::after { transition: background .12s, width .12s; } }
+</style>
+
+<div class="wrap">
+  <h1>אטלס נקודות השינוי</h1>
+  <p class="lede">לכל חיבור בקורפוס הניסויים: היכן הטקסט משנה את אופיו, לפי הווקטורים של הקטעים בלבד, בלי קלסטרינג ובלי מידע על סוגות.
+    נקודה מסומנת רק אם החלוקה בה חזקה ממה שמתקבל ב-199 ערבובים אקראיים של אותו חיבור <b>(p&lt;0.01)</b>.
+    כל רצועה היא חיבור אחד, מתחילתו (מימין) ועד סופו; הקווים הדקים הם גבולות היחידות הראשיות (פרשה, פרק, דף).
+    לחיצה על נקודה פותחת את הטקסט שלפניה ושאחריה.</p>
+
+  <div class="summary" id="summary" aria-label="נקודות שינוי ל-10,000 מילים, לפי סוגה"></div>
+  <p class="note">המספר בכל כרטיס: נקודות שינוי ל-10,000 מילים בכלל חיבורי הסוגה. בחיבורים קצרים (רבות ממסכתות המשנה והתוספתא) לרוב אין נקודה מובהקת, כי יש בהם מעט טקסט לבדיקה. לחיצה על כרטיס מסתירה או מציגה את הסוגה.
+    קטעים של 25 מילים; חלוקה רקורסיבית עם מבחן פרמוטציה בבלוקים של 250 מילים; מקטע מינימלי 500 מילים.</p>
+
+  <div class="controls">
+    <label for="sort">מיון
+      <select id="sort">
+        <option value="h">לפי הסדר הכרונולוגי (hierarchy)</option>
+        <option value="d">לפי צפיפות נקודות השינוי</option>
+        <option value="n">לפי אורך החיבור</option>
+      </select></label>
+    <label for="q">חיפוש <input type="search" id="q" placeholder="שם חיבור"></label>
+    <div class="legend" aria-hidden="true">
+      <span><i class="lm"></i>נקודת שינוי מובהקת</span>
+      <span><i class="lu"></i>גבול יחידה ראשית</span>
+      <span><i class="lr"></i>הגבול המוכר במחקר (דברים רבה)</span>
+    </div>
+  </div>
+
+  <div id="rows"></div>
+</div>
+
+<aside class="reader" id="reader" hidden aria-live="polite">
+  <button class="x" id="close" aria-label="סגירה">×</button>
+  <h3 id="r-title"></h3>
+  <div class="where" id="r-where"></div>
+  <span class="lab">לפני הנקודה</span>
+  <p class="side" id="r-before"></p>
+  <span class="cut"></span>
+  <span class="lab">אחרי הנקודה</span>
+  <p class="side" id="r-after"></p>
+</aside>
+
+<script>
+const DATA = /*DATA*/null;
+const GEN = Object.fromEntries(DATA.genres);
+const order = DATA.genres.map(g => g[0]);
+const hidden = new Set();
+const hier = h => String(h).split(".").map(p => parseInt(p, 10) || 0);
+const cmpH = (a, b) => { const x = hier(a.h), y = hier(b.h); for (let i = 0; i < Math.max(x.length, y.length); i++) { const d = (x[i] || 0) - (y[i] || 0); if (d) return d; } return 0; };
+const dens = w => w.c.length / w.n * 10000;
+const fmt = n => n.toLocaleString("he-IL");
+const median = a => { const s = [...a].sort((p, q) => p - q); const m = s.length >> 1; return s.length ? (s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) : 0; };
+const target = DATA.works.find(w => w.target);
+
+function summary() {
+  const el = document.getElementById("summary");
+  el.innerHTML = "";
+  for (const g of order) {
+    const ws = DATA.works.filter(w => w.g === g && !w.target);
+    const b = document.createElement("button");
+    b.className = "gcard"; b.type = "button"; b.setAttribute("aria-pressed", hidden.has(g) ? "false" : "true");
+    b.innerHTML = `<span class="gname"><span class="sw" style="background:var(--g-${g})"></span>${GEN[g]}</span>
+      <span class="gstat num">${(ws.reduce((s, w) => s + w.c.length, 0) / ws.reduce((s, w) => s + w.n, 0) * 10000).toFixed(1)}</span>
+      <span class="gsub">${ws.length} חיבורים · ${fmt(ws.reduce((s, w) => s + w.c.length, 0))} נקודות · ${fmt(ws.reduce((s, w) => s + w.n, 0))} מילים</span>`;
+    b.onclick = () => { hidden.has(g) ? hidden.delete(g) : hidden.add(g); summary(); render(); };
+    el.appendChild(b);
+  }
+}
+
+function strip(w, big) {
+  const s = document.createElement("div");
+  s.className = "strip";
+  const pos = word => (word / w.n * 100).toFixed(3) + "%";   // from the right: the text reads right to left
+  const step = Math.max(1, Math.ceil(w.u.length / 120));
+  w.u.forEach(([word], i) => { if (i && i % step === 0) { const u = document.createElement("span"); u.className = "u"; u.style.right = pos(word); s.appendChild(u); } });
+  const gf = document.createElement("span"); gf.className = "gfill"; gf.style.background = `var(--g-${w.g})`; s.appendChild(gf);
+  if (w.target) {
+    const r = document.createElement("span"); r.className = "ref"; r.style.right = pos(30603); s.appendChild(r);
+    const l = document.createElement("span"); l.className = "reflab"; l.style.right = pos(30603); l.textContent = "י״א, ה׳"; s.appendChild(l);
+  }
+  w.c.forEach(([word, unit, before, after]) => {
+    const b = document.createElement("button");
+    b.className = "cp"; b.type = "button"; b.style.right = pos(word);
+    b.setAttribute("aria-label", `${w.t}, ${unit}`);
+    b.title = `${w.t} · ${unit}`;
+    b.onclick = () => openReader(w, word, unit, before, after, b);
+    s.appendChild(b);
+  });
+  return s;
+}
+
+function row(w) {
+  const r = document.createElement("div");
+  r.className = "row" + (w.target ? " target" : "");
+  const t = document.createElement("div"); t.className = "wt"; t.textContent = w.t; t.title = w.f;
+  const m = document.createElement("div"); m.className = "meta";
+  m.innerHTML = `<span class="num">${w.c.length}</span> נק׳ · <span class="num">${(w.n / 1000).toFixed(1)}</span> אלף מילים`;
+  r.append(t, strip(w), m);
+  return r;
+}
+
+function render() {
+  const q = document.getElementById("q").value.trim();
+  const sort = document.getElementById("sort").value;
+  const box = document.getElementById("rows");
+  box.innerHTML = "";
+  if (target && (!q || target.t.includes(q))) {
+    const g = document.createElement("section"); g.className = "group";
+    g.innerHTML = `<h2>מקרה המבחן <small>הקו המקווקו: הגבול שהמחקר מייחס לחיבור; הנקודות: מה שהאלגוריתם מצא בעצמו</small></h2>`;
+    g.appendChild(row(target)); box.appendChild(g);
+  }
+  for (const gk of order) {
+    if (hidden.has(gk)) continue;
+    let ws = DATA.works.filter(w => w.g === gk && !w.target && (!q || w.t.includes(q)));
+    if (!ws.length) continue;
+    ws.sort(sort === "h" ? cmpH : sort === "d" ? (a, b) => dens(b) - dens(a) : (a, b) => b.n - a.n);
+    const g = document.createElement("section"); g.className = "group";
+    g.innerHTML = `<h2><span class="sw" style="background:var(--g-${gk})"></span>${GEN[gk]} <small>${ws.length} חיבורים</small></h2>`;
+    ws.forEach(w => g.appendChild(row(w)));
+    box.appendChild(g);
+  }
+}
+
+let current = null;
+function openReader(w, word, unit, before, after, btn) {
+  if (current) current.classList.remove("on");
+  current = btn; btn.classList.add("on");
+  document.getElementById("r-title").textContent = w.t;
+  document.getElementById("r-where").textContent = `יחידה ${unit} · מילה ${fmt(word)} מתוך ${fmt(w.n)} (${Math.round(word / w.n * 100)}% מהחיבור)`;
+  document.getElementById("r-before").textContent = "…" + before;
+  document.getElementById("r-after").textContent = after + "…";
+  document.getElementById("reader").hidden = false;
+}
+document.getElementById("close").onclick = () => { document.getElementById("reader").hidden = true; if (current) current.classList.remove("on"); };
+document.addEventListener("keydown", e => { if (e.key === "Escape") document.getElementById("close").click(); });
+document.getElementById("sort").onchange = render;
+document.getElementById("q").oninput = render;
+summary(); render();
+</script>
