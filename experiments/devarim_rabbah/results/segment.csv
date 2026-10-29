@@ -1,0 +1,11 @@
+﻿chunk_size,signal,word,unit,p,depth,parasha_boundary,near_11_5,late_before,late_after
+25,vectors,20975,6_1,0.005,1,True,False,1.98,1.68
+25,vectors,21875,6_6,0.005,3,False,False,1.68,1.94
+25,vectors,22725,6_11,0.005,2,False,False,1.94,2.06
+25,vectors,28725,10_1,0.005,3,True,False,2.06,2.23
+25,vectors,29450,10_4,0.005,4,False,False,2.23,2.19
+25,vectors,31075,11_7,0.005,0,False,True,2.19,2.51
+50,vectors,20950,5_15,0.005,1,True,False,2.16,2.02
+50,vectors,21900,6_6,0.005,3,False,False,2.02,2.08
+50,vectors,22700,6_11,0.005,2,False,False,2.08,2.32
+50,vectors,31100,11_7,0.005,0,False,True,2.32,2.5
