@@ -53,6 +53,9 @@ h1 { font: 700 clamp(28px, 4vw, 40px)/1.15 var(--display); margin: 0; text-wrap:
 select, input[type=search] { font: inherit; font-size: 14px; color: var(--ink); background: var(--panel); border: 1px solid var(--rule);
          border-radius: 4px; padding: 5px 8px; }
 input[type=search] { width: 200px; max-width: 100%; }
+.slider input[type=range] { width: 150px; accent-color: var(--focus); }
+#minS-v { min-width: 3.2em; color: var(--ink); }
+.shown { font-size: 12.5px; color: var(--muted); }
 .legend { display: flex; gap: 14px; align-items: center; font-size: 12.5px; color: var(--muted); margin-inline-start: auto; flex-wrap: wrap; }
 .legend i { display: inline-block; vertical-align: middle; margin-inline-end: 5px; }
 .legend .lm { width: 2px; height: 14px; background: var(--mark); }
@@ -75,8 +78,9 @@ input[type=search] { width: 200px; max-width: 100%; }
 .strip .u { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--unit); }
 .strip .gfill { position: absolute; top: 0; bottom: 0; right: 0; width: 3px; border-radius: 0 3px 3px 0; }
 .strip .cp { position: absolute; top: -3px; bottom: -3px; width: 12px; margin-right: -6px; border: 0; padding: 0; background: none; cursor: pointer; }
-.strip .cp::after { content: ""; position: absolute; top: 0; bottom: 0; right: 5px; width: 2px; background: var(--mark); border-radius: 1px; }
-.strip .cp:hover::after, .strip .cp.on::after { background: var(--focus); width: 3px; right: 4.5px; }
+.strip .cp::after { content: ""; position: absolute; top: 0; bottom: 0; right: calc(6px - var(--w, 2px) / 2); width: var(--w, 2px);
+                   background: var(--mark); border-radius: 1px; opacity: var(--o, 1); }
+.strip .cp:hover::after, .strip .cp.on::after { background: var(--focus); opacity: 1; }
 .strip .ref { position: absolute; top: -6px; bottom: -6px; border-inline-start: 2px dashed var(--focus); }
 .strip .reflab { position: absolute; top: -22px; font-size: 11.5px; color: var(--focus); white-space: nowrap; transform: translateX(50%); }
 .target .strip { margin-top: 16px; }
@@ -105,7 +109,8 @@ input[type=search] { width: 200px; max-width: 100%; }
   <p class="lede">לכל חיבור בקורפוס הניסויים: היכן הטקסט משנה את אופיו, לפי הווקטורים של הקטעים בלבד, בלי קלסטרינג ובלי מידע על סוגות.
     נקודה מסומנת רק אם החלוקה בה חזקה ממה שמתקבל ב-199 ערבובים אקראיים של אותו חיבור <b>(p&lt;0.01)</b>.
     כל רצועה היא חיבור אחד, מתחילתו (מימין) ועד סופו; הקווים הדקים הם גבולות היחידות הראשיות (פרשה, פרק, דף).
-    לחיצה על נקודה פותחת את הטקסט שלפניה ושאחריה.</p>
+    לחיצה על נקודה פותחת את הטקסט שלפניה ושאחריה.
+    <b>עוצמה</b> היא פי כמה החלוקה בנקודה חזקה מהחלוקה החזקה ביותר שיצאה בערבובים; ככל שהקו עבה יותר, הנקודה חזקה יותר.</p>
 
   <div class="summary" id="summary" aria-label="נקודות שינוי ל-10,000 מילים, לפי סוגה"></div>
   <p class="note">המספר בכל כרטיס: נקודות שינוי ל-10,000 מילים בכלל חיבורי הסוגה. בחיבורים קצרים (רבות ממסכתות המשנה והתוספתא) לרוב אין נקודה מובהקת, כי יש בהם מעט טקסט לבדיקה. לחיצה על כרטיס מסתירה או מציגה את הסוגה.
@@ -119,6 +124,17 @@ input[type=search] { width: 200px; max-width: 100%; }
         <option value="n">לפי אורך החיבור</option>
       </select></label>
     <label for="q">חיפוש <input type="search" id="q" placeholder="שם חיבור"></label>
+    <label for="minS" class="slider">עוצמה מינימלית
+      <input type="range" id="minS" min="0" max="100" value="0" step="1">
+      <span class="num" id="minS-v">הכל</span></label>
+    <label for="depth">רמת חלוקה
+      <select id="depth">
+        <option value="99">כל הרמות</option>
+        <option value="0">רק החלוקה הראשונה בכל חיבור</option>
+        <option value="1">עד שתי רמות</option>
+        <option value="2">עד שלוש רמות</option>
+      </select></label>
+    <span class="shown" id="shown"></span>
     <div class="legend" aria-hidden="true">
       <span><i class="lm"></i>נקודת שינוי מובהקת</span>
       <span><i class="lu"></i>גבול יחידה ראשית</span>
@@ -133,6 +149,7 @@ input[type=search] { width: 200px; max-width: 100%; }
   <button class="x" id="close" aria-label="סגירה">×</button>
   <h3 id="r-title"></h3>
   <div class="where" id="r-where"></div>
+  <div class="where" id="r-strength"></div>
   <span class="lab">לפני הנקודה</span>
   <p class="side" id="r-before"></p>
   <span class="cut"></span>
@@ -151,17 +168,22 @@ const dens = w => w.c.length / w.n * 10000;
 const fmt = n => n.toLocaleString("he-IL");
 const median = a => { const s = [...a].sort((p, q) => p - q); const m = s.length >> 1; return s.length ? (s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2) : 0; };
 const target = DATA.works.find(w => w.target);
+const maxS = Math.max(...DATA.works.flatMap(w => w.c.map(c => c[5])), 2);
+const minStrength = () => { const v = +document.getElementById("minS").value; return v === 0 ? 0 : Math.exp(Math.log(maxS) * v / 100); };
+const maxDepth = () => +document.getElementById("depth").value;
+const visible = w => { const s = minStrength(), d = maxDepth(); return w.c.filter(c => c[5] >= s && c[4] <= d); };
 
 function summary() {
   const el = document.getElementById("summary");
   el.innerHTML = "";
   for (const g of order) {
     const ws = DATA.works.filter(w => w.g === g && !w.target);
+    const pts = ws.reduce((s, w) => s + visible(w).length, 0);
     const b = document.createElement("button");
     b.className = "gcard"; b.type = "button"; b.setAttribute("aria-pressed", hidden.has(g) ? "false" : "true");
     b.innerHTML = `<span class="gname"><span class="sw" style="background:var(--g-${g})"></span>${GEN[g]}</span>
-      <span class="gstat num">${(ws.reduce((s, w) => s + w.c.length, 0) / ws.reduce((s, w) => s + w.n, 0) * 10000).toFixed(1)}</span>
-      <span class="gsub">${ws.length} חיבורים · ${fmt(ws.reduce((s, w) => s + w.c.length, 0))} נקודות · ${fmt(ws.reduce((s, w) => s + w.n, 0))} מילים</span>`;
+      <span class="gstat num">${(pts / ws.reduce((s, w) => s + w.n, 0) * 10000).toFixed(1)}</span>
+      <span class="gsub">${ws.length} חיבורים · ${fmt(pts)} נקודות · ${fmt(ws.reduce((s, w) => s + w.n, 0))} מילים</span>`;
     b.onclick = () => { hidden.has(g) ? hidden.delete(g) : hidden.add(g); summary(); render(); };
     el.appendChild(b);
   }
@@ -178,12 +200,16 @@ function strip(w, big) {
     const r = document.createElement("span"); r.className = "ref"; r.style.right = pos(30603); s.appendChild(r);
     const l = document.createElement("span"); l.className = "reflab"; l.style.right = pos(30603); l.textContent = "י״א, ה׳"; s.appendChild(l);
   }
-  w.c.forEach(([word, unit, before, after]) => {
+  visible(w).forEach(([word, unit, before, after, depth, strength]) => {
     const b = document.createElement("button");
     b.className = "cp"; b.type = "button"; b.style.right = pos(word);
+    // Thicker and darker the stronger the point (log scale up to the strongest in the corpus).
+    const t = Math.min(1, Math.log(strength) / Math.log(maxS));
+    b.style.setProperty("--w", (1.5 + 2.5 * t).toFixed(1) + "px");
+    b.style.setProperty("--o", (0.55 + 0.45 * t).toFixed(2));
     b.setAttribute("aria-label", `${w.t}, ${unit}`);
     b.title = `${w.t} · ${unit}`;
-    b.onclick = () => openReader(w, word, unit, before, after, b);
+    b.onclick = () => openReader(w, word, unit, before, after, b, depth, strength);
     s.appendChild(b);
   });
   return s;
@@ -194,7 +220,7 @@ function row(w) {
   r.className = "row" + (w.target ? " target" : "");
   const t = document.createElement("div"); t.className = "wt"; t.textContent = w.t; t.title = w.f;
   const m = document.createElement("div"); m.className = "meta";
-  m.innerHTML = `<span class="num">${w.c.length}</span> נק׳ · <span class="num">${(w.n / 1000).toFixed(1)}</span> אלף מילים`;
+  m.innerHTML = `<span class="num">${visible(w).length}</span> נק׳ · <span class="num">${(w.n / 1000).toFixed(1)}</span> אלף מילים`;
   r.append(t, strip(w), m);
   return r;
 }
@@ -222,11 +248,12 @@ function render() {
 }
 
 let current = null;
-function openReader(w, word, unit, before, after, btn) {
+function openReader(w, word, unit, before, after, btn, depth, strength) {
   if (current) current.classList.remove("on");
   current = btn; btn.classList.add("on");
   document.getElementById("r-title").textContent = w.t;
   document.getElementById("r-where").textContent = `יחידה ${unit} · מילה ${fmt(word)} מתוך ${fmt(w.n)} (${Math.round(word / w.n * 100)}% מהחיבור)`;
+  document.getElementById("r-strength").textContent = `עוצמה ${strength.toFixed(1)} (פי כמה מהאקראי) · רמת חלוקה ${depth + 1}`;
   document.getElementById("r-before").textContent = "…" + before;
   document.getElementById("r-after").textContent = after + "…";
   document.getElementById("reader").hidden = false;
@@ -234,6 +261,15 @@ function openReader(w, word, unit, before, after, btn) {
 document.getElementById("close").onclick = () => { document.getElementById("reader").hidden = true; if (current) current.classList.remove("on"); };
 document.addEventListener("keydown", e => { if (e.key === "Escape") document.getElementById("close").click(); });
 document.getElementById("sort").onchange = render;
+function refresh() {
+  const s = minStrength();
+  document.getElementById("minS-v").textContent = s ? "≥ " + s.toFixed(1) : "הכל";
+  const total = DATA.works.reduce((t, w) => t + visible(w).length, 0), all = DATA.works.reduce((t, w) => t + w.c.length, 0);
+  document.getElementById("shown").textContent = `מוצגות ${fmt(total)} מתוך ${fmt(all)} נקודות`;
+  summary(); render();
+}
+document.getElementById("minS").oninput = refresh;
+document.getElementById("depth").onchange = refresh;
 document.getElementById("q").oninput = render;
-summary(); render();
+refresh();
 </script>

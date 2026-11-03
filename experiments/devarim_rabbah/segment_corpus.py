@@ -32,7 +32,7 @@ def main():
     done = json.loads(OUT.read_text(encoding="utf-8")) if OUT.exists() else {}
     t0 = time.time()
     for i, f in enumerate(works, 1):
-        if f in done:
+        if f in done and done[f]["cps"] and "strength" in done[f]["cps"][0] or (f in done and not done[f]["cps"] and done[f].get("v") == 2):
             continue
         df = grid.store.load_selection([f], SIZE, grid.STORE)
         x = segment.standardise(np.vstack(df["vec"].to_numpy()).astype(np.float32))
@@ -50,8 +50,10 @@ def main():
             "genre": groups.get(f, "target"),
             "words": len(units) * SIZE,
             "units": tops,
-            "cps": [{"word": c * SIZE, "unit": units[c], "after": " ".join(chunks[c].split()[:14]),
-                     "before": " ".join(chunks[c - 1].split()[-14:])} for c, _, _ in cps],
+            "v": 2,
+            "cps": [{"word": c * SIZE, "unit": units[c], "depth": depth, "strength": round(strength, 2),
+                     "after": " ".join(chunks[c].split()[:14]),
+                     "before": " ".join(chunks[c - 1].split()[-14:])} for c, _, depth, strength in cps],
         }
         if i % 10 == 0 or len(units) > 2000:
             OUT.write_text(json.dumps(done, ensure_ascii=False), encoding="utf-8")

@@ -23,7 +23,8 @@ for f, w in DATA.items():
         "f": f, "t": w["title"], "g": "classic" if w["genre"] == "target" else w["genre"],
         "target": w["genre"] == "target", "n": w["words"],
         "h": str(row["hierarchy"]) if row is not None else "",
-        "u": w["units"], "c": [[c["word"], c["unit"], c["before"], c["after"]] for c in w["cps"]],
+        "u": w["units"], "c": [[c["word"], c["unit"], c["before"], c["after"], c.get("depth", 0), c.get("strength", 1)]
+                                 for c in w["cps"]],
     })
 payload = json.dumps({"works": works, "genres": GENRES}, ensure_ascii=False, separators=(",", ":"))
 

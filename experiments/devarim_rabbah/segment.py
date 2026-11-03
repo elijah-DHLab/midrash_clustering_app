@@ -51,18 +51,22 @@ def best_split(x, min_size):
 
 
 def split_p(x, obs, min_size, block, rng):
+    """The permutation p of a split, and the strongest split among the shuffles."""
     n = len(x)
     blocks = [x[i:i + block] for i in range(0, n, block)]
-    hits = 0
+    null = []
     for _ in range(R):
         order = rng.permutation(len(blocks))
         _, s = best_split(np.concatenate([blocks[j] for j in order]), min_size)
-        hits += s >= obs
-    return (1 + hits) / (R + 1)
+        null.append(s)
+    hits = sum(s >= obs for s in null)
+    return (1 + hits) / (R + 1), max(null)
 
 
 def segment(x, size, seed=0):
-    """All significant change points of x, as (index, p, depth), found top-down."""
+    """All significant change points of x, as (index, p, depth, strength), found top-down.
+    Strength = the split's statistic over the strongest split in the shuffles: how many times
+    stronger than anything chance produced (every kept point is above 1)."""
     rng = np.random.default_rng(seed)
     min_size, block = max(2, MIN_WORDS // size), max(2, BLOCK_WORDS // size)
     found, stack = [], [(0, len(x), 0)]
@@ -71,9 +75,9 @@ def segment(x, size, seed=0):
         t, obs = best_split(x[a:b], min_size)
         if t is None:
             continue
-        p = split_p(x[a:b], obs, min_size, block, rng)
+        p, null_max = split_p(x[a:b], obs, min_size, block, rng)
         if p < ALPHA:
-            found.append((a + t, p, depth))
+            found.append((a + t, p, depth, obs / null_max if null_max > 0 else float("inf")))
             stack += [(a, a + t, depth + 1), (a + t, b, depth + 1)]
     return sorted(found)
 
@@ -121,9 +125,9 @@ def main():
 
         for name, x in signals.items():
             cps = segment(x, size)
-            edges = [0] + [c for c, _, _ in cps] + [len(x)]
+            edges = [0] + [c for c, _, _, _ in cps] + [len(x)]
             print(f"\nsize {size} | {name}: {len(cps)} significant change points", flush=True)
-            for (c, p, depth) in cps:
+            for (c, p, depth, _) in cps:
                 word = c * size
                 i = edges.index(c)
                 before, after = late[edges[i - 1]:c].mean(), late[c:edges[i + 1]].mean()
