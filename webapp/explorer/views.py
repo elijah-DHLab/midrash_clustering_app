@@ -7,6 +7,7 @@ selected chunks, which is why the parameters here are the cheap ones.
 import hashlib
 import json
 import pathlib
+import re
 import threading
 import time
 import uuid
@@ -814,8 +815,24 @@ def _sweep(df, current_k, k_min=2, k_max=20):
                        config={"displaylogo": False, "responsive": True}), sweep
 
 
+def _download_name(token, name):
+    """'2026-11-15_דברים-רבה-בלי-החלקה_s50_k15_cpd-b50-p1_a1b2c3_chunks.csv': the run's date,
+    its experiment name, its parameters and the start of its token, so a file saved to disk
+    still says which run it came from and can be found again in the log."""
+    record = runs.load(token)
+    if not record:
+        return name
+    p = record["params"]
+    date = record["started"][:10]
+    title = re.sub(r"[^\w֐-׿]+", "-", (record["meta"].get("name") or "").strip()).strip("-")[:60]
+    params = "s%s_k%s%s" % (p.get("chunk_size"), p.get("k"), "_smooth" if p.get("smoothing") else "")
+    if p.get("block_size") and p.get("penalty") is not None:
+        params += "_cpd-b%s-p%s" % (p["block_size"], p["penalty"])
+    return "_".join(part for part in (date, title, params, token[:6], name) if part)
+
+
 def download(request, token, name):
     path = pathlib.Path(settings.RUNS_DIR) / token / name
     if name not in {"chunks.csv", "clusters.csv", "segments.csv", "figure.html", "change_points.csv"} or not path.exists():
         raise Http404
-    return FileResponse(open(path, "rb"), as_attachment=True, filename=name)
+    return FileResponse(open(path, "rb"), as_attachment=True, filename=_download_name(token, name))
