@@ -521,7 +521,8 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
             # one label. A work is a file; its Hebrew name is what the axis shows.
             model_name = jobs.JOBS[job_id].get("form", {}).get("model") or store.default_model()
             hebrew = store.titles_for(model_name)
-            df["grouping_label"] = df["filename"].map(lambda f: hebrew.get(f) or str(f))
+            df["grouping_label"] = df["filename"].map(
+                lambda f: (hebrew.get(f) or {}).get("he") or str(f))
         df = cvr.merge_small_groups(df)
         df = cvr.compute_density_original(df)
 
