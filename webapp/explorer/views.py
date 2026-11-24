@@ -515,6 +515,13 @@ def _compute(job_id, df, k, smoothing, grouping_level, want_cpd, block_size, pen
         # (compute_chunk_cluster_affinities) takes them as they are, and
         # stringify_vectors exists for CSV round trips this app never makes.
         df = cvr.prepare_dataframe(df, grouping_level=grouping_level)
+        if grouping_level == 3:
+            # v7 file names have more than three parts, so "level 3" of the name is the
+            # collection (Midrash Rabbah), not the work: אסתר רבה and קהלת רבה fell under
+            # one label. A work is a file; its Hebrew name is what the axis shows.
+            model_name = jobs.JOBS[job_id].get("form", {}).get("model") or store.default_model()
+            hebrew = store.titles_for(model_name)
+            df["grouping_label"] = df["filename"].map(lambda f: hebrew.get(f) or str(f))
         df = cvr.merge_small_groups(df)
         df = cvr.compute_density_original(df)
 

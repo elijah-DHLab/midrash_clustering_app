@@ -530,18 +530,29 @@ def add_text_boundaries(fig, df):
         span = float(row["x_end"]) - float(row["x_start"])
         if span < min_span:
             continue
-        x_pos = float(row["x_start"])
+        # Each label sits in the middle of its own stretch, level, and wraps onto a
+        # second line instead of being cut (a slanted label ran into the axis title).
+        x_pos = (float(row["x_start"]) + float(row["x_end"])) / 2
         label = str(row["grouping_label"])
-        if len(label) > 30:
-            label = label[:27] + "..."
+        if len(label) > 22 and " " in label:
+            words, lines, line = label.split(" "), [], ""
+            for w in words:
+                if line and len(line) + 1 + len(w) > 22:
+                    lines.append(line)
+                    line = w
+                else:
+                    line = f"{line} {w}".strip()
+            lines.append(line)
+            label = "<br>".join(lines)
         tick_vals.append(x_pos)
         tick_text.append(label)
 
     fig.update_xaxes(
         tickvals=tick_vals,
         ticktext=tick_text,
-        tickangle=-40,
-        tickfont=dict(size=11),
+        tickangle=0,
+        tickfont=dict(size=12),
+        title_standoff=18,
     )
     return fig
 
@@ -619,11 +630,11 @@ def build_figure(df, show_text_boundaries=True, change_points=None, render_mode=
     )
 
     row_height = 35
-    fixed_margins = 60 + 160  # top + bottom margin, holds regardless of k
+    fixed_margins = 60 + 110  # top + bottom margin, holds regardless of k
     fig.update_layout(
         autosize=True,
         height=max(500, fixed_margins + n_clusters * row_height),
-        margin=dict(l=70, r=160, t=60, b=160),
+        margin=dict(l=70, r=110, t=60, b=110),
         legend_title_text="Cluster",
         dragmode="pan",
     )

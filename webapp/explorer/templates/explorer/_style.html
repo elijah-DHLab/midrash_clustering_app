@@ -173,6 +173,9 @@
 
   main { padding: 22px 28px 40px; }
   .plate { background: var(--plate); border: 1px solid var(--rule); padding: 8px 8px 2px; }
+  /* Plotly lays out its toolbar left-to-right; in the RTL page its button groups
+     ran out of the figure onto the sidebar. The figure itself is LTR. */
+  .plate .plotly-graph-div { direction: ltr; position: relative; overflow: hidden; }
   .plate-caption {
     padding: 10px 6px 12px; font: 400 13px/1.7 "Frank Ruhl Libre", serif;
     color: var(--muted); border-top: 1px solid var(--rule-2); margin-top: 6px;
